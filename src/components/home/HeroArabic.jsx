@@ -15,17 +15,17 @@ export default function HeroArabic({ data }) {
     const content = {
         ar: {
             status: "الحالة: متاح للمشاريع",
-            title: (data?.title && hasArabic(data.title)) ? data.title : "مهندس\nالتجارب\nالرقمية.",
-            subtitle: (data?.subtitle && hasArabic(data.subtitle)) ? data.subtitle : "نحول التعقيد إلى بساطة.",
-            desc: (data?.desc && hasArabic(data.desc)) ? data.desc : "نبني نُظماً رقمية تجمع بين دقة الهندسة وجماليات التصميم السويسري.",
+            title: (data?.title && hasArabic(data.title)) ? data.title : "مهندس\nالنظم\nالرقمية.",
+            subtitle: (data?.subtitle && hasArabic(data.subtitle)) ? data.subtitle : "دقة. وضوح. هدف.",
+            desc: (data?.desc && hasArabic(data.desc)) ? data.desc : "نصمم بنية رقمية متكاملة تجمع بين الصرامة الهندسية وجماليات التصميم.",
             ctaPrimary: "ابدأ العمل",
             ctaSecondary: "معرض الأعمال"
         },
         en: {
             status: "STATUS: AVAILABLE_FOR_WORK",
-            title: data?.title_en || "DIGITAL\nPRODUCT\nARCHITECT.",
-            subtitle: data?.subtitle_en || "TURNING CHAOS INTO ORDER.",
-            desc: data?.desc_en || "Engineering digital systems that combine technical precision with Swiss minimalist aesthetics.",
+            title: data?.title_en || "SYSTEM\nINTERFACE\nARCHITECT.",
+            subtitle: data?.subtitle_en || "PRECISION. CLARITY. PURPOSE.",
+            desc: data?.desc_en || "Constructing digital infrastructures that combine technical precision with Swiss minimalist aesthetics.",
             ctaPrimary: "INITIATE_PROJECT",
             ctaSecondary: "VIEW_INDEX"
         }
@@ -75,9 +75,14 @@ export default function HeroArabic({ data }) {
 
                         {/* Description & CTAs */}
                         <div className="flex flex-col gap-10 items-start border-t border-foreground/10 pt-8 mt-4">
-                            <p className={`${lang === 'ar' ? 'text-xl md:text-2xl leading-relaxed opacity-90' : 'text-lg md:text-xl text-muted-foreground leading-relaxed'} max-w-xl`}>
-                                {t.desc}
-                            </p>
+                            <div className="space-y-4 max-w-xl">
+                                <h3 className={`font-bold ${lang === 'ar' ? 'text-2xl text-foreground' : 'text-xl text-foreground font-mono tracking-widest'}`}>
+                                    {t.subtitle}
+                                </h3>
+                                <p className={`${lang === 'ar' ? 'text-xl leading-relaxed opacity-90' : 'text-lg text-muted-foreground leading-relaxed'}`}>
+                                    {t.desc}
+                                </p>
+                            </div>
 
                             <div className="flex flex-wrap items-center gap-6 w-full">
                                 <Link
