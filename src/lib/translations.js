@@ -1,134 +1,142 @@
 export const translations = {
     en: {
-        dir: 'ltr',
-        role: "Product Design Engineer",
         hero: {
-            title: "Structuring Chaos",
-            subtitle: "Into Systems.",
-            desc: "Bridging the gap between aesthetic intuition and engineering precision to build scalable digital products.",
-            cta_case: "case studies_",
-            cta_about: "about me_"
+            title: "Hazem Gamal",
+            subtitle: "UX/UI Designer",
+            desc: "Bridging the gap between aesthetic intuition and engineering precision. Specializing in visual identities, digital products, and high-performance interfaces."
         },
-        services: {
-            title: "Capabilities",
-            subtitle: "I don't just hand off designs. I build the systems that make them scalable.",
-            items: [
-                {
-                    title: "Product Design",
-                    desc: "End-to-end UX/UI design for complex SaaS platforms. I focus on accessibility, clarity, and design systems.",
-                },
-                {
-                    title: "UX Engineering",
-                    desc: "Bridging design and code. I build component libraries and high-fidelity prototypes that production devs love.",
-                },
-                {
-                    title: "Design Systems",
-                    desc: "Creating single sources of truth. I scale design languages from a few components to enterprise-grade systems.",
-                }
-            ]
+        about: {
+            title: "About Me",
+            desc: "I specialize in crafting captivating graphics and exceptional user experiences using tools like Figma, Adobe Illustrator, and Photoshop. With over 3 years of experience, I deliver website redesigns that boost traffic and accessibility."
         },
         work: {
             title: "Selected Work",
             view_btn: "View Case Study",
-            context: "Context:",
-            solution: "Solution:",
-            impact: "Impact:",
             items: [
                 {
-                    title: "Fintech Dashboard Redesign",
-                    role: "Lead Product Designer",
-                    problem: "Users were overwhelmed by data density, resulting in a 40% drop-off rate.",
-                    solution: "Implemented a modular 'widget' system customizable by the user.",
-                    impact: "Increased user retention by 25% and reduced support tickets."
+                    title: "Tesla Arabic Edition",
+                    problem: "Adapting a global automotive brand for the RTL Arabic market while maintaining premium minimalism.",
+                    solution: "End-to-end UI design process focused on cultural localization and typographic harmony."
                 },
                 {
-                    title: "Enterprise Design System",
-                    role: "UX Engineer",
-                    problem: "Inconsistent UI across 12 different legacy products.",
-                    solution: "Built a React-based component library with unified tokens.",
-                    impact: "Reduced dev time by 30% for new features."
+                    title: "Daily Maintenance Group",
+                    problem: "Capstone App for reporting road damages and business licensing.",
+                    solution: "User-centered design with streamlined reporting flows."
+                },
+                {
+                    title: "Code-Base Redesign",
+                    problem: "Legacy interface with poor accessibility metrics.",
+                    solution: "Redesigned interface leading to a 25% increase in traffic and 30% accessibility improvement."
                 }
             ]
+        },
+        experience: {
+            title: "Experience",
+            items: [
+                {
+                    role: "Graphic Design Coordinator",
+                    company: "Google Developer Groups",
+                    date: "Jul 2023 – Present"
+                },
+                {
+                    role: "UX/UI Designer",
+                    company: "SYNC INTERN’S",
+                    date: "Apr 2023 – May 2023"
+                },
+                {
+                    role: "Freelance Designer",
+                    company: "Self-Employed",
+                    date: "Jan 2021 – Present"
+                }
+            ]
+        },
+        skills: {
+            title: "Stack",
+            list: ["Figma", "Adobe Xd", "Illustrator", "Photoshop", "Webflow", "HTML/CSS", "User Research"]
         },
         process: {
             title: "My Process",
-            steps: [
-                { title: "Discover", desc: "Understanding user needs through data and empathy." },
-                { title: "Define", desc: "Framing the right problem to solve." },
-                { title: "Design", desc: "Iterative prototyping and system architecture." },
-                { title: "Deliver", desc: "Production-ready code and comprehensive docs." }
-            ]
+            steps: ["Discover", "Define", "Design", "Deliver"]
         },
         contact: {
-            title: "Let's Build Something",
-            email: "Drop me an email",
+            title: "Let's Talk",
+            email: "hazem.gamal1@outlook.com",
             socials: "Socials"
+        },
+        nav: {
+            home: "Home",
+            work: "Work",
+            writing: "Writing"
         }
     },
     ar: {
-        dir: 'rtl',
-        role: "مهندس تصميم المنتجات",
         hero: {
-            title: "هندسة الفوضى",
-            subtitle: "إلى أنظمة.",
-            desc: "أجمع بين التفكير التصميمي والدقة الهندسية لبناء منتجات رقمية قابلة للتوسع بمستوى عالمي.",
-            cta_case: "تصفح أعمالي",
-            cta_about: "نبذة عني"
+            title: "حازم جمال",
+            subtitle: "مصمم تجربة المستخدم",
+            desc: "سد الفجوة بين الحدس الجمالي والدقة الهندسية. متخصص في الهويات البصرية والمنتجات الرقمية والواجهات عالية الأداء."
         },
-        services: {
-            title: "الخدمات",
-            subtitle: "لا أكتفي بتسليم التصاميم، بل أبني الأنظمة التي تجعلها قابلة للتطوير.",
-            items: [
-                {
-                    title: "تصميم المنتجات",
-                    desc: "تصميم واجهات وتجربة مستخدم لمنصات SaaS المعقدة، مع التركيز على الوضوح وسهولة الاستخدام.",
-                },
-                {
-                    title: "هندسة الواجهات",
-                    desc: "بناء الجسر بين التصميم والكود. أطور نماذج أولية ومكتبات مكونات جاهزة للإنتاج.",
-                },
-                {
-                    title: "أنظمة التصميم",
-                    desc: "بناء لغة تصميم موحدة وموثقة تتحول من مجرد ملفات فيجما إلى كود حي.",
-                }
-            ]
+        about: {
+            title: "عني",
+            desc: "أنا متخصص في صياغة رسومات جذابة وتجارب مستخدم استثنائية باستخدام أدوات مثل Figma و Adobe Illustrator. لدي أكثر من 3 سنوات من الخبرة."
         },
         work: {
             title: "أعمال مختارة",
-            view_btn: "عرض المشروع",
-            context: "السياق:",
-            solution: "الحل:",
-            impact: "الأثر:",
+            view_btn: "عرض دراسة الحالة",
             items: [
                 {
-                    title: "منصة التقنية المالية",
-                    role: "مصمم منتج رئيسي",
-                    problem: "واجهة معقدة أدت لانسحاب 40% من المستخدمين.",
-                    solution: "نظام 'ودجات' مرن يتيح للمستخدم تخصيص واجهته.",
-                    impact: "زيادة الاحتفاظ بالمستخدمين بنسبة 25%."
+                    title: "تسلا - النسخة العربية",
+                    problem: "تكييف علامة تجارية عالمية للسيارات للسوق العربي (RTL) مع الحفاظ على البساطة الفاخرة.",
+                    solution: "عملية تصميم واجهة المستخدم الشاملة تركز على التوطين الثقافي والتناغم الطباعي."
                 },
                 {
-                    title: "نظام تصميم مؤسسي",
-                    role: "مهندس واجهات",
-                    problem: "تشتت بصري عبر 12 منتجاً مختلفاً.",
-                    solution: "مكتبة مكونات React موحدة تعتمد على Tokens.",
-                    impact: "تسريع تطوير الميزات الجديدة بنسبة 30%."
+                    title: "مجموعة الصيانة اليومية",
+                    problem: "تطبيق للإبلاغ عن أضرار الطرق وترخيص الأعمال.",
+                    solution: "تصميم يتمحور حول المستخدم مع تدفقات إبلاغ مبسطة."
+                },
+                {
+                    title: "إعادة تصميم Code-Base",
+                    problem: "واجهة قديمة مع مقاييس وصول ضعيفة.",
+                    solution: "زيادة بنسبة 25٪ في حركة المرور وتحسين بنسبة 30٪ في إمكانية الوصول."
                 }
             ]
         },
-        process: {
-            title: "منهجية العمل",
-            steps: [
-                { title: "الاكتشاف", desc: "فهم عميق للمشكلة واحتياجات المستخدم." },
-                { title: "التعريف", desc: "تحديد نطاق الحل والأهداف بوضوح." },
-                { title: "التصميم", desc: "بناء النماذج الأولية واختبارها تكرارياً." },
-                { title: "التسليم", desc: "كود نظيف وتوثيق شامل للتسليم النهائي." }
+        experience: {
+            title: "الخبرة",
+            items: [
+                {
+                    role: "منسق تصميم الجرافيك",
+                    company: "مجموعات مطوري جوجل",
+                    date: "يوليو 2023 – الآن"
+                },
+                {
+                    role: "مصمم تجربة المستخدم",
+                    company: "SYNC INTERN’S",
+                    date: "أبريل 2023 – مايو 2023"
+                },
+                {
+                    role: "مصمم حر",
+                    company: "عمل حر",
+                    date: "يناير 2021 – الآن"
+                }
             ]
         },
+        skills: {
+            title: "التقنيات",
+            list: ["فيجما", "أدوبي XD", "إليستريتور", "فوتوشوب", "ويب فلو", "HTML/CSS", "بحث المستخدم"]
+        },
+        process: {
+            title: "عمليتي",
+            steps: ["اكتشاف", "تحديد", "تصميم", "تسليم"]
+        },
         contact: {
-            title: "لنبدأ العمل ؟",
-            email: "تواصل معي",
-            socials: "منصات التواصل"
+            title: "لنتحدث",
+            email: "hazem.gamal1@outlook.com",
+            socials: "تواصل"
+        },
+        nav: {
+            home: "الرئيسية",
+            work: "أعمالي",
+            writing: "كتابات"
         }
     }
 };

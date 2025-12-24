@@ -117,11 +117,11 @@ const BentoLayout = () => {
                 </Card>
             </section>
 
-            {/* ROW 3: Large Featured Card */}
+            {/* ROW 3: Large Featured Card (Tesla Arabic) */}
             <Card delay={0.4} style={{ minHeight: '500px', padding: '0', display: 'flex', flexDirection: lang === 'ar' ? 'row-reverse' : 'row' }}>
                 <div style={{ flex: 1, padding: '60px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                    <span style={{ color: 'var(--accent-color)', marginBottom: '16px', fontWeight: 600 }}>FEATURED CASE STUDY</span>
-                    <h2 style={{ fontSize: '3rem', marginBottom: '24px', lineHeight: 1.1 }}>Fintech Dashboard <br /> Redesign</h2>
+                    <span style={{ color: 'var(--accent-color)', marginBottom: '16px', fontWeight: 600 }}>FEATURED PROJECT</span>
+                    <h2 style={{ fontSize: '3rem', marginBottom: '24px', lineHeight: 1.1 }}>{t.work.items[0].title}</h2>
                     <p style={{ fontSize: '1.1rem', color: 'var(--text-muted)', marginBottom: '40px', maxWidth: '400px' }}>
                         {t.work.items[0].problem}
                     </p>
@@ -134,34 +134,62 @@ const BentoLayout = () => {
                         border: 'none',
                         fontSize: '1rem',
                         fontWeight: 600,
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        transition: 'transform 0.2s'
                     }}>
                         {t.work.view_btn}
                     </button>
                 </div>
-                <div style={{ flex: 1, background: '#1a1a2e', position: 'relative' }}>
-                    <div style={{ position: 'absolute', inset: 0, opacity: 0.3, background: 'linear-gradient(45deg, #1a1a2e, #5F7AEA)' }}></div>
+                <div style={{ flex: 1, background: '#1a1a2e', position: 'relative', overflow: 'hidden' }}>
+                    {/* Abstract Visual for Tesla */}
+                    <div style={{
+                        position: 'absolute',
+                        inset: 0,
+                        background: 'linear-gradient(135deg, #cc0000 0%, #000 100%)',
+                        opacity: 0.8
+                    }}></div>
+                    <div style={{ position: 'absolute', bottom: '40px', right: '40px', fontSize: '8rem', fontWeight: 900, color: 'rgba(255,255,255,0.1)' }}>
+                        T
+                    </div>
                 </div>
             </Card>
 
-            {/* ROW 4: 2-Column Grid */}
+            {/* ROW 4: Experience & Skills */}
             <section style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
                 gap: '24px'
             }}>
+                {/* Experience Card */}
                 <Card delay={0.5} style={{ minHeight: '400px' }}>
-                    <h3 style={{ fontSize: '2rem', marginBottom: '16px' }}>Design System</h3>
-                    <p style={{ color: 'var(--text-muted)', marginBottom: '32px' }}>{t.work.items[1].solution}</p>
-                    <div style={{ width: '100%', height: '200px', background: '#e0e0e0', borderRadius: '12px' }}></div>
+                    <h3 style={{ fontSize: '2rem', marginBottom: '24px' }}>{t.experience.title}</h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                        {t.experience.items.map((item, i) => (
+                            <div key={i} style={{ borderLeft: '2px solid var(--card-border)', paddingLeft: '20px' }}>
+                                <h4 style={{ fontSize: '1.2rem', marginBottom: '4px' }}>{item.role}</h4>
+                                <div style={{ color: 'var(--accent-color)', fontSize: '0.9rem', marginBottom: '4px' }}>{item.company}</div>
+                                <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>{item.date}</div>
+                            </div>
+                        ))}
+                    </div>
                 </Card>
 
+                {/* Skills & Stack Card */}
                 <Card delay={0.6} style={{ minHeight: '400px' }}>
-                    <h3 style={{ fontSize: '2rem', marginBottom: '16px' }}>Playground</h3>
-                    <p style={{ color: 'var(--text-muted)', marginBottom: '32px' }}>Experimental labs.</p>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                        <div style={{ aspectRatio: '1', background: 'var(--bg-color)', borderRadius: '8px' }}></div>
-                        <div style={{ aspectRatio: '1', background: 'var(--bg-color)', borderRadius: '8px' }}></div>
+                    <h3 style={{ fontSize: '2rem', marginBottom: '24px' }}>{t.skills.title}</h3>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+                        {t.skills.list.map((skill, i) => (
+                            <span key={i} style={{
+                                padding: '8px 16px',
+                                borderRadius: '50px',
+                                background: 'var(--bg-color)',
+                                border: '1px solid var(--card-border)',
+                                fontSize: '0.9rem',
+                                color: 'var(--text-muted)'
+                            }}>
+                                {skill}
+                            </span>
+                        ))}
                     </div>
                 </Card>
             </section>
