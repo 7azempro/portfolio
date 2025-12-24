@@ -26,7 +26,7 @@ const NavItem = ({ href, icon: Icon, label, isActive }) => (
 );
 
 const Navbar = () => {
-    const { lang, toggleLanguage } = useLanguage();
+    const { lang, toggleLanguage, t } = useLanguage();
     const pathname = usePathname();
 
     return (
@@ -47,14 +47,15 @@ const Navbar = () => {
                 alignItems: 'center',
                 gap: '8px',
                 border: '1px solid var(--card-border)',
-                boxShadow: '0 20px 40px -10px rgba(0,0,0,0.1)'
+                boxShadow: '0 20px 40px -10px rgba(0,0,0,0.1)',
+                direction: 'ltr' // Force LTR for Navbar layout consistency
             }}
         >
             {/* Navigation Links */}
             <div style={{ display: 'flex', alignItems: 'center', paddingLeft: '6px' }}>
-                <NavItem href="/" icon={Home} label="Home" isActive={pathname === '/'} />
-                <NavItem href="/#work" icon={LayoutGrid} label="Work" isActive={pathname === '/#work'} />
-                <NavItem href="/blog" icon={PenTool} label="Writing" isActive={pathname.startsWith('/blog')} />
+                <NavItem href="/" icon={Home} label={t.nav.home} isActive={pathname === '/'} />
+                <NavItem href="/#work" icon={LayoutGrid} label={t.nav.work} isActive={pathname === '/#work'} />
+                <NavItem href="/blog" icon={PenTool} label={t.nav.writing || "Writing"} isActive={pathname.startsWith('/blog')} />
             </div>
 
             <div style={{ width: '1px', height: '24px', background: 'var(--card-border)', margin: '0 4px' }}></div>

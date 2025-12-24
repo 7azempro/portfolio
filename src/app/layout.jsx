@@ -1,0 +1,51 @@
+import '../styles/globals.css';
+import { Rubik, Plus_Jakarta_Sans } from 'next/font/google';
+import ClientProviders from '@/components/layout/ClientProviders';
+
+const rubik = Rubik({
+    subsets: ['arabic', 'latin'],
+    variable: '--font-rubik',
+    display: 'swap',
+});
+
+const jakarta = Plus_Jakarta_Sans({
+    subsets: ['latin'],
+    variable: '--font-jakarta',
+    display: 'swap',
+});
+
+export const metadata = {
+    title: {
+        template: '%s | 7azempro',
+        default: '7azempro | Premium Product Design & Development',
+    },
+    description: 'Transforming complex ideas into elegant digital systems. Expert in React, Next.js, and Product Design.',
+    keywords: ['Portfolio', 'Product Design', 'Next.js', 'React', 'Design Systems', 'Arabic UI'],
+    icons: {
+        icon: '/favicon.ico',
+    },
+};
+
+import ScrollProgress from '@/components/ui/ScrollProgress';
+
+export default function RootLayout({ children }) {
+    return (
+        <html lang="ar" dir="rtl" className="scroll-smooth">
+            <body className="bg-background text-foreground transition-colors duration-300">
+                <ClientProviders fontVariables={{ rubikFont: rubik.variable, jakartaFont: jakarta.variable }}>
+                    <ScrollProgress />
+                    {/* Atmospheric Layers */}
+                    <div className="fixed inset-0 z-[-1] bg-background">
+                        <div className="absolute inset-0 bg-noise opacity-[0.4] mix-blend-overlay pointer-events-none" />
+                        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-600/10 blur-[120px] animate-pulse" />
+                        <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-600/10 blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
+                    </div>
+
+                    <div className="relative z-10">
+                        {children}
+                    </div>
+                </ClientProviders>
+            </body>
+        </html>
+    );
+}

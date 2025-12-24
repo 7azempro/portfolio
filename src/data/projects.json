@@ -1,0 +1,18 @@
+[
+  {
+    "slug": "fintech-dashboard",
+    "title": "Fintech Dashboard",
+    "category": "Product Design",
+    "thumbnail": "/project1.jpg",
+    "desc": "Redesigning the financial future.",
+    "content": "Full case study content..."
+  },
+  {
+    "slug": "ecommerce-system",
+    "title": "E-Commerce System",
+    "category": "Design System",
+    "thumbnail": "/project2.jpg",
+    "desc": "Unified design language for 5 brands.",
+    "content": "Full case study content..."
+  }
+]

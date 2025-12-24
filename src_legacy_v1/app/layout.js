@@ -7,14 +7,14 @@ import Navbar from "@/components/Navbar";
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-plus-jakarta",
-  display: "swap",
+  display: "block",
 });
 
 const ibmPlexArabic = IBM_Plex_Sans_Arabic({
   subsets: ["arabic"],
   weight: ["100", "200", "300", "400", "500", "600", "700"],
   variable: "--font-ibm-plex-arabic",
-  display: "swap",
+  display: "block",
 });
 
 export const metadata = {

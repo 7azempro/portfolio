@@ -1,0 +1,56 @@
+{
+  "items": [
+    {
+      "id": "case-1",
+      "type": "project",
+      "title": "Fintech Dashboard",
+      "subtitle": "Product Design",
+      "thumbnail": "/project1.jpg",
+      "colSpan": 2,
+      "rowSpan": 2,
+      "url": "/works/fintech-dashboard"
+    },
+    {
+      "id": "about",
+      "type": "card",
+      "title": "About Me",
+      "subtitle": "Bio & Skills",
+      "colSpan": 1,
+      "rowSpan": 1,
+      "content": "Obsessed with systems.",
+      "url": "/about"
+    },
+    {
+      "id": "stack",
+      "type": "list",
+      "title": "Tech Stack",
+      "items": [
+        "Next.js",
+        "React",
+        "Framer",
+        "Tailwind"
+      ],
+      "colSpan": 1,
+      "rowSpan": 1
+    },
+    {
+      "id": "services",
+      "type": "list",
+      "title": "Services",
+      "items": [
+        "Design Systems",
+        "Web Development",
+        "Strategy"
+      ],
+      "colSpan": 1,
+      "rowSpan": 2
+    },
+    {
+      "id": "socials",
+      "type": "socials",
+      "title": "Connect",
+      "colSpan": 1,
+      "rowSpan": 1
+    }
+  ]
+}

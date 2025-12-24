@@ -1,0 +1,18 @@
+[
+  {
+    "slug": "future-of-design",
+    "title": "The Future of Design Systems",
+    "date": "2024-03-15",
+    "readTime": "5 min read",
+    "thumbnail": "/article1.jpg",
+    "content": "Design systems are evolving differently in the AI era..."
+  },
+  {
+    "slug": "react-server-components",
+    "title": "Understanding RSCs",
+    "date": "2024-02-10",
+    "readTime": "8 min read",
+    "thumbnail": "/article2.jpg",
+    "content": "Why Server Components change everything..."
+  }
+]
