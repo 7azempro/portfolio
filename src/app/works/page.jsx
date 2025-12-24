@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { ArrowUpRight } from 'lucide-react';
+// import { ArrowUpRight } from 'lucide-react'; // Unused
 import { motion } from 'framer-motion';
 
 // This is a Client Component now for Animation (Data passed as props or fetched in wrapper - simplification: fetch in client or wrap)

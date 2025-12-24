@@ -9,7 +9,7 @@
         /* #FAFAFA */
         --foreground: 17 17 17;
         /* #111111 */
-        --font-primary: var(--font-rubik);
+        --font-primary: var(--font-ibm);
     }
 
     .dark {

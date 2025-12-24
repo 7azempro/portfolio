@@ -1,10 +1,11 @@
 import '../styles/globals.css';
-import { Rubik, Plus_Jakarta_Sans } from 'next/font/google';
+import { IBM_Plex_Sans_Arabic, Plus_Jakarta_Sans } from 'next/font/google';
 import ClientProviders from '@/components/layout/ClientProviders';
 
-const rubik = Rubik({
-    subsets: ['arabic', 'latin'],
-    variable: '--font-rubik',
+const ibmArabic = IBM_Plex_Sans_Arabic({
+    subsets: ['arabic'],
+    weight: ['100', '200', '300', '400', '500', '600', '700'],
+    variable: '--font-ibm',
     display: 'swap',
 });
 
@@ -22,7 +23,7 @@ export const metadata = {
     description: 'Transforming complex ideas into elegant digital systems. Expert in React, Next.js, and Product Design.',
     keywords: ['Portfolio', 'Product Design', 'Next.js', 'React', 'Design Systems', 'Arabic UI'],
     icons: {
-        icon: '/favicon.ico',
+        icon: '/icon.svg',
     },
 };
 
@@ -32,7 +33,7 @@ export default function RootLayout({ children }) {
     return (
         <html lang="ar" dir="rtl" className="scroll-smooth">
             <body className="bg-background text-foreground transition-colors duration-300">
-                <ClientProviders fontVariables={{ rubikFont: rubik.variable, jakartaFont: jakarta.variable }}>
+                <ClientProviders fontVariables={{ ibmFont: ibmArabic.variable, jakartaFont: jakarta.variable }}>
                     <ScrollProgress />
                     {/* Atmospheric Layers */}
                     <div className="fixed inset-0 z-[-1] bg-background">

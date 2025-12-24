@@ -2,20 +2,20 @@
 import { useEffect } from 'react';
 import { useLanguage } from '@/lib/context/LanguageContext';
 
-export default function ThemeSync({ rubikFont, jakartaFont }) {
+export default function ThemeSync({ ibmFont, jakartaFont }) {
     const { lang } = useLanguage();
 
     useEffect(() => {
         const root = document.documentElement;
 
         // Remove existing font classes
-        root.classList.remove(rubikFont, jakartaFont);
+        root.classList.remove(ibmFont, jakartaFont);
 
         if (lang === 'ar') {
-            // ARABIC: Light Mode & Rubik (Architect Light)
+            // ARABIC: Light Mode & IBM Plex Sans Arabic (Architect Light)
             root.classList.add('light');
             root.classList.remove('dark');
-            root.classList.add(rubikFont);
+            root.classList.add(ibmFont);
             root.setAttribute('data-theme', 'light');
             root.setAttribute('dir', 'rtl');
         } else {
@@ -26,7 +26,7 @@ export default function ThemeSync({ rubikFont, jakartaFont }) {
             root.setAttribute('data-theme', 'dark');
             root.setAttribute('dir', 'ltr');
         }
-    }, [lang, rubikFont, jakartaFont]);
+    }, [lang, ibmFont, jakartaFont]);
 
     return null; // This component renders nothing visually
 }
