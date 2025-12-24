@@ -1,0 +1,59 @@
+.scrollSection {
+    height: 300vh;
+    /* Make it tall to allow scrolling */
+    background: #000;
+    position: relative;
+}
+
+.stickyWrapper {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    padding-left: 5vw;
+}
+
+.sectionTitle {
+    font-size: 2rem;
+    color: #555;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.cardContainer {
+    display: flex;
+    gap: 4rem;
+}
+
+.card {
+    min-width: 400px;
+    height: 50vh;
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem;
+    transition: background 0.3s;
+}
+
+.card:hover {
+    background: #161616;
+    border-color: #333;
+}
+
+.card h3 {
+    font-size: 3rem;
+    color: #fff;
+    margin-bottom: 1rem;
+}
+
+.card p {
+    font-size: 1.2rem;
+    color: #888;
+}
