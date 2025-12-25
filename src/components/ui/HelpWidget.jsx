@@ -15,12 +15,13 @@ import Link from 'next/link';
 export default function HelpWidget() {
     const { lang } = useLanguage();
     const [isOpen, setIsOpen] = useState(false);
-    const [widgetPosition, setWidgetPosition] = useState({ y: 0, isTop: false });
+    const [widgetPosition, setWidgetPosition] = useState({ isTop: false, isRight: true }); // Default Right-Bottom
 
     const handleDrag = (event, info) => {
-        const y = info.point.y;
+        const { x, y } = info.point;
         const isTop = y < window.innerHeight / 2;
-        setWidgetPosition({ y, isTop });
+        const isRight = x > window.innerWidth / 2;
+        setWidgetPosition({ isTop, isRight });
     };
 
     const copyLink = () => {
@@ -251,8 +252,8 @@ export default function HelpWidget() {
             drag
             dragMomentum={false}
             onDrag={handleDrag}
-            dragConstraints={{ left: -300, right: 0, top: -500, bottom: 0 }}
-            className={`fixed bottom-32 md:bottom-6 z-[9990] flex flex-col items-end gap-4 ${lang === 'ar' ? 'left-6 items-start' : 'right-6 items-end'}`}
+            dragConstraints={{ left: -window.innerWidth + 50, right: 0, top: -window.innerHeight + 50, bottom: 0 }}
+            className={`fixed bottom-32 md:bottom-6 z-[9990] flex flex-col gap-4 ${widgetPosition.isRight ? 'items-end right-6' : 'items-start left-6'}`}
         >
             {/* TRIGGER BUTTON */}
             <motion.button
@@ -276,11 +277,12 @@ export default function HelpWidget() {
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        initial={{ opacity: 0, y: widgetPosition.isTop ? -10 : 10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: widgetPosition.isTop ? -10 : 10, scale: 0.95 }}
+                        initial={{ opacity: 0, y: widgetPosition.isTop ? -10 : 10, scale: 0.95, x: widgetPosition.isRight ? 10 : -10 }}
+                        animate={{ opacity: 1, y: 0, scale: 1, x: 0 }}
+                        exit={{ opacity: 0, y: widgetPosition.isTop ? -10 : 10, scale: 0.95, x: widgetPosition.isRight ? 10 : -10 }}
                         transition={{ duration: 0.3, ease: "circOut" }}
-                        className={`absolute ${widgetPosition.isTop ? 'top-full mt-4' : 'bottom-full mb-4'} w-[calc(100vw-3rem)] sm:w-80 max-h-[60vh] md:max-h-[75vh] overflow-y-auto bg-background/60 backdrop-blur-xl backdrop-saturate-150 border border-foreground/10 rounded-2xl shadow-2xl origin-${widgetPosition.isTop ? 'top' : 'bottom'}-${lang === 'ar' ? 'left' : 'right'}`}
+                        className={`absolute ${widgetPosition.isTop ? 'top-full mt-4' : 'bottom-full mb-4'} w-[calc(100vw-3rem)] sm:w-80 max-h-[60vh] md:max-h-[75vh] overflow-y-auto bg-background/60 backdrop-blur-xl backdrop-saturate-150 border border-foreground/10 rounded-2xl shadow-2xl origin-${widgetPosition.isTop ? 'top' : 'bottom'}-${widgetPosition.isRight ? 'right' : 'left'}`}
+                        style={{ [widgetPosition.isRight ? 'right' : 'left']: 0 }}
                         onPointerDownCapture={(e) => e.stopPropagation()}
                     >
 
