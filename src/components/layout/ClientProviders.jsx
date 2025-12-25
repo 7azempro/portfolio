@@ -11,7 +11,7 @@ import Preloader from '@/components/ui/Preloader';
 import HelpWidget from '@/components/ui/HelpWidget';
 import { SoundProvider } from '@/lib/context/SoundContext';
 
-export default function ClientProviders({ children, fontVariables }) {
+export default function ClientProviders({ children, fontVariables, nav, socials }) {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -42,10 +42,10 @@ export default function ClientProviders({ children, fontVariables }) {
                 </AnimatePresence>
 
                 <Cursor />
-                <Header />
+                <Header nav={nav} />
                 {children}
                 <HelpWidget />
-                <Footer />
+                <Footer socials={socials} />
             </LanguageProvider>
         </SoundProvider>
     );

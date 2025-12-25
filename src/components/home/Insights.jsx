@@ -2,7 +2,8 @@
 import { motion } from 'framer-motion';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { useSound } from '@/lib/context/SoundContext';
-import { PiArrowUpRightLight, PiLinkedinLogoLight, PiArticleLight } from 'react-icons/pi';
+import { PiArrowUpRightLight, PiLinkedinLogoFill, PiArticleLight } from 'react-icons/pi';
+import { urlFor } from '@/sanity/lib/image';
 
 export default function Insights({ articles = [] }) {
     const { lang } = useLanguage();
@@ -47,7 +48,7 @@ export default function Insights({ articles = [] }) {
                         </span>
                     </div>
                     <div className="hidden md:block">
-                        <PiLinkedinLogoLight className="w-12 h-12 text-blue-500 opacity-50" />
+                        <PiLinkedinLogoFill className="w-12 h-12 text-blue-600" />
                     </div>
                 </div>
 
@@ -79,6 +80,17 @@ export default function Insights({ articles = [] }) {
                                     </span>
                                     <PiArrowUpRightLight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </div>
+
+                                {/* Thumbnail */}
+                                {article.thumbnail && (
+                                    <div className="w-full h-48 mb-6 overflow-hidden rounded-lg">
+                                        <img
+                                            src={urlFor(article.thumbnail).width(600).height(400).url()}
+                                            alt={title}
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                        />
+                                    </div>
+                                )}
 
                                 {/* Content */}
                                 <h3 className="text-xl font-bold mb-4 line-clamp-2 leading-tight group-hover:text-background transition-colors">

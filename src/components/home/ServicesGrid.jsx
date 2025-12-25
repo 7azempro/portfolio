@@ -1,17 +1,13 @@
 'use client';
 import { motion } from 'framer-motion';
-import { PiLayoutLight, PiDeviceMobileLight, PiHardDrivesLight, PiPenNibLight, PiArrowUpRightLight } from 'react-icons/pi';
+import { PiLayoutLight, PiDeviceMobileLight, PiHardDrivesLight, PiPenNibLight, PiArrowUpRightLight, PiAppWindowLight } from 'react-icons/pi';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { useSound } from '@/lib/context/SoundContext';
 
+import { getIcon } from '@/components/ui/IconMapper';
+
 function ServiceCard({ service, index, spanClass, onHover }) {
-    const icons = {
-        web: PiLayoutLight,
-        mobile: PiDeviceMobileLight,
-        backend: PiHardDrivesLight,
-        design: PiPenNibLight
-    };
-    const Icon = icons[service.iconKey] || AppWindow;
+    const Icon = getIcon(service.iconKey) || PiAppWindowLight;
 
     // Format number strictly: 01, 02..
     const num = (index + 1).toString().padStart(2, '0');
@@ -63,15 +59,21 @@ export default function ServicesGrid({ services = [] }) {
         return item[`${field}_en`] || item[field] || "";
     };
 
-    // If Sanity is empty, use fallback (Optional: defined below or removed if strictly CMS)
-    // For now, if services array is empty, we show nothing or skeleton?
-    // Let's assume passed services are what we want.
+    // Fallback Data to match Schema
+    const FALLBACK_SERVICES = [
+        { _id: '1', title: 'تطوير الواجهات', title_en: 'Frontend Architecture', description: 'بناء واجهات تفاعلية سريعة باستخدام React و Next.js.', description_en: 'Building performant, interactive UIs with React & Next.js.', iconKey: 'web' },
+        { _id: '2', title: 'تصميم النظم', title_en: 'System Design', description: 'تصميم أنظمة تصميم متكاملة وقابلة للتوسع.', description_en: 'Creating scalable, atomic design systems.', iconKey: 'design' },
+        { _id: '3', title: 'تطبيقات الجوال', title_en: 'Mobile Hubs', description: 'تطبيقات جوال عابرة للمنصات بأداء أصلي.', description_en: 'Cross-platform mobile experiences with native performance.', iconKey: 'mobile' },
+        { _id: '4', title: 'تطوير الخلفيات', title_en: 'Backend Systems', description: 'حلول خادم قوية ومعالجة بيانات آمنة.', description_en: 'Robust server solutions and secure data handling.', iconKey: 'backend' }
+    ];
+
+    const finalServices = services.length > 0 ? services : FALLBACK_SERVICES;
 
     // Map passed services to structure
-    const displayServices = services.map(s => ({
+    const displayServices = finalServices.map(s => ({
         _id: s._id,
         title: getLoc(s, 'title'),
-        desc: getLoc(s, 'description'), // Schema says 'description' NOT 'desc'
+        desc: getLoc(s, 'description'), // Schema says 'description'
         iconKey: s.iconKey
     }));
 

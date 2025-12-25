@@ -25,20 +25,22 @@ export default function Hero({ data }) {
 
     const content = {
         ar: {
-            status: "الحالة: متاح للمشاريع",
+            status: data?.availability || "الحالة: متاح للمشاريع",
             title: (data?.title && hasArabic(data.title)) ? data.title : "مهندس\nالنظم\nالرقمية.",
             subtitle: (data?.subtitle && hasArabic(data.subtitle)) ? data.subtitle : "دقة. وضوح. هدف.",
             desc: (data?.desc && hasArabic(data.desc)) ? data.desc : "نصمم بنية رقمية متكاملة تجمع بين الصرامة الهندسية وجماليات التصميم.",
-            ctaPrimary: "ابدأ العمل",
-            ctaSecondary: "معرض الأعمال"
+            ctaPrimary: data?.cta_primary || "ابدأ العمل",
+            ctaSecondary: data?.cta_secondary || "معرض الأعمال",
+            location: data?.location || "القاهرة، مصر"
         },
         en: {
-            status: "STATUS: AVAILABLE_FOR_WORK",
+            status: data?.availability_en || "STATUS: AVAILABLE_FOR_WORK",
             title: data?.title_en || "SYSTEM\nINTERFACE\nARCHITECT.",
             subtitle: data?.subtitle_en || "PRECISION. CLARITY. PURPOSE.",
             desc: data?.desc_en || "Constructing digital infrastructures that combine technical precision with Swiss minimalist aesthetics.",
-            ctaPrimary: "INITIATE_PROJECT",
-            ctaSecondary: "VIEW_INDEX"
+            ctaPrimary: data?.cta_primary_en || "INITIATE_PROJECT",
+            ctaSecondary: data?.cta_secondary_en || "VIEW_INDEX",
+            location: data?.location_en || "CAIRO, EG"
         }
     };
 
@@ -52,10 +54,9 @@ export default function Hero({ data }) {
 
             <div className="container mx-auto px-6 relative z-10 h-full flex flex-col justify-center flex-1">
 
-                <div className="flex flex-col-reverse lg:grid lg:grid-cols-12 gap-10 lg:gap-12 items-center relative z-20">
-
+                <div className="flex flex-col lg:grid lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-20">
                     {/* TEXT CONTENT (Strict Typographic Hierarchy) */}
-                    <div className="w-full lg:col-span-7 rtl:text-right ltr:text-left relative z-30 pb-32 lg:pb-0">
+                    <div className="w-full lg:col-span-7 rtl:text-right ltr:text-left relative z-30 mb-8 lg:mb-0">
 
                         {/* Status Indicator (Technical) */}
                         <div className="inline-flex items-center gap-3 border border-foreground/10 px-3 py-1 mb-6 md:mb-12 font-sans text-[10px] tracking-[0.2em] uppercase text-muted-foreground w-fit bg-foreground/5 backdrop-blur-sm">
@@ -99,7 +100,7 @@ export default function Hero({ data }) {
                                 </p>
                             </div>
 
-                            <div className="fixed bottom-6 left-6 right-6 lg:static lg:w-full flex items-center justify-between lg:justify-start gap-4 z-50 lg:mt-4 p-4 lg:p-0 rounded-2xl lg:rounded-none bg-background/80 lg:bg-transparent backdrop-blur-xl lg:backdrop-blur-none border border-foreground/10 lg:border-none shadow-2xl lg:shadow-none">
+                            <div className="w-full lg:w-full flex items-center justify-between lg:justify-start gap-4 z-50 mt-8 lg:mt-4 p-4 lg:p-0 rounded-2xl lg:rounded-none bg-background/50 lg:bg-transparent backdrop-blur-xl lg:backdrop-blur-none border border-foreground/10 lg:border-none shadow-xl lg:shadow-none">
                                 <Link
                                     href="/works"
                                     onClick={playClick}
@@ -124,7 +125,7 @@ export default function Hero({ data }) {
                     </div>
 
                     {/* VISUAL CONTENT (Technical Display) */}
-                    <div className="w-full lg:col-span-5 h-[300px] md:h-[400px] lg:h-[600px] relative flex items-center justify-center z-10 mb-8 lg:mb-0">
+                    <div className="w-full lg:col-span-5 h-[280px] md:h-[400px] lg:h-[600px] relative flex items-center justify-center z-10 lg:mb-0 ordering-first lg:order-none">
                         {/* Frame Markers (RTL Aware) */}
                         <div className="absolute top-0 left-0 rtl:right-0 rtl:left-auto w-4 h-4 border-t border-l rtl:border-r rtl:border-l-0 border-foreground/30" />
                         <div className="absolute top-0 right-0 rtl:left-0 rtl:right-auto w-4 h-4 border-t border-r rtl:border-l rtl:border-r-0 border-foreground/30" />
@@ -152,7 +153,7 @@ export default function Hero({ data }) {
                     <span>SCROLL_TO_EXPLORE</span>
                 </div>
                 <div className="hidden md:flex items-center gap-8">
-                    <span>CAIRO, EG</span>
+                    <span>{t.location}</span>
                     <span>30.0444° N, 31.2357° E</span>
                 </div>
                 <div>

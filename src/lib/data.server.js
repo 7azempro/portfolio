@@ -6,9 +6,9 @@ const HERO_QUERY = `*[_type == "hero"][0]`;
 const PROJECT_QUERY = `*[_type == "project"]`;
 const ARTICLE_QUERY = `*[_type == "article"]`;
 const SERVICE_QUERY = `*[_type == "service"]`;
-const TESTIMONIAL_QUERY = `*[_type == "testimonial"]`;
-const BENTO_QUERY = `*[_type == "bento"]`;
 const TECH_QUERY = `*[_type == "tech"] | order(row asc, name asc)`;
+const SLIDER_QUERY = `*[_type == "project"] | order(year desc)`;
+const ABOUT_QUERY = `*[_type == "about"][0]`;
 const SETTINGS_QUERY = `*[_type == "settings"][0]`;
 
 // Fallback for Missing Config (Not connected)
@@ -65,14 +65,11 @@ export async function getLocalData(key) {
                 return await client.fetch(ARTICLE_QUERY, {}, { next: { revalidate: 30 } }) || [];
             case 'services':
                 return await client.fetch(SERVICE_QUERY, {}, { next: { revalidate: 30 } }) || [];
-            case 'testimonials':
-                return await client.fetch(TESTIMONIAL_QUERY, {}, { next: { revalidate: 30 } }) || [];
-            case 'bento':
-                const items = await client.fetch(BENTO_QUERY, {}, { next: { revalidate: 30 } }) || [];
-                // Handle Bento singleton vs list
-                return { items: Array.isArray(items) ? items : (items.items || []) };
+
             case 'tech':
                 return await client.fetch(TECH_QUERY, {}, { next: { revalidate: 30 } }) || [];
+            case 'about':
+                return await client.fetch(ABOUT_QUERY, {}, { next: { revalidate: 30 } }) || {};
             case 'settings':
                 return await client.fetch(SETTINGS_QUERY, {}, { next: { revalidate: 30 } }) || {};
             default:

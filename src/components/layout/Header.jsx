@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSound } from '@/lib/context/SoundContext';
 import Logo from '@/components/ui/Logo';
 
-export default function Header() {
+export default function Header({ nav }) {
     const { lang, toggleLanguage } = useLanguage();
     const { playHover, playClick } = useSound();
     const [isOpen, setIsOpen] = useState(false);
@@ -19,11 +19,18 @@ export default function Header() {
         setIsOpen(false);
     }, [lang]);
 
-    const links = [
-        { href: "/", label: { ar: "الرئيسية", en: "INDEX" } },
-        { href: "/works", label: { ar: "أعمالي", en: "PROJECTS" } },
-        { href: "/about", label: { ar: "عني", en: "BIO" } },
-    ];
+    // Format CMS nav or Fallback
+    const links = nav?.map(item => ({
+        href: item.link || '/',
+        label: {
+            ar: item.label || 'رابط',
+            en: item.label_en || 'Link'
+        }
+    })) || [
+            { href: "/", label: { ar: "الرئيسية", en: "INDEX" } },
+            { href: "/works", label: { ar: "أعمالي", en: "PROJECTS" } },
+            { href: "/about", label: { ar: "عني", en: "BIO" } },
+        ];
 
     const socials = [
         { name: "Twitter / X", link: "https://twitter.com/7azempro" },

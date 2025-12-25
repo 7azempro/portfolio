@@ -3,18 +3,29 @@ import Link from 'next/link';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import Logo from '@/components/ui/Logo';
 import { PiArrowUpRightLight, PiTwitterLogoLight, PiLinkedinLogoLight, PiGithubLogoLight, PiInstagramLogoLight, PiBehanceLogoLight } from 'react-icons/pi';
+import { useSound } from '@/lib/context/SoundContext';
 
-export default function Footer() {
+import { getIcon } from '@/components/ui/IconMapper';
+
+export default function Footer({ socials }) {
     const { lang } = useLanguage();
+    const { playHover, playClick } = useSound();
     const year = new Date().getFullYear();
 
-    const socials = [
-        { name: "Twitter / X", link: "https://twitter.com/7azempro", icon: PiTwitterLogoLight },
-        { name: "LinkedIn", link: "https://linkedin.com/in/7azempro", icon: PiLinkedinLogoLight },
-        { name: "GitHub", link: "https://github.com/7azempro", icon: PiGithubLogoLight },
-        { name: "Behance", link: "https://www.behance.net/hazempro", icon: PiBehanceLogoLight },
-        { name: "Dribbble", link: "https://dribbble.com/7azempro", icon: PiInstagramLogoLight }, // Using Instagram icon for Dribbble as per instruction's icon list
+    // Default Fallback
+    const defaultSocials = [
+        { name: "Twitter / X", link: "https://twitter.com/7azempro", iconKey: "twitter" },
+        { name: "LinkedIn", link: "https://linkedin.com/in/7azempro", iconKey: "linkedin" },
+        { name: "GitHub", link: "https://github.com/7azempro", iconKey: "github" },
+        { name: "Behance", link: "https://www.behance.net/hazempro", iconKey: "behance" },
+        { name: "Dribbble", link: "https://dribbble.com/7azempro", iconKey: "dribbble" },
     ];
+
+    const displaySocials = (socials || defaultSocials).map(s => ({
+        name: s.platform || s.name,
+        link: s.url || s.link,
+        Icon: getIcon(s.iconKey) || PiArrowUpRightLight // Fallback icon
+    }));
 
     return (
         <footer className="bg-background mt-32 border-t border-foreground/10">
@@ -22,6 +33,8 @@ export default function Footer() {
             {/* 1. Header Row (Call to Action) */}
             <a
                 href="mailto:hazem.gamal1@outlook.com"
+                onClick={playClick}
+                onMouseEnter={playHover}
                 className="group block border-b border-foreground/10 hover:bg-foreground hover:text-background transition-colors duration-500"
             >
                 <div className="container mx-auto px-6 py-16 md:py-24 flex items-center justify-between">
@@ -52,16 +65,18 @@ export default function Footer() {
                             {lang === 'ar' ? "تواصل" : "CONNECT"}
                         </h4>
                         <ul className="flex flex-col gap-3">
-                            {socials.map((social) => (
+                            {displaySocials.map((social) => (
                                 <li key={social.name}>
                                     <a
                                         href={social.link}
                                         target="_blank"
                                         rel="noopener noreferrer"
+                                        onClick={playClick}
+                                        onMouseEnter={playHover}
                                         className="text-lg hover:text-blue-500 transition-colors flex items-center gap-2 group"
                                     >
                                         <span>{social.name}</span>
-                                        <PiArrowUpRightLight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                        <social.Icon className="w-5 h-5 opacity-50 group-hover:opacity-100 transition-opacity" />
                                     </a>
                                 </li>
                             ))}
@@ -74,9 +89,9 @@ export default function Footer() {
                             {lang === 'ar' ? "القائمة" : "INDEX"}
                         </h4>
                         <ul className="flex flex-col gap-3 font-medium">
-                            <li><Link href="/" className="hover:text-blue-500 transition-colors">{lang === 'ar' ? "الرئيسية" : "Home"}</Link></li>
-                            <li><Link href="/works" className="hover:text-blue-500 transition-colors">{lang === 'ar' ? "الأعمال" : "Works"}</Link></li>
-                            <li><Link href="/about" className="hover:text-blue-500 transition-colors">{lang === 'ar' ? "عني" : "About"}</Link></li>
+                            <li><Link href="/" onClick={playClick} onMouseEnter={playHover} className="hover:text-blue-500 transition-colors">{lang === 'ar' ? "الرئيسية" : "Home"}</Link></li>
+                            <li><Link href="/works" onClick={playClick} onMouseEnter={playHover} className="hover:text-blue-500 transition-colors">{lang === 'ar' ? "الأعمال" : "Works"}</Link></li>
+                            <li><Link href="/about" onClick={playClick} onMouseEnter={playHover} className="hover:text-blue-500 transition-colors">{lang === 'ar' ? "عني" : "About"}</Link></li>
                         </ul>
                     </div>
 

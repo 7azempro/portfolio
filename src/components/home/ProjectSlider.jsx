@@ -1,14 +1,15 @@
 'use client';
+// Force Refresh v2
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
 import { PiArrowUpRightLight, PiArrowRightLight } from 'react-icons/pi';
 import { useLanguage } from '@/lib/context/LanguageContext';
+import { urlFor } from '@/sanity/lib/image';
 
 // --- Configuration & Data ---
-const STATIC_IMAGES = {
-    '4': 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop', // Behance (Abstract)
-};
+// --- Configuration & Data ---
+// Removed STATIC_IMAGES in favor of CMS Thumbnails
 
 const FALLBACK_IMAGES = {
     '1': 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?q=80&w=1200', // Medical
@@ -22,14 +23,49 @@ const FALLBACK_IMAGES = {
 const FALLBACK_PROJECTS = [
     {
         _id: '1',
-        title_ar: 'نادي الاستسقاء المصري', title_en: 'Egyptian Club of Ascites',
-        category_ar: 'طبي / مؤسسي', category_en: 'Medical / Organization',
+        title: 'نادي الاستسقاء المصري', title_en: 'Egyptian Club of Ascites',
+        category: 'طبي / مؤسسي', category_en: 'Medical / Organization',
         year: '2025',
         link: 'https://egyptianclubofascites.com/',
-        desc_ar: 'المنصة الرقمية الرسمية لنادي الاستسقاء المصري.', desc_en: 'Official digital presence for the Egyptian Club of Ascites.',
+        desc: 'المنصة الرقمية لنادي الاستسقاء المصري.', desc_en: 'Official digital presence for the Egyptian Club of Ascites.',
         color: 'bg-emerald-500'
     },
-    // ... (Keep strictly necessary fallbacks to avoid clutter, or rely on empty state)
+    {
+        _id: '2',
+        title: 'مسار العقارية', title_en: 'Masar Real Estate',
+        category: 'عقارات', category_en: 'Real Estate Hub',
+        year: '2024',
+        link: 'https://example.com',
+        desc: 'منصة عقارية شاملة لبيع وإدارة الأصول.', desc_en: 'Comprehensive real estate asset management platform.',
+        color: 'bg-blue-600'
+    },
+    {
+        _id: '3',
+        title: 'رحلات', title_en: 'Rihlat Travel',
+        category: 'سفر وسياحة', category_en: 'Travel & Tourism',
+        year: '2023',
+        link: 'https://example.com',
+        desc: 'تجربة حجز سلسة للمسافر العصري.', desc_en: 'Seamless booking experience for modern travelers.',
+        color: 'bg-orange-500'
+    },
+    {
+        _id: '5',
+        title: 'كورب تك', title_en: 'CorpTech Solutions',
+        category: 'شركات', category_en: 'Enterprise',
+        year: '2023',
+        link: 'https://example.com',
+        desc: 'لوحة تحكم إدارية للشركات الكبرى.', desc_en: 'Administrative dashboard for large scale enterprises.',
+        color: 'bg-slate-800'
+    },
+    {
+        _id: '6',
+        title: 'ديف كور', title_en: 'DevCore Systems',
+        category: 'تقنية', category_en: 'SaaS Platform',
+        year: '2022',
+        link: 'https://example.com',
+        desc: 'أدوات تطوير متقدمة للفرق التقنية.', desc_en: 'Advanced development tools for engineering teams.',
+        color: 'bg-indigo-600'
+    }
 ];
 
 // --- Sub-Components ---
@@ -46,9 +82,15 @@ function ProjectCard({ project, lang }) {
     // Determine Image Source:
     // 1. If ID 4 (Behance), use Static Abstract.
     // 2. Otherwise, try Microlink (Live Screenshot).
-    const imageUrl = project._id === '4'
-        ? STATIC_IMAGES['4']
-        : `https://api.microlink.io/?url=${encodeURIComponent(project.link)}&screenshot=true&meta=false&embed=screenshot.url&overlay.browser=dark&viewport.width=1280&viewport.height=800`;
+    // Determine Image Source:
+    // Prioritize CMS Thumbnail -> Then Microlink -> Then Fallback
+    // Determine Image Source:
+    // 1. CMS Thumbnail (Highest Priority)
+    // 2. Curated Fallback Image (for Demo Data)
+    // 3. Microlink (Live Backup)
+    const imageUrl = project.thumbnail
+        ? urlFor(project.thumbnail).width(800).height(600).url()
+        : (FALLBACK_IMAGES[project._id] || `https://api.microlink.io/?url=${encodeURIComponent(project.link)}&screenshot=true&meta=false&embed=screenshot.url&overlay.browser=dark&viewport.width=1280&viewport.height=800`);
 
     return (
         <a href={project.link} target="_blank" rel="noopener noreferrer" className="block relative group-hover:-translate-y-2 transition-transform duration-500">
@@ -115,6 +157,7 @@ function ProjectCard({ project, lang }) {
 // --- Main Component ---
 
 export default function ProjectSlider({ projects = [] }) {
+    console.log('[ProjectSlider] Received:', projects.length, 'Fallback needed:', projects.length === 0);
     const displayProjects = projects.length > 0 ? projects : FALLBACK_PROJECTS;
     const containerRef = useRef(null);
     const { scrollXProgress } = useScroll({ container: containerRef });
