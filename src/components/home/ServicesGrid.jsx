@@ -40,7 +40,7 @@ function ServiceCard({ service, index, spanClass, onHover }) {
                 <h3 className="text-2xl md:text-3xl font-bold mb-4 tracking-tight group-hover:translate-x-2 transition-transform duration-500">
                     {service.title}
                 </h3>
-                <p className="text-muted-foreground text-sm md:text-base leading-relaxed max-w-sm font-sans border-l border-foreground/10 pl-4">
+                <p className="text-muted-foreground text-sm md:text-base leading-relaxed max-w-sm font-sans border-l rtl:border-r rtl:border-l-0 border-foreground/10 pl-4 rtl:pr-4 rtl:pl-0">
                     {service.desc}
                 </p>
             </div>

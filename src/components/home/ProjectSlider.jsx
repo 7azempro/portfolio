@@ -177,7 +177,7 @@ export default function ProjectSlider() {
                     <div className="w-48 h-1 bg-foreground/10 dark:bg-white/10 rounded-full overflow-hidden">
                         <motion.div
                             className="h-full bg-blue-600 dark:bg-blue-500"
-                            style={{ scaleX: scrollXProgress, transformOrigin: lang === 'ar' ? "left" : "right" }}
+                            style={{ scaleX: scrollXProgress, transformOrigin: lang === 'ar' ? "right" : "left" }}
                         />
                     </div>
                 </div>
