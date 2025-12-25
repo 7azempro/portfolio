@@ -65,7 +65,7 @@ export default function Hero({ data }) {
 
             <div className="container mx-auto px-6 relative z-10 flex flex-col justify-start lg:justify-center flex-1">
 
-                <div className="flex flex-col lg:grid lg:grid-cols-12 gap-16 lg:gap-12 items-start lg:items-center relative z-20 pb-40 lg:pb-0">
+                <div className="flex flex-col lg:grid lg:grid-cols-12 gap-24 lg:gap-12 items-start lg:items-center relative z-20 pb-40 lg:pb-0">
                     {/* TEXT CONTENT (Strict Typographic Hierarchy) */}
                     <div className="w-full lg:col-span-7 rtl:text-right ltr:text-left relative z-30 mb-24 lg:mb-0">
 
@@ -111,7 +111,7 @@ export default function Hero({ data }) {
                                 </p>
                             </div>
 
-                            <div className="fixed bottom-6 left-4 right-4 z-[60] lg:relative lg:bottom-auto lg:left-auto lg:right-auto lg:z-auto w-auto lg:w-full flex items-center justify-between lg:justify-start gap-4 p-3 lg:p-0 bg-background/60 backdrop-blur-2xl border border-foreground/10 lg:border-none rounded-2xl lg:rounded-none shadow-2xl lg:shadow-none transition-all duration-300">
+                            <div className="fixed bottom-6 left-4 right-4 z-[60] lg:relative lg:bottom-auto lg:left-auto lg:right-auto lg:z-auto w-auto lg:w-full flex items-center justify-between lg:justify-start gap-4 p-3 lg:p-0 bg-background/40 backdrop-blur-xl backdrop-saturate-150 border border-foreground/10 lg:border-none rounded-2xl lg:rounded-none shadow-2xl lg:shadow-none transition-all duration-300">
                                 <Link
                                     href="/works"
                                     onClick={playClick}
@@ -136,7 +136,7 @@ export default function Hero({ data }) {
                     </div>
 
                     {/* VISUAL CONTENT (Technical Display) */}
-                    <div className="w-full lg:col-span-5 h-[260px] md:h-[400px] lg:h-[600px] relative flex items-center justify-center z-10 lg:order-none mb-20 lg:mb-0">
+                    <div className="w-full lg:col-span-5 h-[260px] md:h-[400px] lg:h-[600px] relative flex items-center justify-center z-10 lg:order-none mt-32 mb-20 lg:my-0">
                         {/* Frame Markers (RTL Aware) */}
                         <div className="absolute top-0 left-0 rtl:right-0 rtl:left-auto w-4 h-4 border-t border-l rtl:border-r rtl:border-l-0 border-foreground/30" />
                         <div className="absolute top-0 right-0 rtl:left-0 rtl:right-auto w-4 h-4 border-t border-r rtl:border-l rtl:border-r-0 border-foreground/30" />
