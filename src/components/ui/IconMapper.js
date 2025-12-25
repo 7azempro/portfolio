@@ -1,5 +1,6 @@
 import {
-    RiReactjsFill, RiNextjsFill, RiTailwindCssFill, RiGithubFill
+    RiReactjsFill, RiNextjsFill, RiTailwindCssFill, RiGithubFill,
+    RiTwitterXFill, RiLinkedinFill, RiBehanceFill, RiDribbbleFill
 } from "react-icons/ri";
 import {
     SiFramer, SiSanity, SiFigma, SiTypescript, SiNodedotjs, SiGreensock, SiPython, SiGit,
@@ -14,6 +15,10 @@ export const IconMap = {
     'nextjs': RiNextjsFill,
     'tailwind': RiTailwindCssFill,
     'github': RiGithubFill,
+    'twitter': RiTwitterXFill,
+    'linkedin': RiLinkedinFill,
+    'behance': RiBehanceFill,
+    'dribbble': RiDribbbleFill,
     'framer': SiFramer,
     'sanity': SiSanity,
     'figma': SiFigma,

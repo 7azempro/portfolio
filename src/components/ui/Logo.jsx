@@ -8,8 +8,7 @@ export default function Logo({ className = "" }) {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
             dir="ltr"
-            className={`group flex items-center font-bold tracking-tighter text-2xl ${className} cursor-pointer select-none`}
-            style={{ fontFamily: 'var(--font-jakarta)' }}
+            className={`group flex items-center font-bold tracking-tighter text-2xl ${className} cursor-pointer select-none font-brand`}
         >
             <span className="text-foreground group-hover:text-primary transition-colors duration-300">7azem</span>
             <span className="text-muted-foreground font-light">pro</span>

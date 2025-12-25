@@ -28,6 +28,11 @@ body {
     font-family: var(--font-primary), sans-serif;
 }
 
+/* Force Brand Font */
+.font-brand {
+    font-family: var(--font-jakarta) !important;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
     width: 10px;

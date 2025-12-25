@@ -48,7 +48,22 @@ export const settings = {
                     fields: [
                         { name: 'platform', title: 'Platform Name', type: 'string' },
                         { name: 'url', title: 'URL', type: 'url' },
-                        { name: 'iconKey', title: 'Icon Key (from IconMapper)', type: 'string' }
+                        {
+                            name: 'iconKey',
+                            title: 'Icon Key',
+                            type: 'string',
+                            options: {
+                                list: [
+                                    { title: 'GitHub', value: 'github' },
+                                    { title: 'Twitter / X', value: 'twitter' },
+                                    { title: 'LinkedIn', value: 'linkedin' },
+                                    { title: 'Behance', value: 'behance' },
+                                    { title: 'Dribbble', value: 'dribbble' },
+                                    { title: 'Instagram', value: 'instagram' },
+                                    { title: 'Facebook', value: 'facebook' }
+                                ]
+                            }
+                        }
                     ]
                 }
             ]

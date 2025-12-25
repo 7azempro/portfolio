@@ -1,6 +1,25 @@
+'use client';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { useLanguage } from '@/lib/context/LanguageContext';
 import Logo from '@/components/ui/Logo';
 
-// ... (keep loadingMessages logic)
+const loadingMessages = {
+    en: [
+        "INITIALIZING SYSTEM...",
+        "LOADING ASSETS...",
+        "ESTABLISHING SECURE CONNECTION...",
+        "RENDERING UI...",
+        "SYSTEM READY."
+    ],
+    ar: [
+        "جاري تهيئة النظام...",
+        "تحميل الملفات...",
+        "تأمين الاتصال...",
+        "تجهيز الواجهة...",
+        "النظام جاهز."
+    ]
+};
 
 export default function Preloader() {
     const { lang } = useLanguage();
@@ -62,8 +81,42 @@ export default function Preloader() {
                     {/* Center Content - UNIFIED LOGO */}
                     <div className="relative z-10 flex flex-col items-center justify-center flex-grow gap-8">
 
-                        <div className="transform scale-[2] md:scale-[2.5]">
-                            <Logo />
+                        {/* ENHANCED LOGO CONTAINER */}
+                        <div className="relative flex flex-col items-center transform scale-125 md:scale-150">
+                            {/* Rotating/Pulsing Diamond */}
+                            <motion.div
+                                animate={{
+                                    rotate: [0, 360],
+                                    scale: [1, 1.1, 1],
+                                    boxShadow: ["0 0 20px rgba(59, 130, 246, 0.3)", "0 0 40px rgba(59, 130, 246, 0.6)", "0 0 20px rgba(59, 130, 246, 0.3)"]
+                                }}
+                                transition={{
+                                    rotate: { duration: 8, repeat: Infinity, ease: "linear" },
+                                    scale: { duration: 2, repeat: Infinity, ease: "easeInOut" },
+                                    boxShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+                                }}
+                                className="w-16 h-16 bg-gradient-to-tr from-blue-600 to-cyan-400 rotate-45 rounded-xl border border-blue-400/30 backdrop-blur-sm z-20"
+                            />
+
+                            {/* Logo Text */}
+                            <div className="flex items-center gap-1 mt-6 overflow-hidden font-brand">
+                                <motion.span
+                                    initial={{ y: 40, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    transition={{ delay: 0.2, duration: 0.5, ease: "backOut" }}
+                                    className="text-3xl font-bold tracking-tighter text-white"
+                                >
+                                    7azem
+                                </motion.span>
+                                <motion.span
+                                    initial={{ y: 40, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    transition={{ delay: 0.3, duration: 0.5, ease: "backOut" }}
+                                    className="text-3xl font-light text-blue-400"
+                                >
+                                    pro
+                                </motion.span>
+                            </div>
                         </div>
 
                         {/* Loading Percentage */}

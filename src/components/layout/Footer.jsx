@@ -41,7 +41,7 @@ export default function Footer({ socials }) {
                     <h2 className="text-5xl md:text-8xl font-bold tracking-tighter">
                         {lang === 'ar' ? "ابدأ مشروعاً" : "START A PROJECT"}
                     </h2>
-                    <PiArrowUpRightLight className="w-12 h-12 md:w-24 md:h-24 transition-transform duration-500 group-hover:-translate-y-2 group-hover:translate-x-2" />
+                    <PiArrowUpRightLight className="w-12 h-12 md:w-24 md:h-24 transition-transform duration-500 group-hover:-translate-y-2 group-hover:translate-x-2 rtl:group-hover:-translate-x-2 rtl:-scale-x-100" />
                 </div>
             </a>
 
@@ -51,7 +51,7 @@ export default function Footer({ socials }) {
 
                     {/* Col 1: Brand */}
                     <div className="p-8 md:p-12 md:border-l border-foreground/10 rtl:border-r rtl:border-l-0">
-                        <Logo />
+                        <Logo className="text-4xl md:text-5xl mb-4 w-fit" />
                         <p className="mt-6 text-sm text-muted-foreground leading-relaxed max-w-xs font-sans">
                             {lang === 'ar'
                                 ? "تصميم وتطوير واجهات رقمية تركز على الأداء والجمال."
@@ -75,8 +75,8 @@ export default function Footer({ socials }) {
                                         onMouseEnter={playHover}
                                         className="text-lg hover:text-blue-500 transition-colors flex items-center gap-2 group"
                                     >
-                                        <span>{social.name}</span>
                                         <social.Icon className="w-5 h-5 opacity-50 group-hover:opacity-100 transition-opacity" />
+                                        <span>{social.name}</span>
                                     </a>
                                 </li>
                             ))}

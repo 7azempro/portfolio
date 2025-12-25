@@ -43,13 +43,11 @@ export default function Insights({ articles = [] }) {
                         <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-4">
                             {content.heading}
                         </h2>
-                        <span className="font-sans text-xs uppercase tracking-widest text-muted-foreground border-l-2 border-blue-500 pl-2">
+                        <span className="font-sans text-xs uppercase tracking-widest text-muted-foreground border-s-2 border-blue-500 ps-2">
                             // {content.sub}
                         </span>
                     </div>
-                    <div className="hidden md:block">
-                        <PiLinkedinLogoFill className="w-12 h-12 text-blue-600" />
-                    </div>
+
                 </div>
 
                 {/* Grid */}
@@ -71,43 +69,52 @@ export default function Insights({ articles = [] }) {
                                 transition={{ delay: index * 0.1 }}
                                 onClick={playClick}
                                 onMouseEnter={playHover}
-                                className="group block bg-foreground/5 dark:bg-white/5 border border-foreground/10 p-8 rounded-2xl hover:bg-foreground hover:text-background transition-colors duration-500 relative overflow-hidden"
+                                className="group block h-full min-h-[360px] bg-[#111] dark:bg-white/5 border border-foreground/10 dark:border-white/10 rounded-2xl relative overflow-hidden isolate"
                             >
-                                {/* Date Badge */}
-                                <div className="flex justify-between items-start mb-6">
-                                    <span className="font-mono text-xs opacity-60 uppercase tracking-widest">
-                                        {date}
-                                    </span>
-                                    <PiArrowUpRightLight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                </div>
-
-                                {/* Thumbnail */}
+                                {/* 1. FEATURE IMAGE BACKGROUND */}
                                 {article.thumbnail && (
-                                    <div className="w-full h-48 mb-6 overflow-hidden rounded-lg">
-                                        <img
-                                            src={urlFor(article.thumbnail).width(600).height(400).url()}
-                                            alt={title}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                                        />
-                                    </div>
+                                    <>
+                                        {/* Image */}
+                                        <div className="absolute inset-0 z-[-2]">
+                                            <img
+                                                src={urlFor(article.thumbnail).width(600).height(800).url()}
+                                                alt={title}
+                                                className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 opacity-60 group-hover:opacity-40"
+                                            />
+                                        </div>
+                                        {/* Gradient Overlay for Text Readability */}
+                                        <div className="absolute inset-0 z-[-1] bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
+                                    </>
                                 )}
 
-                                {/* Content */}
-                                <h3 className="text-xl font-bold mb-4 line-clamp-2 leading-tight group-hover:text-background transition-colors">
-                                    {title}
-                                </h3>
-                                <p className="text-sm opacity-70 mb-8 line-clamp-3 leading-relaxed">
-                                    {excerpt}
-                                </p>
+                                {/* 2. CONTENT CONTAINER */}
+                                <div className="relative z-10 p-8 flex flex-col h-full justify-between">
 
-                                {/* Footer */}
-                                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest opacity-50 group-hover:opacity-100">
-                                    <span>{content.readMore}</span>
-                                    <PiArticleLight className="w-4 h-4" />
+                                    {/* Top: Date & Badge */}
+                                    <div className="flex justify-between items-start mb-auto">
+                                        <span className="font-mono text-xs text-white/70 uppercase tracking-widest bg-black/30 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
+                                            {date}
+                                        </span>
+                                        <div className="bg-white/10 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 transform ltr:translate-x-4 rtl:-translate-x-4 group-hover:translate-x-0 -translate-y-4 group-hover:translate-y-0">
+                                            <PiArrowUpRightLight className="w-5 h-5 text-white rtl:-scale-x-100" />
+                                        </div>
+                                    </div>
+
+                                    {/* Bottom: Title & CTA */}
+                                    <div className="mt-8">
+                                        <h3 className="text-2xl md:text-3xl font-bold mb-4 leading-tight text-white group-hover:text-blue-400 transition-colors">
+                                            {title}
+                                        </h3>
+                                        <p className="text-sm text-white/70 mb-6 line-clamp-2 leading-relaxed">
+                                            {excerpt}
+                                        </p>
+
+                                        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white/50 group-hover:text-white transition-colors">
+                                            <span>{content.readMore}</span>
+                                            <PiArticleLight className="w-4 h-4" />
+                                        </div>
+                                    </div>
                                 </div>
-
-                                {/* Background Decoration */}
-                                <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-background/10 transition-colors" />
                             </motion.a>
                         );
                     })}
