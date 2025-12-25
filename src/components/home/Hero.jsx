@@ -58,7 +58,7 @@ export default function Hero({ data }) {
     const t = content[lang];
 
     return (
-        <section ref={ref} className="relative min-h-screen flex flex-col justify-start lg:justify-center overflow-hidden bg-background text-foreground pt-28 lg:pt-0 border-b border-foreground/5 dark:border-white/5">
+        <section ref={ref} className="relative min-h-screen flex flex-col justify-start lg:justify-center overflow-hidden bg-background text-foreground pt-40 lg:pt-0 border-b border-foreground/5 dark:border-white/5">
 
             {/* Strict Grid Background - Parallaxed */}
             <motion.div style={{ y }} className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
@@ -160,7 +160,7 @@ export default function Hero({ data }) {
             </div>
 
             {/* Bottom Status Bar */}
-            <div className="absolute bottom-0 left-0 right-0 h-12 border-t border-foreground/5 dark:border-white/5 flex items-center justify-between px-6 text-[10px] font-sans tracking-swiss-caps text-muted-foreground uppercase bg-background/50 backdrop-blur-sm">
+            <div className="hidden md:flex absolute bottom-0 left-0 right-0 h-12 border-t border-foreground/5 dark:border-white/5 items-center justify-between px-6 text-[10px] font-sans tracking-swiss-caps text-muted-foreground uppercase bg-background/50 backdrop-blur-sm">
                 <div className="flex items-center gap-2">
                     <PiArrowDownLight className="w-3 h-3 animate-bounce" />
                     <span>{lang === 'ar' ? 'اسحب للاستكشاف' : 'SCROLL_TO_EXPLORE'}</span>
