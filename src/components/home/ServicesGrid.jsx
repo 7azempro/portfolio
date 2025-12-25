@@ -57,27 +57,23 @@ export default function ServicesGrid({ services = [] }) {
     const { lang } = useLanguage();
     const { playHover } = useSound();
 
-    const t = {
-        ar: {
-            web: { title: 'هندسة الواجهات', desc: 'تصميم وبناء واجهات مستخدم معقدة تركز على الأداء وتجربة المستخدم.' },
-            mobile: { title: 'تطوير الأنظمة', desc: 'بناء تطبيقات ويب متكاملة، من الخوادم السحابية إلى واجهة العميل.' },
-            design: { title: 'تصميم المنتجات', desc: 'نهج علمي قائم على البيانات لتحويل الأفكار إلى منتجات رقمية قابلة للتنفيذ.' },
-            backend: { title: 'حلول الجوال', desc: 'تطبيقات عالية الأداء تعمل بكفاءة على جميع الأجهزة والمنصات.' }
-        },
-        en: {
-            web: { title: 'UI Engineering', desc: 'Architecting complex frontend systems with pixel-perfect precision.' },
-            mobile: { title: 'Full-Stack Systems', desc: 'End-to-end development of scalable, secure, and robust digital products.' },
-            design: { title: 'Product Design', desc: 'Data-driven prototyping and interface design committed to usability.' },
-            backend: { title: 'Mobile Solutions', desc: 'Native-grade performance for mission-critical mobile applications.' }
-        }
+    // Helper for Localization
+    const getLoc = (item, field) => {
+        if (lang === 'ar') return item[field] || item[`${field}_ar`] || "";
+        return item[`${field}_en`] || item[field] || "";
     };
 
-    const displayServices = [
-        { _id: '1', ...t[lang].web, iconKey: 'web' },
-        { _id: '2', ...t[lang].mobile, iconKey: 'mobile' },
-        { _id: '3', ...t[lang].design, iconKey: 'design' },
-        { _id: '4', ...t[lang].backend, iconKey: 'backend' },
-    ];
+    // If Sanity is empty, use fallback (Optional: defined below or removed if strictly CMS)
+    // For now, if services array is empty, we show nothing or skeleton?
+    // Let's assume passed services are what we want.
+
+    // Map passed services to structure
+    const displayServices = services.map(s => ({
+        _id: s._id,
+        title: getLoc(s, 'title'),
+        desc: getLoc(s, 'description'), // Schema says 'description' NOT 'desc'
+        iconKey: s.iconKey
+    }));
 
     return (
         <section className="py-32 container mx-auto px-6">

@@ -18,64 +18,29 @@ const FALLBACK_IMAGES = {
     '6': 'https://images.unsplash.com/photo-1555421689-492a6c3ae4eb?q=80&w=1200', // Tech
 };
 
-const PROJECTS_DATA = [
+// Fallback Data if Sanity is empty
+const FALLBACK_PROJECTS = [
     {
         _id: '1',
-        title: { ar: 'نادي الاستسقاء المصري', en: 'Egyptian Club of Ascites' },
-        category: { ar: 'طبي / مؤسسي', en: 'Medical / Organization' },
+        title_ar: 'نادي الاستسقاء المصري', title_en: 'Egyptian Club of Ascites',
+        category_ar: 'طبي / مؤسسي', category_en: 'Medical / Organization',
         year: '2025',
         link: 'https://egyptianclubofascites.com/',
-        desc: { ar: 'المنصة الرقمية الرسمية لنادي الاستسقاء المصري.', en: 'Official digital presence for the Egyptian Club of Ascites.' },
+        desc_ar: 'المنصة الرقمية الرسمية لنادي الاستسقاء المصري.', desc_en: 'Official digital presence for the Egyptian Club of Ascites.',
         color: 'bg-emerald-500'
     },
-    {
-        _id: '2',
-        title: { ar: 'تاون مارك', en: 'Town Mark' },
-        category: { ar: 'عقارات', en: 'Real Estate' },
-        year: '2025',
-        link: 'https://bytownmark.com/',
-        desc: { ar: 'سوق عقارات حديث وعرض للمشاريع التنموية.', en: 'Modern property marketplace and development showcase.' },
-        color: 'bg-blue-600'
-    },
-    {
-        _id: '3',
-        title: { ar: 'رحلة آمنة (السعودية)', en: 'Safe Trip KSA' },
-        category: { ar: 'سفر وخدمات لوجستية', en: 'Travel & Logistics' },
-        year: '2025',
-        link: 'https://safetripeksa.com/',
-        desc: { ar: 'حلول نقل وسياحة آمنة في المملكة العربية السعودية.', en: 'Secure transport and tourism solutions in Saudi Arabia.' },
-        color: 'bg-amber-500'
-    },
-    {
-        _id: '5',
-        title: { ar: 'بكر الصبحي', en: 'Bakur Alsubhy' },
-        category: { ar: 'شخصي / أعمال', en: 'Personal / Business' },
-        year: '2025',
-        link: 'https://bakuralsubhy.com/',
-        desc: { ar: 'الموقع الرسمي والمحفظة الرقمية.', en: 'Official website and digital portfolio.' },
-        color: 'bg-indigo-500'
-    },
-    {
-        _id: '6',
-        title: { ar: 'سعود الفيفي', en: 'Saud Alfify' },
-        category: { ar: 'شخصي', en: 'Personal' },
-        year: '2025',
-        link: 'https://saud-alfify.sa/',
-        desc: { ar: 'الهوية الرقمية والموقع الشخصي.', en: 'Digital identity and personal website.' },
-        color: 'bg-teal-500'
-    },
-    {
-        _id: '4',
-        title: { ar: 'المزيد على بيهانس', en: 'More on Behance' },
-        category: { ar: 'معرض الأعمال', en: 'Portfolio' },
-        year: '2025',
-        link: 'https://www.behance.net/hazempro',
-        desc: { ar: 'استكشف محفظة التصميم الكاملة ودراسات الحالة.', en: 'Explore the complete design portfolio and case studies.' },
-        color: 'bg-purple-600'
-    },
+    // ... (Keep strictly necessary fallbacks to avoid clutter, or rely on empty state)
 ];
 
 // --- Sub-Components ---
+
+// Helper to safely get localized text from flat structure
+const getLoc = (item, field, lang) => {
+    // field: 'title', 'desc', 'category'
+    // item: { title: '...', title_en: '...' }
+    if (lang === 'ar') return item[field] || item[`${field}_ar`] || "";
+    return item[`${field}_en`] || item[field] || "";
+};
 
 function ProjectCard({ project, lang }) {
     // Determine Image Source:
@@ -103,7 +68,7 @@ function ProjectCard({ project, lang }) {
                 <div className="aspect-[16/9] relative group">
                     <img
                         src={imageUrl}
-                        alt={project.title[lang]}
+                        alt={getLoc(project, 'title', lang)}
                         className="absolute inset-0 w-full h-full object-cover object-top filter grayscale contrast-[1.1] group-hover:grayscale-0 group-hover:contrast-100 transition-all duration-700 ease-out"
                         onError={(e) => {
                             // Fallback to Thematic Unsplash if Screenshot Fails
@@ -130,16 +95,16 @@ function ProjectCard({ project, lang }) {
             <div className="flex justify-between items-start border-t border-foreground/10 dark:border-white/10 pt-6">
                 <div>
                     <h3 className="text-3xl font-bold mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                        {project.title[lang]}
+                        {getLoc(project, 'title', lang)}
                     </h3>
-                    <p className="text-muted-foreground text-lg max-w-md">{project.desc[lang]}</p>
+                    <p className="text-muted-foreground text-lg max-w-md">{getLoc(project, 'desc', lang)}</p>
                 </div>
                 <div className="text-right">
                     <span className="block text-4xl font-sans font-bold text-foreground/10 group-hover:text-foreground/30 transition-colors">
                         {project.year}
                     </span>
                     <span className="inline-block mt-2 px-3 py-1 bg-foreground/5 rounded text-xs font-sans text-foreground/60 uppercase tracking-wider">
-                        {project.category[lang]}
+                        {getLoc(project, 'category', lang) || "PROJECT"}
                     </span>
                 </div>
             </div>
@@ -149,7 +114,8 @@ function ProjectCard({ project, lang }) {
 
 // --- Main Component ---
 
-export default function ProjectSlider() {
+export default function ProjectSlider({ projects = [] }) {
+    const displayProjects = projects.length > 0 ? projects : FALLBACK_PROJECTS;
     const containerRef = useRef(null);
     const { scrollXProgress } = useScroll({ container: containerRef });
     const { lang } = useLanguage();
@@ -200,7 +166,7 @@ export default function ProjectSlider() {
                 className="flex gap-12 overflow-x-auto px-6 pb-20 snap-x snap-mandatory scrollbar-hide pt-4 relative"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
-                {PROJECTS_DATA.map((project, index) => (
+                {displayProjects.map((project, index) => (
                     <motion.div
                         key={project._id}
                         initial={{ opacity: 0, x: 50 }}

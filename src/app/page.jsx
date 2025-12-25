@@ -3,6 +3,7 @@ import Hero from "@/components/home/Hero";
 import ServicesGrid from "@/components/home/ServicesGrid";
 import ProjectSlider from "@/components/home/ProjectSlider";
 import TechStack from "@/components/home/TechStack";
+import Insights from "@/components/home/Insights";
 
 export default async function Home() {
     const heroData = await getLocalData('hero');
@@ -23,6 +24,9 @@ export default async function Home() {
 
             {/* Projects Slider */}
             <ProjectSlider projects={projectData} />
+
+            {/* Insights / Articles */}
+            <Insights articles={await getLocalData('articles')} />
 
 
         </main>
