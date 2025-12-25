@@ -1,39 +1,39 @@
 'use client';
 import Marquee from "@/components/ui/Marquee";
-import {
-    RiReactjsFill, RiNextjsFill, RiTailwindCssFill, RiGithubFill
-} from "react-icons/ri";
-import {
-    SiFramer, SiSanity, SiFigma, SiTypescript, SiNodedotjs, SiGreensock
-} from "react-icons/si";
+// Icons are now mapped in IconMapper
 import { useLanguage } from "@/lib/context/LanguageContext";
 
-const TECH_ITEMS_ROW_1 = [
-    { name: "NEXT.JS 14", icon: RiNextjsFill },
-    { name: "REACT", icon: RiReactjsFill },
-    { name: "TAILWIND", icon: RiTailwindCssFill },
-    { name: "TYPESCRIPT", icon: SiTypescript },
-    { name: "FRAMER MOTION", icon: SiFramer },
-];
+import { getIcon } from "@/components/ui/IconMapper";
 
-const TECH_ITEMS_ROW_2 = [
-    { name: "SANITY.IO", icon: SiSanity },
-    { name: "FIGMA", icon: SiFigma },
-    { name: "NODE.JS", icon: SiNodedotjs },
-    { name: "GITHUB", icon: RiGithubFill },
-    { name: "GSAP", icon: SiGreensock },
-];
+// Helper to render items
+const RenderTechItems = ({ items }) => (
+    items.map((item, i) => {
+        const Icon = getIcon(item.iconKey);
+        return (
+            <div key={item._id || i} className="flex items-center gap-2 mx-4 md:mx-8 text-foreground/40 font-sans text-sm md:text-xl font-bold tracking-tighter uppercase whitespace-nowrap">
+                <Icon className="w-5 h-5 md:w-6 md:h-6" />
+                <span>{item.name}</span>
+            </div>
+        );
+    })
+);
 
-export default function TechStack() {
+export default function TechStack({ data = [] }) {
     const { lang } = useLanguage();
     const isAr = lang === 'ar';
 
-    // Reverse direction in Arabic for natural flow (or Keep it if user prefers)
-    // Usually, Arabic readers scan Right to Left. 
-    // If we want items to "enter" from the reading side, we might want adjusting.
-    // Let's invert the velocities.
     const v1 = isAr ? 1 : -1;
     const v2 = isAr ? -1 : 1;
+
+    // Filter by Row (if data exists)
+    // If no data (first load), use fallback? User said "everything from sanity", so maybe empty is fine.
+    // But to avoid ugly empty space, let's keep fallback for now OR show nothing.
+    // Let's assume user WILL add data.
+
+    const row1 = data.filter(item => item.row === 1);
+    const row2 = data.filter(item => item.row === 2);
+
+    if (data.length === 0) return null; // Hide if no data
 
     return (
         <section className="py-12 border-b border-foreground/5 dark:border-white/5 bg-background overflow-hidden relative" dir="ltr">
@@ -45,22 +45,12 @@ export default function TechStack() {
             <div className="flex flex-col gap-8 opacity-80 hover:opacity-100 transition-opacity duration-500">
                 {/* Row 1 */}
                 <Marquee baseVelocity={v1}>
-                    {TECH_ITEMS_ROW_1.map((item, i) => (
-                        <div key={i} className="flex items-center gap-2 mx-4 md:mx-8 text-foreground/40 font-sans text-sm md:text-xl font-bold tracking-tighter uppercase whitespace-nowrap">
-                            <item.icon className="w-5 h-5 md:w-6 md:h-6" />
-                            <span>{item.name}</span>
-                        </div>
-                    ))}
+                    <RenderTechItems items={row1} />
                 </Marquee>
 
                 {/* Row 2 */}
                 <Marquee baseVelocity={v2}>
-                    {TECH_ITEMS_ROW_2.map((item, i) => (
-                        <div key={i} className="flex items-center gap-2 mx-4 md:mx-8 text-foreground/40 font-sans text-sm md:text-xl font-bold tracking-tighter uppercase whitespace-nowrap">
-                            <item.icon className="w-5 h-5 md:w-6 md:h-6" />
-                            <span>{item.name}</span>
-                        </div>
-                    ))}
+                    <RenderTechItems items={row2} />
                 </Marquee>
             </div>
         </section>

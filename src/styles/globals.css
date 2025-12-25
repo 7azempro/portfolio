@@ -191,35 +191,57 @@ html.lenis body {
 }
 
 /* --- ACCESSIBILITY OVERLAYS --- */
-body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: 10000;
-    pointer-events: none;
-    opacity: 0;
-    transition: backdrop-filter 0.3s ease, opacity 0.3s ease;
-}
+/* --- ACCESSIBILITY FILTERS --- */
 
 /* GRAYSCALE */
-html.grayscale-mode body::after {
-    opacity: 1;
-    backdrop-filter: grayscale(100%);
-    -webkit-backdrop-filter: grayscale(100%);
+html.grayscale-mode {
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
 }
 
 /* HIGH CONTRAST */
-html.high-contrast body::after {
-    opacity: 1;
-    backdrop-filter: contrast(125%) saturate(120%);
-    -webkit-backdrop-filter: contrast(125%) saturate(120%);
+html.high-contrast {
+    filter: contrast(125%) saturate(120%);
+    -webkit-filter: contrast(125%) saturate(120%);
 }
 
 /* COMBINED */
-html.grayscale-mode.high-contrast body::after {
-    opacity: 1;
-    backdrop-filter: grayscale(100%) contrast(125%) saturate(120%);
-    -webkit-backdrop-filter: grayscale(100%) contrast(125%) saturate(120%);
+html.grayscale-mode.high-contrast {
+    filter: grayscale(100%) contrast(125%) saturate(120%);
+    -webkit-filter: grayscale(100%) contrast(125%) saturate(120%);
+}
+
+/* INVERT MODE */
+html.invert-mode {
+    filter: invert(100%);
+    -webkit-filter: invert(100%);
+}
+
+/* Re-invert media to preserve visuals */
+html.invert-mode img,
+html.invert-mode video,
+html.invert-mode .re-invert {
+    filter: invert(100%);
+    -webkit-filter: invert(100%);
+}
+
+/* YELLOW ON BLACK (Hyper Legibility) */
+html.yellow-black-mode body {
+    --background: 0 0 0 !important;
+    --foreground: 255 255 0 !important;
+    background-color: #000 !important;
+    color: #ff0 !important;
+}
+
+html.yellow-black-mode * {
+    border-color: #ff0 !important;
+    outline-color: #ff0 !important;
+}
+
+html.yellow-black-mode img,
+html.yellow-black-mode video {
+    filter: grayscale(100%) !important;
+    /* Remove distraction */
 }
 
 /* REDUCE MOTION */

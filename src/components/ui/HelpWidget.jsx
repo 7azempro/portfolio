@@ -3,7 +3,9 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     PiHeadsetLight, PiXLight, PiEnvelopeSimpleLight, PiQuestionLight, PiWhatsappLogoLight,
-    PiWheelchairLight, PiEyeClosedLight, PiSunLight, PiPauseLight, PiArrowCounterClockwiseLight
+    PiWheelchairLight, PiEyeClosedLight, PiSunLight, PiPauseLight, PiArrowCounterClockwiseLight,
+    PiArrowsLeftRightLight, PiWarningCircleLight,
+    PiSpeakerHighLight, PiSpeakerSlashLight, PiRulerLight
 } from 'react-icons/pi';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import Link from 'next/link';
@@ -15,13 +17,16 @@ export default function HelpWidget() {
     // Accessibility State
     const [textScale, setTextScale] = useState(1);
     const [acModes, setAcModes] = useState({
-        grayscale: false,
-        contrast: false,
-        motion: false
+        visualMode: 'normal',
+        motion: false,
+        readingGuide: false,
+        soundEnabled: true
     });
+    const [isReading, setIsReading] = useState(false);
 
     const toggleOpen = () => setIsOpen(!isOpen);
 
+    // Apply A11y Changes
     // Apply A11y Changes
     useEffect(() => {
         const root = document.documentElement;
@@ -29,23 +34,89 @@ export default function HelpWidget() {
         root.style.fontSize = `${textScale * 100}%`;
 
         // Classes
-        root.classList.toggle('grayscale-mode', acModes.grayscale);
-        root.classList.toggle('high-contrast', acModes.contrast);
+        root.classList.toggle('grayscale-mode', acModes.visualMode === 'grayscale');
+        root.classList.toggle('high-contrast', acModes.visualMode === 'contrast');
+        root.classList.toggle('invert-mode', acModes.visualMode === 'invert');
+        root.classList.toggle('yellow-black-mode', acModes.visualMode === 'yellowBlack');
         root.classList.toggle('reduce-motion', acModes.motion);
+        root.classList.toggle('reading-guide-active', acModes.readingGuide);
 
     }, [textScale, acModes]);
+
+    // Reading Guide Effect
+    useEffect(() => {
+        if (!acModes.readingGuide) return;
+
+        const guide = document.createElement('div');
+        guide.id = 'a11y-reading-guide';
+        guide.style.cssText = `
+            position: fixed;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 0, 0, 0.5);
+            z-index: 10000;
+            pointer-events: none;
+            transform: translateY(-50%);
+            mix-blend-mode: difference;
+        `;
+        document.body.appendChild(guide);
+
+        const moveGuide = (e) => {
+            guide.style.top = `${e.clientY}px`;
+        };
+
+        window.addEventListener('mousemove', moveGuide);
+
+        return () => {
+            window.removeEventListener('mousemove', moveGuide);
+            if (guide.parentNode) guide.remove();
+        };
+    }, [acModes.readingGuide]);
 
     const adjustTextScale = (delta) => {
         setTextScale(prev => Math.min(Math.max(prev + delta / 100, 0.8), 1.5)); // Limit 80% - 150%
     };
 
-    const toggleMode = (mode) => {
-        setAcModes(prev => ({ ...prev, [mode]: !prev[mode] }));
+    const cycleVisualMode = () => {
+        const modes = ['normal', 'contrast', 'invert', 'yellowBlack', 'grayscale'];
+        const currentIndex = modes.indexOf(acModes.visualMode);
+        const nextIndex = (currentIndex + 1) % modes.length;
+        setAcModes(prev => ({ ...prev, visualMode: modes[nextIndex] }));
+    };
+
+    const toggleMotion = () => {
+        setAcModes(prev => ({ ...prev, motion: !prev.motion }));
+    };
+
+    const toggleGuide = () => {
+        setAcModes(prev => ({ ...prev, readingGuide: !prev.readingGuide }));
+    };
+
+    const toggleSound = () => {
+        setAcModes(prev => ({ ...prev, soundEnabled: !prev.soundEnabled }));
+    };
+
+    const toggleSpeech = () => {
+        if (isReading) {
+            window.speechSynthesis.cancel();
+            setIsReading(false);
+        } else {
+            const text = document.body.innerText;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = lang === 'ar' ? 'ar-SA' : 'en-US';
+            utterance.rate = 0.9;
+            utterance.onend = () => setIsReading(false);
+            window.speechSynthesis.speak(utterance);
+            setIsReading(true);
+        }
     };
 
     const resetA11y = () => {
         setTextScale(1);
-        setAcModes({ grayscale: false, contrast: false, motion: false });
+        setAcModes({ visualMode: 'normal', motion: false, readingGuide: false, soundEnabled: true });
+        window.speechSynthesis.cancel();
+        setIsReading(false);
     };
 
     const t = {
@@ -82,6 +153,7 @@ export default function HelpWidget() {
                 animate={{ scale: 1 }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
+                aria-label={isOpen ? "Close Help Widget" : "Open Help Widget"}
                 className={`fixed bottom-6 z-[9990] w-14 h-14 bg-foreground text-background rounded-full flex items-center justify-center shadow-2xl shadow-blue-500/20 hover:shadow-blue-500/40 transition-shadow ${lang === 'ar' ? 'left-6' : 'right-6'}`}
             >
                 {isOpen ? <PiXLight className="w-6 h-6" /> : <PiHeadsetLight className="w-6 h-6" />}
@@ -100,7 +172,7 @@ export default function HelpWidget() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.95 }}
                         transition={{ duration: 0.3, ease: "circOut" }}
-                        className={`fixed bottom-24 z-[9990] w-80 bg-background/80 backdrop-blur-xl border border-foreground/10 rounded-2xl overflow-hidden shadow-2xl ${lang === 'ar' ? 'left-6' : 'right-6'}`}
+                        className={`fixed bottom-24 z-[9990] w-[calc(100vw-3rem)] sm:w-80 max-h-[75vh] overflow-y-auto bg-background/80 backdrop-blur-xl border border-foreground/10 rounded-2xl shadow-2xl ${lang === 'ar' ? 'left-6' : 'right-6'}`}
                     >
 
                         {/* Header */}
@@ -126,46 +198,75 @@ export default function HelpWidget() {
                                 </h4>
 
                                 {/* Controls Grid */}
-                                <div className="grid grid-cols-2 gap-2">
-                                    {/* Text Scale */}
-                                    <div className="flex items-center justify-between bg-background border border-foreground/10 rounded px-2 py-1.5 col-span-2">
-                                        <button onClick={() => adjustTextScale(-10)} className="w-6 h-6 flex items-center justify-center hover:bg-foreground/5 rounded text-xs">-</button>
-                                        <span className="text-[10px] font-mono">{(textScale * 100).toFixed(0)}%</span>
-                                        <button onClick={() => adjustTextScale(10)} className="w-6 h-6 flex items-center justify-center hover:bg-foreground/5 rounded text-xs">+</button>
+                                <div className="space-y-2">
+                                    {/* Text Scale Bar */}
+                                    <div className="flex items-center justify-between bg-background border border-foreground/10 rounded-md p-2">
+                                        <button onClick={() => adjustTextScale(-10)} aria-label="Decrease text size" className="w-8 h-8 flex items-center justify-center hover:bg-foreground/5 rounded text-sm">-</button>
+                                        <span className="text-[10px] font-mono font-bold tracking-widest">TEXT SCALE: {(textScale * 100).toFixed(0)}%</span>
+                                        <button onClick={() => adjustTextScale(10)} aria-label="Increase text size" className="w-8 h-8 flex items-center justify-center hover:bg-foreground/5 rounded text-sm">+</button>
                                     </div>
 
-                                    {/* Toggles */}
-                                    <button
-                                        onClick={() => toggleMode('grayscale')}
-                                        className={`flex flex-col items-center justify-center gap-1 p-2 rounded border transition-colors ${acModes.grayscale ? 'bg-foreground text-background border-foreground' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}
-                                    >
-                                        <PiEyeClosedLight className="w-4 h-4" />
-                                        <span className="text-[8px] uppercase">Gray</span>
-                                    </button>
+                                    {/* Main Grid (3 Cols) */}
+                                    <div className="grid grid-cols-3 gap-2">
 
-                                    <button
-                                        onClick={() => toggleMode('contrast')}
-                                        className={`flex flex-col items-center justify-center gap-1 p-2 rounded border transition-colors ${acModes.contrast ? 'bg-foreground text-background border-foreground' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}
-                                    >
-                                        <PiSunLight className="w-4 h-4" />
-                                        <span className="text-[8px] uppercase">Contrast</span>
-                                    </button>
+                                        {/* 1. Visual Mode */}
+                                        <button
+                                            onClick={cycleVisualMode}
+                                            className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-md border transition-all duration-300 ${acModes.visualMode !== 'normal' ? 'bg-foreground text-background border-foreground ring-2 ring-offset-2 ring-foreground/20' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}
+                                        >
+                                            {acModes.visualMode === 'normal' && <PiSunLight className="w-5 h-5" />}
+                                            {acModes.visualMode === 'contrast' && <PiSunLight className="w-5 h-5" />}
+                                            {acModes.visualMode === 'invert' && <PiArrowsLeftRightLight className="w-5 h-5" />}
+                                            {acModes.visualMode === 'yellowBlack' && <PiWarningCircleLight className="w-5 h-5" />}
+                                            {acModes.visualMode === 'grayscale' && <PiEyeClosedLight className="w-5 h-5" />}
+                                            <span className="text-[7px] font-bold uppercase tracking-wider">{acModes.visualMode === 'normal' ? 'Color' : acModes.visualMode === 'yellowBlack' ? 'Yel/Blk' : acModes.visualMode}</span>
+                                        </button>
 
-                                    <button
-                                        onClick={() => toggleMode('motion')}
-                                        className={`flex flex-col items-center justify-center gap-1 p-2 rounded border transition-colors ${acModes.motion ? 'bg-foreground text-background border-foreground' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}
-                                    >
-                                        <PiPauseLight className="w-4 h-4" />
-                                        <span className="text-[8px] uppercase">Motion</span>
-                                    </button>
+                                        {/* 2. Reading Guide */}
+                                        <button
+                                            onClick={toggleGuide}
+                                            className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-md border transition-all duration-300 ${acModes.readingGuide ? 'bg-foreground text-background border-foreground ring-2 ring-offset-2 ring-foreground/20' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}
+                                        >
+                                            <PiRulerLight className="w-5 h-5" />
+                                            <span className="text-[7px] font-bold uppercase tracking-wider">Guide</span>
+                                        </button>
 
-                                    <button
-                                        onClick={resetA11y}
-                                        className="flex flex-col items-center justify-center gap-1 p-2 rounded border border-red-500/20 text-red-500 hover:bg-red-500 hover:text-white transition-colors"
-                                    >
-                                        <PiArrowCounterClockwiseLight className="w-4 h-4" />
-                                        <span className="text-[8px] uppercase">Reset</span>
-                                    </button>
+                                        {/* 3. Speak */}
+                                        <button
+                                            onClick={toggleSpeech}
+                                            className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-md border transition-all duration-300 ${isReading ? 'bg-foreground text-background border-foreground ring-2 ring-offset-2 ring-foreground/20 animate-pulse' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}
+                                        >
+                                            <PiSpeakerHighLight className="w-5 h-5" />
+                                            <span className="text-[7px] font-bold uppercase tracking-wider">{isReading ? 'Reading' : 'Speak'}</span>
+                                        </button>
+
+                                        {/* 4. Motion */}
+                                        <button
+                                            onClick={toggleMotion}
+                                            className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-md border transition-all duration-300 ${acModes.motion ? 'bg-foreground text-background border-foreground ring-2 ring-offset-2 ring-foreground/20' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}
+                                        >
+                                            <PiPauseLight className="w-5 h-5" />
+                                            <span className="text-[7px] font-bold uppercase tracking-wider">Motion</span>
+                                        </button>
+
+                                        {/* 5. Sound */}
+                                        <button
+                                            onClick={toggleSound}
+                                            className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-md border transition-all duration-300 ${!acModes.soundEnabled ? 'bg-red-500/10 border-red-500/50 text-red-500' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}
+                                        >
+                                            {acModes.soundEnabled ? <PiSpeakerHighLight className="w-5 h-5" /> : <PiSpeakerSlashLight className="w-5 h-5" />}
+                                            <span className="text-[7px] font-bold uppercase tracking-wider">{acModes.soundEnabled ? 'Sound' : 'Muted'}</span>
+                                        </button>
+
+                                        {/* 6. Reset */}
+                                        <button
+                                            onClick={resetA11y}
+                                            className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-md border border-red-500/20 text-red-500 hover:bg-red-500 hover:text-white transition-all duration-300"
+                                        >
+                                            <PiArrowCounterClockwiseLight className="w-5 h-5" />
+                                            <span className="text-[7px] font-bold uppercase tracking-wider">Reset</span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 

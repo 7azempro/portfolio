@@ -42,10 +42,10 @@ export default function Header() {
 
                         {/* Mobile Trigger (Inside Logo Box for Mobile) */}
                         <div className="flex items-center gap-4 md:hidden">
-                            <button onClick={toggleLanguage} className="text-xs font-sans font-bold tracking-widest uppercase">
+                            <button onClick={toggleLanguage} aria-label="Switch Language" className="text-xs font-sans font-bold tracking-widest uppercase">
                                 {lang === 'ar' ? 'EN' : 'AR'}
                             </button>
-                            <button onClick={toggleMenu} className="p-2 -mr-2">
+                            <button onClick={toggleMenu} aria-label="Toggle navigation menu" className="p-2 -mr-2">
                                 {isOpen ? <PiXLight className="w-6 h-6" /> : <PiListLight className="w-6 h-6" />}
                             </button>
                         </div>

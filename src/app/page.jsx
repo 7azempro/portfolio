@@ -7,13 +7,14 @@ import TechStack from "@/components/home/TechStack";
 export default async function Home() {
     const heroData = await getLocalData('hero');
     const servicesData = await getLocalData('services');
+    const techData = await getLocalData('tech');
     const projectData = await getLocalData('projects');
 
     return (
         <main className="min-h-screen">
             <HeroArabic data={heroData} />
 
-            <TechStack />
+            <TechStack data={techData} />
 
             {/* Services Grid */}
             <div id="services">

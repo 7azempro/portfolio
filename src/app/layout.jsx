@@ -31,7 +31,7 @@ export const metadata = {
         description: 'Transforming complex ideas into elegant digital systems. Precision-engineered for performance.',
         url: 'https://7azem.pro',
         siteName: '7azempro',
-        locale: 'ar_EG',
+        locale: 'en_US',
         type: 'website',
         images: [
             {
@@ -72,7 +72,7 @@ import ScrollProgress from '@/components/ui/ScrollProgress';
 
 export default function RootLayout({ children }) {
     return (
-        <html lang="ar" dir="rtl" className="scroll-smooth">
+        <html lang="en" dir="ltr" className="scroll-smooth" suppressHydrationWarning>
             <body className={`${ibmArabic.variable} ${jakarta.variable} bg-background text-foreground transition-colors duration-300`}>
                 <ClientProviders fontVariables={{ ibmFont: ibmArabic.variable, jakartaFont: jakarta.variable }}>
                     <ScrollProgress />

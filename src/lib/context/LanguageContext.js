@@ -6,8 +6,8 @@ import { translations } from '../translations';
 const LanguageContext = createContext();
 
 export function LanguageProvider({ children }) {
-    const [lang, setLang] = useState('ar');
-    const [t, setT] = useState(translations.ar);
+    const [lang, setLang] = useState('en');
+    const [t, setT] = useState(translations.en);
 
     useEffect(() => {
         setT(translations[lang]);
