@@ -58,16 +58,16 @@ export default function Hero({ data }) {
     const t = content[lang];
 
     return (
-        <section ref={ref} className="relative min-h-[100dvh] flex flex-col justify-center overflow-hidden bg-background text-foreground pt-20 lg:pt-24 border-b border-foreground/5 dark:border-white/5">
+        <section ref={ref} className="relative min-h-screen flex flex-col justify-start lg:justify-center overflow-hidden bg-background text-foreground pt-28 lg:pt-0 border-b border-foreground/5 dark:border-white/5">
 
             {/* Strict Grid Background - Parallaxed */}
             <motion.div style={{ y }} className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
 
-            <div className="container mx-auto px-6 relative z-10 h-full flex flex-col justify-center flex-1">
+            <div className="container mx-auto px-6 relative z-10 flex flex-col justify-start lg:justify-center flex-1">
 
-                <div className="flex flex-col lg:grid lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-20">
+                <div className="flex flex-col lg:grid lg:grid-cols-12 gap-16 lg:gap-12 items-start lg:items-center relative z-20 pb-40 lg:pb-0">
                     {/* TEXT CONTENT (Strict Typographic Hierarchy) */}
-                    <div className="w-full lg:col-span-7 rtl:text-right ltr:text-left relative z-30 mb-8 lg:mb-0">
+                    <div className="w-full lg:col-span-7 rtl:text-right ltr:text-left relative z-30 mb-24 lg:mb-0">
 
                         {/* Status Indicator (Technical) */}
                         <div className="inline-flex items-center gap-3 border border-foreground/10 px-3 py-1 mb-4 md:mb-8 font-sans text-[10px] tracking-swiss-caps uppercase text-muted-foreground w-fit bg-foreground/5 backdrop-blur-sm">
@@ -111,12 +111,12 @@ export default function Hero({ data }) {
                                 </p>
                             </div>
 
-                            <div className="w-full lg:w-full flex items-center justify-between lg:justify-start gap-4 z-50 p-4 lg:p-0 rounded-2xl lg:rounded-none bg-background/50 lg:bg-transparent backdrop-blur-xl lg:backdrop-blur-none border border-foreground/10 lg:border-none shadow-xl lg:shadow-none">
+                            <div className="fixed bottom-6 left-4 right-4 z-[60] lg:relative lg:bottom-auto lg:left-auto lg:right-auto lg:z-auto w-auto lg:w-full flex items-center justify-between lg:justify-start gap-4 p-3 lg:p-0 bg-background/60 backdrop-blur-2xl border border-foreground/10 lg:border-none rounded-2xl lg:rounded-none shadow-2xl lg:shadow-none transition-all duration-300">
                                 <Link
                                     href="/works"
                                     onClick={playClick}
                                     onMouseEnter={playHover}
-                                    className="flex-1 lg:flex-none text-center relative overflow-hidden px-6 lg:px-8 py-3 lg:py-4 bg-foreground text-background font-sans text-xs font-bold tracking-swiss-caps uppercase hover:bg-blue-600 transition-colors group rounded lg:rounded-none"
+                                    className="flex-1 lg:flex-none text-center relative overflow-hidden px-6 lg:px-8 py-4 lg:py-4 bg-foreground text-background font-sans text-xs font-bold tracking-swiss-caps uppercase hover:bg-blue-600 transition-colors group rounded-xl lg:rounded-none"
                                 >
                                     <span className="relative z-10">{t.ctaPrimary}</span>
                                     {/* Tech Corner */}
@@ -126,7 +126,7 @@ export default function Hero({ data }) {
                                     href="/about"
                                     onClick={playClick}
                                     onMouseEnter={playHover}
-                                    className="flex-1 lg:flex-none text-center group flex items-center justify-center gap-3 px-4 py-3 lg:py-4 text-foreground font-sans text-xs font-bold tracking-swiss-caps uppercase hover:text-blue-600 transition-colors border border-foreground/20 lg:border-none rounded lg:rounded-none"
+                                    className="flex-1 lg:flex-none text-center group flex items-center justify-center gap-3 px-4 py-4 lg:py-4 text-foreground font-sans text-xs font-bold tracking-swiss-caps uppercase hover:text-blue-600 transition-colors border border-foreground/20 lg:border-none rounded-xl lg:rounded-none"
                                 >
                                     <span>{t.ctaSecondary}</span>
                                     <div className="w-1.5 h-1.5 border border-foreground group-hover:bg-blue-600 group-hover:border-blue-600 transition-colors rotate-45 rtl:-rotate-45" />
@@ -136,7 +136,7 @@ export default function Hero({ data }) {
                     </div>
 
                     {/* VISUAL CONTENT (Technical Display) */}
-                    <div className="w-full lg:col-span-5 h-[280px] md:h-[400px] lg:h-[600px] relative flex items-center justify-center z-10 lg:mb-0 ordering-first lg:order-none">
+                    <div className="w-full lg:col-span-5 h-[260px] md:h-[400px] lg:h-[600px] relative flex items-center justify-center z-10 lg:order-none mb-20 lg:mb-0">
                         {/* Frame Markers (RTL Aware) */}
                         <div className="absolute top-0 left-0 rtl:right-0 rtl:left-auto w-4 h-4 border-t border-l rtl:border-r rtl:border-l-0 border-foreground/30" />
                         <div className="absolute top-0 right-0 rtl:left-0 rtl:right-auto w-4 h-4 border-t border-r rtl:border-l rtl:border-r-0 border-foreground/30" />
@@ -149,7 +149,7 @@ export default function Hero({ data }) {
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 1.2, ease: "circOut" }}
-                            className="w-full h-full flex items-center justify-center"
+                            className="w-full h-full flex items-center justify-center scale-90 md:scale-100"
                         >
                             {/* The Dashboard Widget lives inside this strict frame */}
                             {isMounted ? <DashboardWidget /> : <div className="w-full h-full bg-white/5 animate-pulse rounded-2xl" />}
