@@ -37,6 +37,15 @@ export const lesson = {
             initialValue: false
         },
         {
+            name: 'resources',
+            title: 'Downloadable Resources',
+            type: 'array',
+            of: [
+                { type: 'file', title: 'File' },
+                { type: 'url', title: 'External Link' }
+            ]
+        },
+        {
             name: 'content',
             title: 'Content / Notes',
             type: 'array',

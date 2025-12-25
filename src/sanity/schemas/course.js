@@ -37,10 +37,36 @@ export const course = {
             type: 'image'
         },
         {
-            name: 'modules',
-            title: 'Modules / Lessons',
+            name: 'instructor',
+            title: 'Instructor',
+            type: 'reference',
+            to: [{ type: 'about' }]
+        },
+        {
+            name: 'learningOutcomes',
+            title: 'What you will learn',
             type: 'array',
-            of: [{ type: 'reference', to: [{ type: 'lesson' }] }]
+            of: [{ type: 'string' }]
+        },
+        {
+            name: 'modules',
+            title: 'Curriculum Modules',
+            type: 'array',
+            of: [
+                {
+                    type: 'object',
+                    title: 'Module',
+                    fields: [
+                        { name: 'title', title: 'Module Title', type: 'string' },
+                        {
+                            name: 'lessons',
+                            title: 'Lessons',
+                            type: 'array',
+                            of: [{ type: 'reference', to: [{ type: 'lesson' }] }]
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }

@@ -52,6 +52,50 @@ export const product = {
             of: [{ type: 'image' }]
         },
         {
+            name: 'sku',
+            title: 'SKU',
+            type: 'string'
+        },
+        {
+            name: 'variants',
+            title: 'Product Variants',
+            type: 'array',
+            of: [
+                {
+                    type: 'object',
+                    title: 'Variant',
+                    fields: [
+                        { name: 'name', title: 'Variant Name (e.g. Red, XL)', type: 'string' },
+                        { name: 'price', title: 'Price Override', type: 'number' },
+                        { name: 'sku', title: 'SKU', type: 'string' },
+                        { name: 'stock', title: 'Stock Count', type: 'number' }
+                    ]
+                }
+            ]
+        },
+        {
+            name: 'dimensions',
+            title: 'Dimensions',
+            type: 'object',
+            fields: [
+                { name: 'width', title: 'Width', type: 'number' },
+                { name: 'height', title: 'Height', type: 'number' },
+                { name: 'depth', title: 'Depth', type: 'number' },
+                { name: 'weight', title: 'Weight (kg)', type: 'number' }
+            ],
+            hidden: ({ parent }) => parent?.productType === 'digital'
+        },
+        {
+            name: 'seo',
+            title: 'SEO Metadata',
+            type: 'object',
+            options: { collapsible: true, collapsed: true },
+            fields: [
+                { name: 'metaTitle', title: 'Meta Title', type: 'string' },
+                { name: 'metaDesc', title: 'Meta Description', type: 'text', rows: 3 }
+            ]
+        },
+        {
             name: 'stripeId',
             title: 'Stripe Product ID',
             type: 'string',
