@@ -1,7 +1,7 @@
 'use client';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { RiArrowRightUpLine } from 'react-icons/ri';
+import { PiArrowUpRightLight } from 'react-icons/pi';
 import { useLanguage } from '@/lib/context/LanguageContext';
 
 export default function WorksGrid({ projects }) {
@@ -25,7 +25,7 @@ export default function WorksGrid({ projects }) {
                             <span className="text-xs font-sans uppercase tracking-widest text-muted-foreground border border-foreground/10 px-2 py-1">
                                 {project.category?.[lang] || "PROJECT"}
                             </span>
-                            <RiArrowRightUpLine className="w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            <PiArrowUpRightLight className="w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         </div>
 
                         {/* Middle: Title & Year */}

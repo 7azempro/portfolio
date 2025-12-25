@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getLocalData } from "@/lib/data.server";
-import { RiCalendarLine } from 'react-icons/ri';
+import { PiCalendarBlankLight } from 'react-icons/pi';
 
 export default async function BlogPage() {
     const articles = await getLocalData('articles');
@@ -13,7 +13,7 @@ export default async function BlogPage() {
                 {articles.map((article) => (
                     <Link key={article._id} href={`/blog/${article.slug.current}`} className="group block border-b border-border pb-10">
                         <div className="flex items-center gap-3 text-sm text-muted-foreground mb-3">
-                            <RiCalendarLine className="w-4 h-4" />
+                            <PiCalendarBlankLight className="w-4 h-4" />
                             <time>{article.date}</time>
                             <span>•</span>
                             <span>{article.readTime}</span>

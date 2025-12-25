@@ -2,18 +2,18 @@
 import Link from 'next/link';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import Logo from '@/components/ui/Logo';
-import { RiArrowRightUpLine } from 'react-icons/ri';
+import { PiArrowUpRightLight, PiTwitterLogoLight, PiLinkedinLogoLight, PiGithubLogoLight, PiInstagramLogoLight, PiBehanceLogoLight } from 'react-icons/pi';
 
 export default function Footer() {
     const { lang } = useLanguage();
     const year = new Date().getFullYear();
 
     const socials = [
-        { name: "Twitter / X", link: "https://twitter.com/7azempro" },
-        { name: "LinkedIn", link: "https://linkedin.com/in/7azempro" },
-        { name: "GitHub", link: "https://github.com/7azempro" },
-        { name: "Behance", link: "https://www.behance.net/hazempro" },
-        { name: "Dribbble", link: "https://dribbble.com/7azempro" },
+        { name: "Twitter / X", link: "https://twitter.com/7azempro", icon: PiTwitterLogoLight },
+        { name: "LinkedIn", link: "https://linkedin.com/in/7azempro", icon: PiLinkedinLogoLight },
+        { name: "GitHub", link: "https://github.com/7azempro", icon: PiGithubLogoLight },
+        { name: "Behance", link: "https://www.behance.net/hazempro", icon: PiBehanceLogoLight },
+        { name: "Dribbble", link: "https://dribbble.com/7azempro", icon: PiInstagramLogoLight }, // Using Instagram icon for Dribbble as per instruction's icon list
     ];
 
     return (
@@ -28,7 +28,7 @@ export default function Footer() {
                     <h2 className="text-5xl md:text-8xl font-bold tracking-tighter">
                         {lang === 'ar' ? "ابدأ مشروعاً" : "START A PROJECT"}
                     </h2>
-                    <RiArrowRightUpLine className="w-12 h-12 md:w-24 md:h-24 transition-transform duration-500 group-hover:-translate-y-2 group-hover:translate-x-2" />
+                    <PiArrowUpRightLight className="w-12 h-12 md:w-24 md:h-24 transition-transform duration-500 group-hover:-translate-y-2 group-hover:translate-x-2" />
                 </div>
             </a>
 
@@ -61,7 +61,7 @@ export default function Footer() {
                                         className="text-lg hover:text-blue-500 transition-colors flex items-center gap-2 group"
                                     >
                                         <span>{social.name}</span>
-                                        <RiArrowRightUpLine className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                        <PiArrowUpRightLight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                                     </a>
                                 </li>
                             ))}

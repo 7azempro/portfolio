@@ -1,7 +1,7 @@
 import React from 'react';
 import { getLocalData } from '../../../lib/data.server';
 import Link from 'next/link';
-import { RiArrowLeftLine } from 'react-icons/ri';
+import { PiArrowLeftLight } from 'react-icons/pi';
 
 export async function generateMetadata({ params }) {
     const { slug } = await params;
@@ -30,7 +30,7 @@ export default async function ProjectPage({ params }) {
             {/* Hero / Header */}
             <div className="pt-32 px-[5vw] pb-20">
                 <Link href="/" className="inline-flex items-center gap-2 text-white/50 hover:text-white transition-colors mb-12">
-                    <RiArrowLeftLine size={20} />
+                    <PiArrowLeftLight size={20} />
                     Back to Works
                 </Link>
 

@@ -1,7 +1,7 @@
 'use client';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { motion } from 'framer-motion';
-import { RiArrowRightUpLine, RiDownloadLine, RiMapPinLine, RiTimeLine, RiStackLine } from 'react-icons/ri';
+import { PiArrowUpRightLight, PiDownloadSimpleLight, PiMapPinLight, PiClockLight, PiStackLight } from 'react-icons/pi';
 import Link from 'next/link';
 
 export default function AboutPage() {
@@ -65,7 +65,7 @@ export default function AboutPage() {
                     <span className="text-xs font-sans uppercase tracking-widest text-muted-foreground border border-foreground/10 px-3 py-1 rounded-full">
                         {content.subtitle} // 001
                     </span>
-                    <RiArrowRightUpLine className="w-6 h-6 text-muted-foreground" />
+                    <PiArrowUpRightLight className="w-6 h-6 text-muted-foreground" />
                 </div>
 
                 <h1 className="text-[12vw] leading-[0.8] font-black tracking-tighter text-foreground mix-blend-difference">
@@ -88,7 +88,7 @@ export default function AboutPage() {
                             </div>
                             <h2 className="text-2xl font-bold uppercase tracking-tight mb-2">{content.role}</h2>
                             <div className="flex items-center gap-2 text-muted-foreground text-sm font-sans mb-8">
-                                <RiMapPinLine />
+                                <PiMapPinLight />
                                 <span>CAIRO, EG (GMT+2)</span>
                             </div>
 
@@ -111,7 +111,7 @@ export default function AboutPage() {
 
                         <button className="w-full py-4 bg-blue-600 text-white font-bold uppercase tracking-widest text-xs hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
                             {content.download}
-                            <RiDownloadLine />
+                            <PiDownloadSimpleLight />
                         </button>
                     </div>
                 </aside>
@@ -123,7 +123,7 @@ export default function AboutPage() {
                     {/* History Section */}
                     <section className="border-b border-foreground/10">
                         <div className="p-6 border-b border-foreground/10 bg-background flex items-center gap-3">
-                            <RiTimeLine className="text-blue-500" />
+                            <PiClockLight className="text-blue-500" />
                             <h3 className="text-sm font-bold uppercase tracking-widest">{content.sections.exp}</h3>
                         </div>
                         <div className="divide-y divide-foreground/10">
@@ -135,7 +135,7 @@ export default function AboutPage() {
                                     <div className="md:col-span-9">
                                         <h4 className="text-xl font-bold mb-1 flex items-center gap-2">
                                             {item.role}
-                                            <RiArrowRightUpLine className="opacity-0 group-hover:opacity-100 transition-opacity text-blue-500" />
+                                            <PiArrowUpRightLight className="opacity-0 group-hover:opacity-100 transition-opacity text-blue-500" />
                                         </h4>
                                         <h5 className="text-sm font-semibold text-foreground/70 mb-3">{item.company}</h5>
                                         <p className="text-sm text-muted-foreground leading-relaxed max-w-lg">
@@ -151,7 +151,7 @@ export default function AboutPage() {
                     {/* Stack Section */}
                     <section className="border-b border-foreground/10">
                         <div className="p-6 border-b border-foreground/10 bg-background flex items-center gap-3">
-                            <RiStackLine className="text-purple-500" />
+                            <PiStackLight className="text-purple-500" />
                             <h3 className="text-sm font-bold uppercase tracking-widest">{content.sections.stack}</h3>
                         </div>
                         <div className="p-8 grid grid-cols-2 md:grid-cols-4 gap-px bg-foreground/10 border border-foreground/10">

@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { RiCustomerService2Line, RiCloseLine, RiMailSendLine, RiQuestionLine, RiInformationLine, RiWhatsappLine } from 'react-icons/ri';
+import { PiHeadsetLight, PiXLight, PiEnvelopeSimpleLight, PiQuestionLight, PiWhatsappLogoLight } from 'react-icons/pi';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import Link from 'next/link';
 
@@ -47,7 +47,7 @@ export default function HelpWidget() {
                 whileTap={{ scale: 0.9 }}
                 className={`fixed bottom-6 z-[9990] w-14 h-14 bg-foreground text-background rounded-full flex items-center justify-center shadow-2xl shadow-blue-500/20 hover:shadow-blue-500/40 transition-shadow ${lang === 'ar' ? 'left-6' : 'right-6'}`}
             >
-                {isOpen ? <RiCloseLine className="w-6 h-6" /> : <RiCustomerService2Line className="w-6 h-6" />}
+                {isOpen ? <PiXLight className="w-6 h-6" /> : <PiHeadsetLight className="w-6 h-6" />}
 
                 {/* Pulse Ring */}
                 {!isOpen && (
@@ -75,7 +75,7 @@ export default function HelpWidget() {
                                     <span className="text-[10px] font-mono opacity-80">{content.status}</span>
                                 </div>
                             </div>
-                            <RiCustomerService2Line className="w-8 h-8 opacity-20" />
+                            <PiHeadsetLight className="w-8 h-8 opacity-20" />
                         </div>
 
                         {/* Content */}
@@ -89,7 +89,7 @@ export default function HelpWidget() {
                                 className="flex items-center gap-3 p-3 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 rounded-lg transition-colors group"
                             >
                                 <div className="w-8 h-8 bg-emerald-500 text-white flex items-center justify-center rounded-md shadow-sm shadow-emerald-500/20 animate-pulse">
-                                    <RiWhatsappLine className="w-5 h-5" />
+                                    <PiWhatsappLogoLight className="w-5 h-5" />
                                 </div>
                                 <div>
                                     <h4 className="font-bold text-xs uppercase tracking-wide text-emerald-600 dark:text-emerald-400">{content.chat}</h4>
@@ -106,7 +106,7 @@ export default function HelpWidget() {
                                 className="flex items-center gap-3 p-3 hover:bg-foreground/5 rounded-lg transition-colors group border border-transparent hover:border-foreground/5"
                             >
                                 <div className="w-8 h-8 bg-blue-500/10 text-blue-500 flex items-center justify-center rounded-md group-hover:bg-blue-500 group-hover:text-white transition-colors">
-                                    <RiMailSendLine />
+                                    <PiEnvelopeSimpleLight />
                                 </div>
                                 <div>
                                     <h4 className="font-bold text-xs uppercase tracking-wide">{content.email}</h4>
@@ -121,7 +121,7 @@ export default function HelpWidget() {
                                 className="flex items-center gap-3 p-3 hover:bg-foreground/5 rounded-lg transition-colors group border border-transparent hover:border-foreground/5"
                             >
                                 <div className="w-8 h-8 bg-purple-500/10 text-purple-500 flex items-center justify-center rounded-md group-hover:bg-purple-500 group-hover:text-white transition-colors">
-                                    <RiQuestionLine />
+                                    <PiQuestionLight />
                                 </div>
                                 <h4 className="font-bold text-xs uppercase tracking-wide">{content.legal}</h4>
                             </Link>

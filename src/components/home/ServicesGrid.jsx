@@ -1,14 +1,14 @@
 'use client';
 import { motion } from 'framer-motion';
-import { RiLayoutLine, RiSmartphoneLine, RiServerLine, RiPenNibLine, RiArrowRightUpLine } from 'react-icons/ri';
+import { PiLayoutLight, PiDeviceMobileLight, PiHardDrivesLight, PiPenNibLight, PiArrowUpRightLight } from 'react-icons/pi';
 import { useLanguage } from '@/lib/context/LanguageContext';
 
 function ServiceCard({ service, index, spanClass }) {
     const icons = {
-        web: RiLayoutLine,
-        mobile: RiSmartphoneLine,
-        backend: RiServerLine,
-        design: RiPenNibLine
+        web: PiLayoutLight,
+        mobile: PiDeviceMobileLight,
+        backend: PiHardDrivesLight,
+        design: PiPenNibLight
     };
     const Icon = icons[service.iconKey] || AppWindow;
 
@@ -45,7 +45,7 @@ function ServiceCard({ service, index, spanClass }) {
 
             {/* Corner Decor */}
             <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <RiArrowRightUpLine className="w-5 h-5 text-blue-500" />
+                <PiArrowUpRightLight className="w-5 h-5 text-blue-500" />
             </div>
         </motion.div>
     );

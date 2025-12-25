@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { RiMenu3Line, RiCloseLine, RiArrowRightUpLine } from 'react-icons/ri';
+import { PiListLight, PiXLight, PiArrowUpRightLight } from 'react-icons/pi';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import Logo from '@/components/ui/Logo';
@@ -46,7 +46,7 @@ export default function Header() {
                                 {lang === 'ar' ? 'EN' : 'AR'}
                             </button>
                             <button onClick={toggleMenu} className="p-2 -mr-2">
-                                {isOpen ? <RiCloseLine className="w-6 h-6" /> : <RiMenu3Line className="w-6 h-6" />}
+                                {isOpen ? <PiXLight className="w-6 h-6" /> : <PiListLight className="w-6 h-6" />}
                             </button>
                         </div>
                     </div>
@@ -83,7 +83,7 @@ export default function Header() {
                             className="h-full px-8 flex items-center gap-2 bg-foreground text-background hover:bg-blue-600 transition-colors text-xs font-sans tracking-widest uppercase border-l border-foreground/10 rtl:border-l-0 rtl:border-r"
                         >
                             <span>{lang === 'ar' ? "تواصل" : "LET'S_TALK"}</span>
-                            <RiArrowRightUpLine className="w-3 h-3" />
+                            <PiArrowUpRightLight className="w-3 h-3" />
                         </Link>
                     </div>
                 </div>
@@ -117,7 +117,7 @@ export default function Header() {
                                         >
                                             {lang === 'ar' ? link.label.ar : link.label.en}
                                         </motion.span>
-                                        <RiArrowRightUpLine className="w-6 h-6 md:w-12 md:h-12 opacity-50 group-hover:opacity-100 transition-opacity mb-2" />
+                                        <PiArrowUpRightLight className="w-6 h-6 md:w-12 md:h-12 opacity-50 group-hover:opacity-100 transition-opacity mb-2" />
                                     </Link>
                                 ))}
                             </div>

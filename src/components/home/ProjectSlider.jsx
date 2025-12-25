@@ -2,7 +2,7 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
-import { RiArrowRightUpLine } from 'react-icons/ri';
+import { PiArrowUpRightLight, PiArrowRightLight } from 'react-icons/pi';
 import { useLanguage } from '@/lib/context/LanguageContext';
 
 // --- Configuration & Data ---
@@ -120,7 +120,7 @@ function ProjectCard({ project, lang }) {
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
                         <div className="px-6 py-3 rounded-full bg-background/90 backdrop-blur text-foreground border border-foreground/10 flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 font-sans text-sm">
                             <span>VISIT_SITE</span>
-                            <RiArrowRightUpLine className="w-4 h-4" />
+                            <PiArrowUpRightLight className="w-4 h-4" />
                         </div>
                     </div>
                 </div>
@@ -182,18 +182,21 @@ export default function ProjectSlider() {
                     </div>
                 </div>
 
-                {/* Mobile Scroll Hint */}
-                <div className="md:hidden flex items-center gap-2 text-blue-500 animate-pulse">
-                    <span className="text-[10px] font-mono tracking-widest uppercase">
+            </div>
+
+            {/* Mobile Floating Hint (Fixed relative to section) */}
+            <div className="absolute right-6 bottom-1/3 md:hidden z-20 pointer-events-none">
+                <div className="flex items-center gap-2 bg-background/90 backdrop-blur border border-foreground/10 px-3 py-1.5 rounded-full shadow-2xl animate-pulse">
+                    <span className="text-[10px] font-mono tracking-widest uppercase text-blue-500">
                         {lang === 'ar' ? 'اسحب للتصفح' : 'SWIPE_TO_EXPLORE'}
                     </span>
-                    <RiArrowRightUpLine className={`w-4 h-4 ${lang === 'ar' ? 'rotate-180' : ''}`} />
+                    <PiArrowRightLight className={`w-4 h-4 text-blue-500 ${lang === 'ar' ? 'rotate-180' : ''}`} />
                 </div>
             </div>
 
             <div
                 ref={containerRef}
-                className="flex gap-12 overflow-x-auto px-6 pb-20 snap-x snap-mandatory scrollbar-hide pt-4"
+                className="flex gap-12 overflow-x-auto px-6 pb-20 snap-x snap-mandatory scrollbar-hide pt-4 relative"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
                 {PROJECTS_DATA.map((project, index) => (
@@ -208,6 +211,6 @@ export default function ProjectSlider() {
                     </motion.div>
                 ))}
             </div>
-        </section>
+        </section >
     );
 }

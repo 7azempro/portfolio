@@ -1,7 +1,7 @@
 import React from 'react';
 import { getLocalData } from '../../../lib/data.server';
 import Link from 'next/link';
-import { RiArrowLeftLine, RiTimeLine, RiCalendarLine } from 'react-icons/ri';
+import { PiArrowLeftLight, PiClockLight, PiCalendarBlankLight } from 'react-icons/pi';
 
 export async function generateMetadata({ params }) {
     const { slug } = await params;
@@ -30,7 +30,7 @@ export default async function BlogPost({ params }) {
             {/* Simple Header */}
             <div className="pt-32 px-[5vw] pb-12 max-w-4xl mx-auto">
                 <Link href="/blog" className="inline-flex items-center gap-2 text-white/50 hover:text-white transition-colors mb-8">
-                    <RiArrowLeftLine size={20} />
+                    <PiArrowLeftLight size={20} />
                     Back to Writing
                 </Link>
 
@@ -40,10 +40,10 @@ export default async function BlogPost({ params }) {
 
                 <div className="flex gap-6 text-white/40 text-sm">
                     <span className="flex items-center gap-2">
-                        <RiCalendarLine size={16} /> {post.date}
+                        <PiCalendarBlankLight size={16} /> {post.date}
                     </span>
                     <span className="flex items-center gap-2">
-                        <RiTimeLine size={16} /> {post.readTime}
+                        <PiClockLight size={16} /> {post.readTime}
                     </span>
                 </div>
             </div>

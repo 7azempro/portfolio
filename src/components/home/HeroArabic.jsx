@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { useEffect, useState } from 'react';
 import DashboardWidget from './DashboardWidget';
-import { RiArrowDownLine } from 'react-icons/ri';
+import { PiArrowDownLight } from 'react-icons/pi';
 
 export default function HeroArabic({ data }) {
     const { lang } = useLanguage();
@@ -133,7 +133,7 @@ export default function HeroArabic({ data }) {
             {/* Bottom Status Bar */}
             <div className="absolute bottom-0 left-0 right-0 h-12 border-t border-foreground/5 dark:border-white/5 flex items-center justify-between px-6 text-[10px] font-sans tracking-widest text-muted-foreground uppercase bg-background/50 backdrop-blur-sm">
                 <div className="flex items-center gap-2">
-                    <RiArrowDownLine className="w-3 h-3 animate-bounce" />
+                    <PiArrowDownLight className="w-3 h-3 animate-bounce" />
                     <span>SCROLL_TO_EXPLORE</span>
                 </div>
                 <div className="hidden md:flex items-center gap-8">
