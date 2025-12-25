@@ -111,7 +111,7 @@ export default function Hero({ data }) {
                                 </p>
                             </div>
 
-                            <div className="fixed bottom-6 left-4 right-4 z-50 lg:relative lg:bottom-auto lg:left-auto lg:right-auto lg:z-auto w-auto lg:w-full flex items-center justify-between lg:justify-start gap-4 p-3 lg:p-0 bg-foreground/5 backdrop-blur-2xl backdrop-saturate-150 border border-foreground/10 lg:border-none rounded-2xl lg:rounded-none shadow-2xl lg:shadow-none transition-all duration-300">
+                            <div className="fixed bottom-6 left-4 right-4 z-50 lg:relative lg:bottom-auto lg:left-auto lg:right-auto lg:z-auto w-auto lg:w-full flex items-center justify-between lg:justify-start gap-4 p-3 lg:p-0 bg-foreground/5 lg:bg-transparent backdrop-blur-2xl lg:backdrop-blur-none backdrop-saturate-150 lg:backdrop-saturate-100 border border-foreground/10 lg:border-none rounded-2xl lg:rounded-none shadow-2xl lg:shadow-none transition-all duration-300">
                                 <Link
                                     href="/works"
                                     onClick={playClick}
