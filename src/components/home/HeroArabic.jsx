@@ -34,7 +34,7 @@ export default function HeroArabic({ data }) {
     const t = content[lang];
 
     return (
-        <section className="relative min-h-[100dvh] flex flex-col justify-center overflow-hidden bg-background text-foreground pt-28 lg:pt-36 border-b border-foreground/5 dark:border-white/5">
+        <section className="relative min-h-[100dvh] flex flex-col justify-center overflow-hidden bg-background text-foreground pt-20 lg:pt-24 border-b border-foreground/5 dark:border-white/5">
 
             {/* Strict Grid Background */}
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
@@ -58,10 +58,10 @@ export default function HeroArabic({ data }) {
                             initial="hidden"
                             animate="visible"
                             variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
-                            className={`${lang === 'ar' ? 'text-4xl md:text-6xl lg:text-8xl leading-[1.3] font-bold tracking-normal py-4 mb-8 mt-4' : 'text-[11vw] md:text-[8vw] lg:text-[7vw] leading-[0.8] font-black tracking-tighter mb-8'} text-foreground mix-blend-difference`}
+                            className={`${lang === 'ar' ? 'text-4xl md:text-6xl lg:text-8xl leading-[1.4] font-bold tracking-normal py-2 mb-8 mt-4' : 'text-[11vw] md:text-[8vw] lg:text-[7vw] leading-[0.95] font-black tracking-tighter mb-8'} text-foreground mix-blend-difference`}
                         >
                             {(t.title || "").split("\n").map((line, i) => (
-                                <div key={i} className={`overflow-hidden ${lang === 'ar' ? 'pb-4' : ''}`}>
+                                <div key={i} className={`overflow-hidden py-1 ${lang === 'ar' ? 'pb-4' : 'pb-1'}`}>
                                     <motion.div
                                         variants={{
                                             hidden: { y: "100%" },

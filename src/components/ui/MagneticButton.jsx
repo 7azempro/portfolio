@@ -8,10 +8,14 @@ export default function MagneticButton({ children, className = "", onClick }) {
 
     const handleMouse = (e) => {
         const { clientX, clientY } = e;
+        if (!ref.current) return;
+
         const { height, width, left, top } = ref.current.getBoundingClientRect();
         const middleX = clientX - (left + width / 2);
         const middleY = clientY - (top + height / 2);
-        setPosition({ x: middleX * 0.2, y: middleY * 0.2 });
+
+        // Slightly increased ease for smoother feel
+        setPosition({ x: middleX * 0.25, y: middleY * 0.25 });
     };
 
     const reset = () => {
@@ -28,9 +32,9 @@ export default function MagneticButton({ children, className = "", onClick }) {
             onMouseMove={handleMouse}
             onMouseLeave={reset}
             onClick={onClick}
-            className={`relative overflow-hidden group ${className}`}
+            className={`relative overflow-visible z-10 group ${className}`} // changed overflow-hidden to visible just in case, and ensured z-index
         >
-            <span className="relative z-10">{children}</span>
+            <span className="relative z-10 block">{children}</span>
         </motion.button>
     );
 }

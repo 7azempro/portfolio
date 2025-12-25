@@ -168,20 +168,20 @@ export default function DashboardWidget() {
     const content = t[lang];
 
     return (
-        <div className="w-full bg-foreground/5 dark:bg-white/5 backdrop-blur-3xl border border-foreground/10 dark:border-white/10 rounded-2xl p-8 shadow-2xl relative overflow-hidden transition-colors duration-500">
+        <div className="w-full bg-foreground/5 dark:bg-white/5 backdrop-blur-3xl border border-foreground/10 dark:border-white/10 rounded-2xl p-4 sm:p-6 md:p-8 shadow-2xl relative overflow-hidden transition-colors duration-500">
 
             {/* Header */}
-            <div className="flex justify-between items-center mb-8 border-b border-foreground/10 dark:border-white/10 pb-6">
+            <div className="flex justify-between items-center mb-6 sm:mb-8 border-b border-foreground/10 dark:border-white/10 pb-4 sm:pb-6">
                 <div className="flex gap-4 items-center">
                     {/* Diamond Logo */}
-                    <div className="w-12 h-12 flex items-center justify-center">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center">
                         <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-500 to-cyan-400 rotate-45 shadow-lg shadow-blue-500/20 flex items-center justify-center">
                             <span className="text-white font-black text-xl -rotate-45 select-none">7</span>
                         </div>
                     </div>
                     <div className="flex flex-col text-foreground">
-                        <span className="text-sm font-bold tracking-widest uppercase">{content.system}</span>
-                        <span className="text-xs text-muted-foreground font-sans mt-1">
+                        <span className="text-xs sm:text-sm font-bold tracking-widest uppercase">{content.system}</span>
+                        <span className="text-[10px] sm:text-xs text-muted-foreground font-sans mt-1">
                             <UserTimeDisplay />
                         </span>
                     </div>
@@ -192,7 +192,7 @@ export default function DashboardWidget() {
             </div>
 
             {/* Data Grid */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
 
                 {/* Uptime Module */}
                 <motion.div
@@ -245,7 +245,7 @@ export default function DashboardWidget() {
                 </motion.div>
 
                 {/* Resource Dials (New Row) */}
-                <div className="col-span-2 grid grid-cols-2 gap-4">
+                <div className="col-span-1 sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div className="bg-foreground/5 dark:bg-white/5 p-3 rounded-lg border border-foreground/5 dark:border-white/5 flex items-center justify-between">
                         <span className="text-[10px] uppercase text-muted-foreground font-sans">{content.cpu}</span>
                         <div className="h-1.5 w-24 bg-foreground/10 dark:bg-white/10 rounded-full overflow-hidden">

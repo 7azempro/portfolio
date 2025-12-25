@@ -9,6 +9,7 @@ const SERVICE_QUERY = `*[_type == "service"]`;
 const TESTIMONIAL_QUERY = `*[_type == "testimonial"]`;
 const BENTO_QUERY = `*[_type == "bento"]`;
 const TECH_QUERY = `*[_type == "tech"] | order(row asc, name asc)`;
+const SETTINGS_QUERY = `*[_type == "settings"][0]`;
 
 // Fallback for Missing Config (Not connected)
 const MOCK_DATA = {
@@ -72,6 +73,8 @@ export async function getLocalData(key) {
                 return { items: Array.isArray(items) ? items : (items.items || []) };
             case 'tech':
                 return await client.fetch(TECH_QUERY, {}, { next: { revalidate: 30 } }) || [];
+            case 'settings':
+                return await client.fetch(SETTINGS_QUERY, {}, { next: { revalidate: 30 } }) || {};
             default:
                 return {};
         }

@@ -38,7 +38,7 @@ const Hero = ({ data }) => {
             animate="show"
             className="min-h-[80vh] flex flex-col justify-center px-[5vw] pt-32 pb-16"
         >
-            <motion.h1 variants={itemAnim} className="text-[clamp(3.5rem,8vw,7rem)] font-bold leading-[0.95] tracking-tight mb-8">
+            <motion.h1 variants={itemAnim} className="text-[clamp(3.5rem,8vw,7rem)] font-bold leading-[1.3] tracking-tight mb-8 py-8 overflow-visible">
                 {data.title} <br />
                 <span className="text-[var(--accent-color)]">{data.subtitle}</span>
             </motion.h1>
