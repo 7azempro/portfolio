@@ -16,14 +16,55 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata = {
+    metadataBase: new URL('https://7azem.pro'),
     title: {
         template: '%s | 7azempro',
         default: '7azempro | Premium Product Design & Development',
     },
     description: 'Transforming complex ideas into elegant digital systems. Expert in React, Next.js, and Product Design.',
-    keywords: ['Portfolio', 'Product Design', 'Next.js', 'React', 'Design Systems', 'Arabic UI'],
+    keywords: ['Portfolio', 'Product Design', 'Next.js', 'React', 'Design Systems', 'Arabic UI', 'Frontend Architecture'],
+    authors: [{ name: 'Hazem Gamal', url: 'https://7azem.pro' }],
+    creator: 'Hazem Gamal',
+    publisher: 'Hazem Gamal',
+    openGraph: {
+        title: '7azempro | Premium Product Design & Development',
+        description: 'Transforming complex ideas into elegant digital systems. Precision-engineered for performance.',
+        url: 'https://7azem.pro',
+        siteName: '7azempro',
+        locale: 'ar_EG',
+        type: 'website',
+        images: [
+            {
+                url: '/og-default.jpg', // User should provide this
+                width: 1200,
+                height: 630,
+                alt: '7azempro Portfolio Preview',
+            },
+        ],
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: '7azempro | Premium Product Design & Development',
+        description: 'Transforming complex ideas into elegant digital systems.',
+        creator: '@7azempro',
+        images: ['/og-default.jpg'],
+    },
     icons: {
         icon: '/icon.svg',
+        shortcut: '/favicon.ico',
+        apple: '/apple-touch-icon.png',
+    },
+    manifest: '/site.webmanifest',
+    robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+            index: true,
+            follow: true,
+            'max-video-preview': -1,
+            'max-image-preview': 'large',
+            'max-snippet': -1,
+        },
     },
 };
 

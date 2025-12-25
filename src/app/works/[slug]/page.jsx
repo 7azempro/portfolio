@@ -6,9 +6,40 @@ import { PiArrowLeftLight } from 'react-icons/pi';
 export async function generateMetadata({ params }) {
     const { slug } = await params;
     const projects = await getLocalData('projects');
-    const project = projects.find(p => p.slug === slug);
+    const project = projects.find(p => p.slug === slug || p.slug?.current === slug);
+
+    if (!project) {
+        return {
+            title: 'Project Not Found | 7azempro',
+        };
+    }
+
+    const title = `${project.title} | 7azempro`;
+    const description = project.desc?.en || project.desc?.ar || "Premium digital product design case study.";
+    const image = project.thumbnail || '/og-default.jpg';
+
     return {
-        title: project ? `${project.title} | Hazem Gamal` : 'Project Not Found',
+        title: title,
+        description: description,
+        openGraph: {
+            title: title,
+            description: description,
+            type: 'article',
+            images: [
+                {
+                    url: image,
+                    width: 1200,
+                    height: 630,
+                    alt: project.title,
+                },
+            ],
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: title,
+            description: description,
+            images: [image],
+        },
     };
 }
 

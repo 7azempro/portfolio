@@ -1,7 +1,10 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { PiHeadsetLight, PiXLight, PiEnvelopeSimpleLight, PiQuestionLight, PiWhatsappLogoLight } from 'react-icons/pi';
+import {
+    PiHeadsetLight, PiXLight, PiEnvelopeSimpleLight, PiQuestionLight, PiWhatsappLogoLight,
+    PiWheelchairLight, PiEyeClosedLight, PiSunLight, PiPauseLight, PiArrowCounterClockwiseLight
+} from 'react-icons/pi';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import Link from 'next/link';
 
@@ -9,7 +12,41 @@ export default function HelpWidget() {
     const { lang } = useLanguage();
     const [isOpen, setIsOpen] = useState(false);
 
+    // Accessibility State
+    const [textScale, setTextScale] = useState(1);
+    const [acModes, setAcModes] = useState({
+        grayscale: false,
+        contrast: false,
+        motion: false
+    });
+
     const toggleOpen = () => setIsOpen(!isOpen);
+
+    // Apply A11y Changes
+    useEffect(() => {
+        const root = document.documentElement;
+        // Text Scale
+        root.style.fontSize = `${textScale * 100}%`;
+
+        // Classes
+        root.classList.toggle('grayscale-mode', acModes.grayscale);
+        root.classList.toggle('high-contrast', acModes.contrast);
+        root.classList.toggle('reduce-motion', acModes.motion);
+
+    }, [textScale, acModes]);
+
+    const adjustTextScale = (delta) => {
+        setTextScale(prev => Math.min(Math.max(prev + delta / 100, 0.8), 1.5)); // Limit 80% - 150%
+    };
+
+    const toggleMode = (mode) => {
+        setAcModes(prev => ({ ...prev, [mode]: !prev[mode] }));
+    };
+
+    const resetA11y = () => {
+        setTextScale(1);
+        setAcModes({ grayscale: false, contrast: false, motion: false });
+    };
 
     const t = {
         ar: {
@@ -79,7 +116,60 @@ export default function HelpWidget() {
                         </div>
 
                         {/* Content */}
-                        <div className="p-4 space-y-2">
+                        <div className="p-4 space-y-4">
+
+                            {/* Accessibility Controls */}
+                            <div className="bg-foreground/5 rounded-lg p-3 space-y-3">
+                                <h4 className="font-bold text-[10px] uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                                    <PiWheelchairLight className="w-4 h-4" />
+                                    {lang === 'ar' ? 'أدوات الوصول' : 'ACCESSIBILITY'}
+                                </h4>
+
+                                {/* Controls Grid */}
+                                <div className="grid grid-cols-2 gap-2">
+                                    {/* Text Scale */}
+                                    <div className="flex items-center justify-between bg-background border border-foreground/10 rounded px-2 py-1.5 col-span-2">
+                                        <button onClick={() => adjustTextScale(-10)} className="w-6 h-6 flex items-center justify-center hover:bg-foreground/5 rounded text-xs">-</button>
+                                        <span className="text-[10px] font-mono">{(textScale * 100).toFixed(0)}%</span>
+                                        <button onClick={() => adjustTextScale(10)} className="w-6 h-6 flex items-center justify-center hover:bg-foreground/5 rounded text-xs">+</button>
+                                    </div>
+
+                                    {/* Toggles */}
+                                    <button
+                                        onClick={() => toggleMode('grayscale')}
+                                        className={`flex flex-col items-center justify-center gap-1 p-2 rounded border transition-colors ${acModes.grayscale ? 'bg-foreground text-background border-foreground' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}
+                                    >
+                                        <PiEyeClosedLight className="w-4 h-4" />
+                                        <span className="text-[8px] uppercase">Gray</span>
+                                    </button>
+
+                                    <button
+                                        onClick={() => toggleMode('contrast')}
+                                        className={`flex flex-col items-center justify-center gap-1 p-2 rounded border transition-colors ${acModes.contrast ? 'bg-foreground text-background border-foreground' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}
+                                    >
+                                        <PiSunLight className="w-4 h-4" />
+                                        <span className="text-[8px] uppercase">Contrast</span>
+                                    </button>
+
+                                    <button
+                                        onClick={() => toggleMode('motion')}
+                                        className={`flex flex-col items-center justify-center gap-1 p-2 rounded border transition-colors ${acModes.motion ? 'bg-foreground text-background border-foreground' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}
+                                    >
+                                        <PiPauseLight className="w-4 h-4" />
+                                        <span className="text-[8px] uppercase">Motion</span>
+                                    </button>
+
+                                    <button
+                                        onClick={resetA11y}
+                                        className="flex flex-col items-center justify-center gap-1 p-2 rounded border border-red-500/20 text-red-500 hover:bg-red-500 hover:text-white transition-colors"
+                                    >
+                                        <PiArrowCounterClockwiseLight className="w-4 h-4" />
+                                        <span className="text-[8px] uppercase">Reset</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="w-full h-px bg-foreground/10" />
 
                             {/* WhatsApp Action (Priority) */}
                             <a
