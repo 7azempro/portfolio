@@ -58,7 +58,7 @@ export default function Hero({ data }) {
     const t = content[lang];
 
     return (
-        <section ref={ref} className="relative min-h-screen flex flex-col justify-start lg:justify-center overflow-hidden bg-background text-foreground pt-32 lg:pt-0 border-b border-foreground/5 dark:border-white/5">
+        <section ref={ref} className="relative min-h-screen flex flex-col justify-start lg:justify-center overflow-hidden bg-background text-foreground pt-32 lg:pt-28 border-b border-foreground/5 dark:border-white/5">
 
             {/* Strict Grid Background - Parallaxed */}
             <motion.div style={{ y }} className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
