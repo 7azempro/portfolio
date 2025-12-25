@@ -9,6 +9,11 @@ import { about } from './about'
 import { experience } from './experience'
 import { education } from './education'
 import { testimonial } from './testimonial'
+import { course } from './course'
+import { lesson } from './lesson'
+import { product } from './product'
+import { order } from './order'
+import { socialPost } from './socialPost'
 
 export const schemaTypes = [
     hero,
@@ -17,6 +22,11 @@ export const schemaTypes = [
     service,
     tech,
     article,
+    socialPost,
+    course,
+    lesson,
+    product,
+    order,
     experience,
     education,
     testimonial,
