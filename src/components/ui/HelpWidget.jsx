@@ -6,7 +6,7 @@ import {
     PiHeadsetLight, PiXLight, PiEnvelopeSimpleLight, PiQuestionLight, PiWhatsappLogoLight,
     PiWheelchairLight, PiEyeClosedLight, PiSunLight, PiPauseLight, PiArrowCounterClockwiseLight,
     PiArrowsLeftRightLight, PiWarningCircleLight,
-    PiSpeakerHighLight, PiSpeakerSlashLight, PiRulerLight
+    PiSpeakerHighLight, PiSpeakerSlashLight, PiRulerLight, PiLinkLight, PiArrowsClockwiseLight
 } from 'react-icons/pi';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import Link from 'next/link';
@@ -14,6 +14,21 @@ import Link from 'next/link';
 export default function HelpWidget() {
     const { lang } = useLanguage();
     const [isOpen, setIsOpen] = useState(false);
+    const [widgetPosition, setWidgetPosition] = useState({ y: 0, isTop: false });
+
+    const handleDrag = (event, info) => {
+        const y = info.point.y;
+        const isTop = y < window.innerHeight / 2;
+        setWidgetPosition({ y, isTop });
+    };
+
+    const copyLink = () => {
+        navigator.clipboard.writeText(window.location.href);
+    };
+
+    const refreshSystem = () => {
+        window.location.reload();
+    };
 
     const { soundEnabled, toggleSound: toggleCtxSound, playClick } = useSound();
 
@@ -143,6 +158,9 @@ export default function HelpWidget() {
             about: "ABOUT_SYSTEM",
             chat: "LIVE_CHAT",
             connect: "CONNECT",
+            utilities: "SYSTEM_UTILITIES",
+            copy: "COPY_LINK",
+            refresh: "RELOAD",
             accessibility: {
                 textScale: "TEXT SCALE",
                 color: "Color",
@@ -168,6 +186,9 @@ export default function HelpWidget() {
             about: "حول النظام",
             chat: "المحادثة الفورية",
             connect: "تواصل معنا",
+            utilities: "أدوات النظام",
+            copy: "نسخ الرابط",
+            refresh: "تحديث",
             accessibility: {
                 textScale: "حجم النص",
                 color: "ألوان",
@@ -192,8 +213,9 @@ export default function HelpWidget() {
         <motion.div
             drag
             dragMomentum={false}
+            onDrag={handleDrag}
             dragConstraints={{ left: -300, right: 0, top: -500, bottom: 0 }}
-            className={`fixed bottom-32 md:bottom-6 z-[9990] flex flex-col items-end gap-4 ${lang === 'ar' ? 'left-6 items-start' : 'right-6'}`}
+            className={`fixed bottom-32 md:bottom-6 z-[9990] flex flex-col items-end gap-4 ${lang === 'ar' ? 'left-6 items-start' : 'right-6 items-end'}`}
         >
             {/* TRIGGER BUTTON */}
             <motion.button
@@ -217,11 +239,11 @@ export default function HelpWidget() {
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                        initial={{ opacity: 0, y: widgetPosition.isTop ? -10 : 10, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                        exit={{ opacity: 0, y: widgetPosition.isTop ? -10 : 10, scale: 0.95 }}
                         transition={{ duration: 0.3, ease: "circOut" }}
-                        className={`absolute bottom-full mb-4 w-[calc(100vw-3rem)] sm:w-80 max-h-[60vh] md:max-h-[75vh] overflow-y-auto bg-background/60 backdrop-blur-xl backdrop-saturate-150 border border-foreground/10 rounded-2xl shadow-2xl origin-bottom-${lang === 'ar' ? 'left' : 'right'}`}
+                        className={`absolute ${widgetPosition.isTop ? 'top-full mt-4' : 'bottom-full mb-4'} w-[calc(100vw-3rem)] sm:w-80 max-h-[60vh] md:max-h-[75vh] overflow-y-auto bg-background/60 backdrop-blur-xl backdrop-saturate-150 border border-foreground/10 rounded-2xl shadow-2xl origin-${widgetPosition.isTop ? 'top' : 'bottom'}-${lang === 'ar' ? 'left' : 'right'}`}
                         onPointerDownCapture={(e) => e.stopPropagation()}
                     >
 
@@ -239,6 +261,18 @@ export default function HelpWidget() {
 
                         {/* Content */}
                         <div className="p-4 space-y-4">
+
+                            {/* System Utilities */}
+                            <div className="grid grid-cols-2 gap-2">
+                                <button onClick={copyLink} className="flex items-center justify-center gap-2 p-3 bg-foreground/5 hover:bg-foreground/10 rounded-lg transition-colors border border-foreground/5 group">
+                                    <PiLinkLight className="w-4 h-4" />
+                                    <span className="text-[9px] font-bold uppercase tracking-wider">{content.copy}</span>
+                                </button>
+                                <button onClick={refreshSystem} className="flex items-center justify-center gap-2 p-3 bg-foreground/5 hover:bg-foreground/10 rounded-lg transition-colors border border-foreground/5 group">
+                                    <PiArrowsClockwiseLight className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" />
+                                    <span className="text-[9px] font-bold uppercase tracking-wider">{content.refresh}</span>
+                                </button>
+                            </div>
 
                             {/* Accessibility Controls */}
                             <div className="bg-foreground/5 rounded-lg p-3 space-y-3">
