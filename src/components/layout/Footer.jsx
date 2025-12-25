@@ -124,7 +124,7 @@ export default function Footer({ socials }) {
             <div className="container mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center text-xs font-sans text-muted-foreground uppercase tracking-widest">
                 <p>© {year} 7AZEM.PRO</p>
                 <div className="flex gap-6 mt-4 md:mt-0">
-                    <Link href="/legal" className="hover:text-foreground cursor-pointer">{lang === 'ar' ? 'قانوني' : 'LEGAL'}</Link>
+                    <Link href="/legal" className="hover:text-foreground cursor-pointer">{lang === 'ar' ? 'السياسات والأحكام' : 'LEGAL_FRAMEWORK'}</Link>
                 </div>
             </div>
         </footer>

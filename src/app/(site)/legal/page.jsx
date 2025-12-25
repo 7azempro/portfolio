@@ -7,7 +7,7 @@ export default function LegalPage() {
 
     const t = {
         ar: {
-            title: "الشروط والخصوصية",
+            title: "السياسات والأحكام",
             updated: "آخر تحديث: ديسمبر 2025",
             privacyTitle: "سياسة الخصوصية",
             privacyContent: [
@@ -24,7 +24,7 @@ export default function LegalPage() {
             contact: "للأسئلة، يرجى التواصل: "
         },
         en: {
-            title: "LEGAL",
+            title: "LEGAL_FRAMEWORK",
             updated: "LAST UPDATED: DECEMBER 2025",
             privacyTitle: "Privacy Policy",
             privacyContent: [

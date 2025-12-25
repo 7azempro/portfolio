@@ -129,7 +129,7 @@ export default function HelpWidget() {
             subtitle: "نظام المساعدة",
             status: "متاح",
             email: "مراسلة بريدية",
-            legal: "الشروط والخصوصية",
+            legal: "السياسات والأحكام",
             about: "حول النظام",
             chat: "المحادثة الفورية",
             connect: "تواصل معنا"
