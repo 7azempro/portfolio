@@ -3,7 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { useSound } from '@/lib/context/SoundContext';
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 const DashboardWidget = dynamic(() => import('./DashboardWidget'), {
     ssr: false,
@@ -14,6 +14,13 @@ import { PiArrowDownLight } from 'react-icons/pi';
 export default function Hero({ data }) {
     const { lang } = useLanguage();
     const { playHover, playClick } = useSound();
+
+    // Defer widget load to prioritize LCP
+    const [isMounted, setIsMounted] = useState(false);
+    useEffect(() => {
+        const timer = setTimeout(() => setIsMounted(true), 100); // 100ms delay to let LCP paint
+        return () => clearTimeout(timer);
+    }, []);
 
     // Parallax logic
     const ref = useRef(null);
@@ -136,6 +143,8 @@ export default function Hero({ data }) {
                         <div className="absolute bottom-0 left-0 rtl:right-0 rtl:left-auto w-4 h-4 border-b border-l rtl:border-r rtl:border-l-0 border-foreground/30" />
                         <div className="absolute bottom-0 right-0 rtl:left-0 rtl:right-auto w-4 h-4 border-b border-r rtl:border-l rtl:border-r-0 border-foreground/30" />
 
+
+
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
@@ -143,7 +152,7 @@ export default function Hero({ data }) {
                             className="w-full h-full flex items-center justify-center"
                         >
                             {/* The Dashboard Widget lives inside this strict frame */}
-                            <DashboardWidget />
+                            {isMounted ? <DashboardWidget /> : <div className="w-full h-full bg-white/5 animate-pulse rounded-2xl" />}
                         </motion.div>
                     </div>
 
