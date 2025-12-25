@@ -19,7 +19,7 @@ export default function Preloader() {
                 />
 
                 {/* Text Reveal */}
-                <div className="flex items-center gap-1 overflow-hidden" dir="ltr">
+                <div className="flex items-center gap-1 overflow-hidden" dir="ltr" style={{ fontFamily: 'var(--font-jakarta)' }}>
                     <motion.span
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}

@@ -34,7 +34,7 @@ export default function HeroArabic({ data }) {
     const t = content[lang];
 
     return (
-        <section className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-background text-foreground pt-20 border-b border-foreground/5 dark:border-white/5">
+        <section className="relative min-h-[100dvh] flex flex-col justify-center overflow-hidden bg-background text-foreground pt-28 lg:pt-36 border-b border-foreground/5 dark:border-white/5">
 
             {/* Strict Grid Background */}
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
@@ -47,8 +47,9 @@ export default function HeroArabic({ data }) {
                     <div className="lg:col-span-7 rtl:text-right ltr:text-left">
 
                         {/* Status Indicator (Technical) */}
-                        <div className="inline-flex items-center gap-3 border-b border-foreground/20 pb-2 mb-8 md:mb-12 font-sans text-xs tracking-widest uppercase text-muted-foreground w-fit">
-                            <span className="w-2 h-2 bg-emerald-500 rounded-none animate-pulse" />
+                        <div className="inline-flex items-center gap-3 border border-foreground/10 px-3 py-1 mb-8 md:mb-12 font-sans text-[10px] tracking-[0.2em] uppercase text-muted-foreground w-fit bg-foreground/5 backdrop-blur-sm">
+                            <span className="w-1.5 h-1.5 bg-emerald-500 rounded-none animate-pulse shadow-sm shadow-emerald-500/50" />
+                            <span className="opacity-50">sys_001 ::</span>
                             {t.status}
                         </div>
 
@@ -57,7 +58,7 @@ export default function HeroArabic({ data }) {
                             initial="hidden"
                             animate="visible"
                             variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
-                            className={`${lang === 'ar' ? 'text-5xl md:text-7xl lg:text-8xl leading-tight font-bold tracking-normal py-2 mb-6' : 'text-[11vw] md:text-[8vw] lg:text-[7vw] leading-[0.8] font-black tracking-tighter mb-8'} text-foreground mix-blend-difference`}
+                            className={`${lang === 'ar' ? 'text-4xl md:text-6xl lg:text-8xl leading-[1.3] font-bold tracking-normal py-4 mb-8 mt-4' : 'text-[11vw] md:text-[8vw] lg:text-[7vw] leading-[0.8] font-black tracking-tighter mb-8'} text-foreground mix-blend-difference`}
                         >
                             {(t.title || "").split("\n").map((line, i) => (
                                 <div key={i} className={`overflow-hidden ${lang === 'ar' ? 'pb-4' : ''}`}>
@@ -74,8 +75,11 @@ export default function HeroArabic({ data }) {
                         </motion.h1>
 
                         {/* Description & CTAs */}
-                        <div className="flex flex-col gap-10 items-start border-t border-foreground/10 pt-8 mt-4">
-                            <div className="space-y-4 max-w-xl">
+                        <div className="flex flex-col gap-10 items-start border-t border-foreground/10 pt-8 mt-4 mb-12 lg:mb-0 relative">
+                            {/* Decorative Marker */}
+                            <div className="absolute top-0 right-0 w-8 h-px bg-foreground" />
+
+                            <div className="space-y-6 max-w-xl ltr:pl-6 rtl:pr-6 border-l rtl:border-r rtl:border-l-0 border-foreground/20">
                                 <h3 className={`font-bold ${lang === 'ar' ? 'text-2xl text-foreground' : 'text-xl text-foreground font-mono tracking-widest'}`}>
                                     {t.subtitle}
                                 </h3>
@@ -84,19 +88,21 @@ export default function HeroArabic({ data }) {
                                 </p>
                             </div>
 
-                            <div className="flex flex-wrap items-center gap-6 w-full">
+                            <div className="flex flex-wrap items-center gap-6 w-full mt-4">
                                 <Link
                                     href="/works"
-                                    className="px-8 py-4 bg-foreground text-background font-sans text-sm font-bold tracking-widest uppercase hover:bg-blue-600 transition-colors shadow-lg shadow-blue-500/10"
+                                    className="relative overflow-hidden px-8 py-4 bg-foreground text-background font-sans text-xs font-bold tracking-widest uppercase hover:bg-blue-600 transition-colors group"
                                 >
-                                    {t.ctaPrimary}
+                                    <span className="relative z-10">{t.ctaPrimary}</span>
+                                    {/* Tech Corner */}
+                                    <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-background opacity-50" />
                                 </Link>
                                 <Link
                                     href="/about"
-                                    className="group flex items-center gap-2 px-4 py-4 text-foreground font-sans text-sm font-bold tracking-widest uppercase hover:text-blue-600 transition-colors"
+                                    className="group flex items-center gap-3 px-4 py-4 text-foreground font-sans text-xs font-bold tracking-widest uppercase hover:text-blue-600 transition-colors"
                                 >
                                     <span>{t.ctaSecondary}</span>
-                                    <div className="w-1 h-1 bg-foreground rounded-full group-hover:bg-blue-600 transition-colors" />
+                                    <div className="w-1.5 h-1.5 border border-foreground group-hover:bg-blue-600 group-hover:border-blue-600 transition-colors rotate-45" />
                                 </Link>
                             </div>
                         </div>

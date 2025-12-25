@@ -8,6 +8,7 @@ import { LanguageProvider } from '@/lib/context/LanguageContext';
 import ThemeSync from '@/components/layout/ThemeSync';
 import Cursor from '@/components/ui/Cursor';
 import Preloader from '@/components/ui/Preloader';
+import HelpWidget from '@/components/ui/HelpWidget';
 
 export default function ClientProviders({ children, fontVariables }) {
     const [isLoading, setIsLoading] = useState(true);
@@ -41,6 +42,7 @@ export default function ClientProviders({ children, fontVariables }) {
             <Cursor />
             <Header />
             {children}
+            <HelpWidget />
             <Footer />
         </LanguageProvider>
     );

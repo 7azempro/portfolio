@@ -181,6 +181,14 @@ export default function ProjectSlider() {
                         />
                     </div>
                 </div>
+
+                {/* Mobile Scroll Hint */}
+                <div className="md:hidden flex items-center gap-2 text-blue-500 animate-pulse">
+                    <span className="text-[10px] font-mono tracking-widest uppercase">
+                        {lang === 'ar' ? 'اسحب للتصفح' : 'SWIPE_TO_EXPLORE'}
+                    </span>
+                    <RiArrowRightUpLine className={`w-4 h-4 ${lang === 'ar' ? 'rotate-180' : ''}`} />
+                </div>
             </div>
 
             <div

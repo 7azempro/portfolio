@@ -32,7 +32,7 @@ import ScrollProgress from '@/components/ui/ScrollProgress';
 export default function RootLayout({ children }) {
     return (
         <html lang="ar" dir="rtl" className="scroll-smooth">
-            <body className="bg-background text-foreground transition-colors duration-300">
+            <body className={`${ibmArabic.variable} ${jakarta.variable} bg-background text-foreground transition-colors duration-300`}>
                 <ClientProviders fontVariables={{ ibmFont: ibmArabic.variable, jakartaFont: jakarta.variable }}>
                     <ScrollProgress />
                     {/* Atmospheric Layers */}
