@@ -70,9 +70,9 @@ export default function Hero({ data }) {
                     <div className="w-full lg:col-span-7 rtl:text-right ltr:text-left relative z-30 mb-24 lg:mb-0">
 
                         {/* Status Indicator (Technical) */}
-                        <div className="inline-flex items-center gap-3 border border-foreground/10 px-3 py-1 mb-4 md:mb-8 font-sans text-[10px] tracking-swiss-caps uppercase text-muted-foreground w-fit bg-foreground/5 backdrop-blur-sm">
+                        <div className="inline-flex items-center gap-3 border border-foreground/10 px-3 py-1 mb-4 md:mb-8 font-mono text-[10px] tracking-widest uppercase text-muted-foreground w-fit bg-foreground/5 backdrop-blur-sm">
                             <span className="w-1.5 h-1.5 bg-emerald-500 rounded-none animate-pulse shadow-sm shadow-emerald-500/50" />
-                            <span className="opacity-50">sys_001 ::</span>
+                            <span className="opacity-50">SYS_001 ::</span>
                             {t.status}
                         </div>
 
