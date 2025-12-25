@@ -7,7 +7,7 @@ import {
     PiWheelchairLight, PiEyeClosedLight, PiSunLight, PiPauseLight, PiArrowCounterClockwiseLight,
     PiArrowsLeftRightLight, PiWarningCircleLight,
     PiSpeakerHighLight, PiSpeakerSlashLight, PiRulerLight, PiLinkLight, PiArrowsClockwiseLight,
-    PiCloudSunLight, PiWifiHighLight, PiWifiSlashLight, PiClockLight
+    PiCloudSunLight, PiWifiHighLight, PiWifiSlashLight, PiClockLight, PiSquaresFourLight
 } from 'react-icons/pi';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import Link from 'next/link';
@@ -15,14 +15,11 @@ import Link from 'next/link';
 export default function HelpWidget() {
     const { lang } = useLanguage();
     const [isOpen, setIsOpen] = useState(false);
+    const [activeTab, setActiveTab] = useState('system'); // system | contact
     const [widgetPosition, setWidgetPosition] = useState({ isTop: false, isRight: true }); // Default Right-Bottom
 
-    const handleDrag = (event, info) => {
-        const { x, y } = info.point;
-        const isTop = y < window.innerHeight / 2;
-        const isRight = x > window.innerWidth / 2;
-        setWidgetPosition({ isTop, isRight });
-    };
+    // Drag logic moved to onDragEnd
+
 
     const copyLink = () => {
         navigator.clipboard.writeText(window.location.href);
@@ -81,7 +78,6 @@ export default function HelpWidget() {
 
     const toggleOpen = () => setIsOpen(!isOpen);
 
-    // Apply A11y Changes
     // Apply A11y Changes
     useEffect(() => {
         const root = document.documentElement;
@@ -177,16 +173,6 @@ export default function HelpWidget() {
     };
 
     const t = {
-        ar: {
-            title: "مركز الدعم",
-            subtitle: "نظام المساعدة",
-            status: "متاح",
-            email: "مراسلة بريدية",
-            legal: "السياسات والأحكام",
-            about: "حول النظام",
-            chat: "المحادثة الفورية",
-            connect: "تواصل معنا"
-        },
         en: {
             title: "SUPPORT_CENTER",
             subtitle: "SYSTEM_HELP",
@@ -196,6 +182,8 @@ export default function HelpWidget() {
             about: "ABOUT_SYSTEM",
             chat: "LIVE_CHAT",
             connect: "CONNECT",
+            tabSystem: "SYSTEM",
+            tabContact: "CONNECT",
             utilities: "SYSTEM_UTILITIES",
             copy: "COPY_LINK",
             refresh: "RELOAD",
@@ -224,6 +212,8 @@ export default function HelpWidget() {
             about: "حول النظام",
             chat: "المحادثة الفورية",
             connect: "تواصل معنا",
+            tabSystem: "النظام",
+            tabContact: "تواصل",
             utilities: "أدوات النظام",
             copy: "نسخ الرابط",
             refresh: "تحديث",
@@ -247,13 +237,43 @@ export default function HelpWidget() {
 
     const content = t[lang];
 
+
+    const [isDragging, setIsDragging] = useState(false);
+
+    const handleDragEnd = (event, info) => {
+        setIsDragging(false);
+        const { x, y } = info.point;
+        // Check window dimensions
+        const winW = window.innerWidth;
+        const winH = window.innerHeight;
+
+        // Determine quadrant
+        const isRight = x > winW / 2;
+        const isTop = y < winH / 2;
+
+        setWidgetPosition({ isTop, isRight });
+    };
+
     return (
         <motion.div
             drag
             dragMomentum={false}
-            onDrag={handleDrag}
-            dragConstraints={{ left: -window.innerWidth + 50, right: 0, top: -window.innerHeight + 50, bottom: 0 }}
-            className={`fixed bottom-32 md:bottom-6 z-[9990] flex flex-col gap-4 ${widgetPosition.isRight ? 'items-end right-6' : 'items-start left-6'}`}
+            whileDrag={{ scale: 1.1 }}
+            onDragStart={() => setIsDragging(true)}
+            onDragEnd={handleDragEnd}
+            // Reset position on re-render when side changes (key technique or manual animate)
+            // Using animate to reset x/y to 0 helps snap it to the new anchor
+            animate={{
+                x: 0,
+                y: 0,
+                opacity: 1
+            }}
+            transition={{
+                type: "spring",
+                stiffness: 300,
+                damping: 30
+            }}
+            className={`fixed z-[9990] flex flex-col gap-4 ${widgetPosition.isRight ? 'right-6 items-end' : 'left-6 items-start'} ${widgetPosition.isTop ? 'top-6' : 'bottom-32 md:bottom-6'}`}
         >
             {/* TRIGGER BUTTON */}
             <motion.button
@@ -262,10 +282,11 @@ export default function HelpWidget() {
                 animate={{ scale: 1 }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
+
                 aria-label={isOpen ? "Close Help Widget" : "Open Help Widget"}
                 className={`w-14 h-14 bg-foreground text-background rounded-full flex items-center justify-center shadow-2xl shadow-blue-500/20 hover:shadow-blue-500/40 transition-shadow`}
             >
-                {isOpen ? <PiXLight className="w-6 h-6" /> : <PiHeadsetLight className="w-6 h-6" />}
+                {isOpen ? <PiXLight className="w-6 h-6" /> : <PiSquaresFourLight className="w-6 h-6" />}
 
                 {/* Pulse Ring */}
                 {!isOpen && (
@@ -281,195 +302,195 @@ export default function HelpWidget() {
                         animate={{ opacity: 1, y: 0, scale: 1, x: 0 }}
                         exit={{ opacity: 0, y: widgetPosition.isTop ? -10 : 10, scale: 0.95, x: widgetPosition.isRight ? 10 : -10 }}
                         transition={{ duration: 0.3, ease: "circOut" }}
-                        className={`absolute ${widgetPosition.isTop ? 'top-full mt-4' : 'bottom-full mb-4'} w-[calc(100vw-3rem)] sm:w-80 max-h-[60vh] md:max-h-[75vh] overflow-y-auto bg-background/60 backdrop-blur-xl backdrop-saturate-150 border border-foreground/10 rounded-2xl shadow-2xl origin-${widgetPosition.isTop ? 'top' : 'bottom'}-${widgetPosition.isRight ? 'right' : 'left'}`}
+                        className={`absolute ${widgetPosition.isTop ? 'top-full mt-4' : 'bottom-full mb-4'} w-[calc(100vw-3rem)] sm:w-80 max-h-[60vh] md:max-h-[75vh] overflow-hidden bg-background/60 backdrop-blur-xl backdrop-saturate-150 border border-foreground/10 rounded-2xl shadow-2xl origin-${widgetPosition.isTop ? 'top' : 'bottom'}-${widgetPosition.isRight ? 'right' : 'left'} flex flex-col`}
                         style={{ [widgetPosition.isRight ? 'right' : 'left']: 0 }}
                         onPointerDownCapture={(e) => e.stopPropagation()}
                     >
 
-                        {/* Header */}
-                        <div className="bg-foreground text-background p-4 flex items-center justify-between">
-                            <div>
-                                <h3 className="font-bold text-sm tracking-widest uppercase">{content.title}</h3>
-                                <div className="flex items-center gap-2 mt-1">
-                                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                                    <span className="text-[10px] font-mono opacity-80">{content.status}</span>
+                        {/* Header & Tabs */}
+                        <div className="bg-foreground text-background p-2 shrink-0">
+                            <div className="flex items-center justify-between mb-3 px-2 pt-2">
+                                <div>
+                                    <h3 className="font-bold text-sm tracking-widest uppercase">{content.title}</h3>
+                                    <div className="flex items-center gap-2 mt-1">
+                                        <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                                        <span className="text-[10px] font-mono opacity-80">{content.status}</span>
+                                    </div>
                                 </div>
+                                <button onClick={() => setIsOpen(false)} className="p-1 hover:bg-white/10 rounded-full transition-colors">
+                                    <PiXLight className="w-4 h-4" />
+                                </button>
                             </div>
-                            <PiHeadsetLight className="w-8 h-8 opacity-20" />
+
+                            {/* Segmented Control */}
+                            <div className="flex p-1 bg-background/10 rounded-lg">
+                                <button
+                                    onClick={() => setActiveTab('system')}
+                                    className={`flex-1 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-md transition-all ${activeTab === 'system' ? 'bg-background text-foreground shadow-sm' : 'text-background/60 hover:text-background'}`}
+                                >
+                                    {content.tabSystem}
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('contact')}
+                                    className={`flex-1 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-md transition-all ${activeTab === 'contact' ? 'bg-background text-foreground shadow-sm' : 'text-background/60 hover:text-background'}`}
+                                >
+                                    {content.tabContact}
+                                </button>
+                            </div>
                         </div>
 
-                        {/* Content */}
-                        <div className="p-4 space-y-4">
+                        {/* Content Scroll Area */}
+                        <div className="p-4 space-y-4 overflow-y-auto custom-scrollbar">
 
-                            {/* Smart Status Grid */}
-                            <div className="grid grid-cols-3 gap-2">
-                                <div className="flex flex-col items-center justify-center gap-1 p-2 rounded-lg bg-foreground/5 border border-foreground/5">
-                                    <PiCloudSunLight className="w-5 h-5 text-amber-500" />
-                                    <span className="text-[10px] font-mono font-bold">{weather ? `${weather.temperature}°C` : '--'}</span>
-                                    <span className="text-[7px] uppercase tracking-wider opacity-60">CAIRO</span>
-                                </div>
-                                <div className="flex flex-col items-center justify-center gap-1 p-2 rounded-lg bg-foreground/5 border border-foreground/5">
-                                    <PiClockLight className="w-5 h-5 text-blue-500" />
-                                    <span className="text-[10px] font-mono font-bold">{time || '--:--'}</span>
-                                    <span className="text-[7px] uppercase tracking-wider opacity-60">LOCAL</span>
-                                </div>
-                                <div className={`flex flex-col items-center justify-center gap-1 p-2 rounded-lg border transition-colors ${isOnline ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600' : 'bg-red-500/10 border-red-500/20 text-red-600'}`}>
-                                    {isOnline ? <PiWifiHighLight className="w-5 h-5" /> : <PiWifiSlashLight className="w-5 h-5" />}
-                                    <span className="text-[10px] font-mono font-bold">{isOnline ? 'ON' : 'OFF'}</span>
-                                    <span className="text-[7px] uppercase tracking-wider opacity-60">NET</span>
-                                </div>
-                            </div>
-
-                            {/* System Utilities */}
-                            <div className="grid grid-cols-2 gap-2">
-                                <button onClick={copyLink} className="flex items-center justify-center gap-2 p-3 bg-foreground/5 hover:bg-foreground/10 rounded-lg transition-colors border border-foreground/5 group">
-                                    <PiLinkLight className="w-4 h-4" />
-                                    <span className="text-[9px] font-bold uppercase tracking-wider">{content.copy}</span>
-                                </button>
-                                <button onClick={refreshSystem} className="flex items-center justify-center gap-2 p-3 bg-foreground/5 hover:bg-foreground/10 rounded-lg transition-colors border border-foreground/5 group">
-                                    <PiArrowsClockwiseLight className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" />
-                                    <span className="text-[9px] font-bold uppercase tracking-wider">{content.refresh}</span>
-                                </button>
-                            </div>
-
-                            {/* Accessibility Controls */}
-                            <div className="bg-foreground/5 rounded-lg p-3 space-y-3">
-                                <h4 className="font-bold text-[10px] uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                                    <PiWheelchairLight className="w-4 h-4" />
-                                    {lang === 'ar' ? 'أدوات الوصول' : 'ACCESSIBILITY'}
-                                </h4>
-
-                                {/* Controls Grid */}
-                                <div className="space-y-2">
-                                    {/* Text Scale Bar */}
-                                    <div className="flex items-center justify-between bg-background border border-foreground/10 rounded-md p-2">
-                                        <button onClick={() => adjustTextScale(-10)} aria-label="Decrease text size" className="w-8 h-8 flex items-center justify-center hover:bg-foreground/5 rounded text-sm">-</button>
-                                        <span className="text-[10px] font-mono font-bold tracking-widest">{content.accessibility.textScale}: {(textScale * 100).toFixed(0)}%</span>
-                                        <button onClick={() => adjustTextScale(10)} aria-label="Increase text size" className="w-8 h-8 flex items-center justify-center hover:bg-foreground/5 rounded text-sm">+</button>
-                                    </div>
-
-                                    {/* Main Grid (3 Cols) */}
+                            {/* TAB: SYSTEM */}
+                            {activeTab === 'system' && (
+                                <motion.div
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    className="space-y-4"
+                                >
+                                    {/* Smart Status Grid */}
                                     <div className="grid grid-cols-3 gap-2">
+                                        <div className="flex flex-col items-center justify-center gap-1 p-2 rounded-lg bg-foreground/5 border border-foreground/5">
+                                            <PiCloudSunLight className="w-5 h-5 text-amber-500" />
+                                            <span className="text-[10px] font-mono font-bold">{weather ? `${weather.temperature}°C` : '--'}</span>
+                                            <span className="text-[7px] uppercase tracking-wider opacity-60">CAIRO</span>
+                                        </div>
+                                        <div className="flex flex-col items-center justify-center gap-1 p-2 rounded-lg bg-foreground/5 border border-foreground/5">
+                                            <PiClockLight className="w-5 h-5 text-blue-500" />
+                                            <span className="text-[10px] font-mono font-bold">{time || '--:--'}</span>
+                                            <span className="text-[7px] uppercase tracking-wider opacity-60">LOCAL</span>
+                                        </div>
+                                        <div className={`flex flex-col items-center justify-center gap-1 p-2 rounded-lg border transition-colors ${isOnline ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600' : 'bg-red-500/10 border-red-500/20 text-red-600'}`}>
+                                            {isOnline ? <PiWifiHighLight className="w-5 h-5" /> : <PiWifiSlashLight className="w-5 h-5" />}
+                                            <span className="text-[10px] font-mono font-bold">{isOnline ? 'ON' : 'OFF'}</span>
+                                            <span className="text-[7px] uppercase tracking-wider opacity-60">NET</span>
+                                        </div>
+                                    </div>
 
-                                        {/* 1. Visual Mode */}
-                                        <button
-                                            onClick={cycleVisualMode}
-                                            className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-md border transition-all duration-300 ${acModes.visualMode !== 'normal' ? 'bg-foreground text-background border-foreground ring-2 ring-offset-2 ring-foreground/20' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}
-                                        >
-                                            {acModes.visualMode === 'normal' && <PiSunLight className="w-5 h-5" />}
-                                            {acModes.visualMode === 'contrast' && <PiSunLight className="w-5 h-5" />}
-                                            {acModes.visualMode === 'invert' && <PiArrowsLeftRightLight className="w-5 h-5" />}
-                                            {acModes.visualMode === 'yellowBlack' && <PiWarningCircleLight className="w-5 h-5" />}
-                                            {acModes.visualMode === 'grayscale' && <PiEyeClosedLight className="w-5 h-5" />}
-                                            <span className="text-[7px] font-bold uppercase tracking-wider">
-                                                {acModes.visualMode === 'normal' ? content.accessibility.color :
-                                                    acModes.visualMode === 'contrast' ? content.accessibility.contrast :
-                                                        acModes.visualMode === 'invert' ? content.accessibility.invert :
-                                                            acModes.visualMode === 'yellowBlack' ? content.accessibility.yellowBlack :
-                                                                content.accessibility.grayscale}
-                                            </span>
+                                    {/* System Utilities */}
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <button onClick={copyLink} className="flex items-center justify-center gap-2 p-3 bg-foreground/5 hover:bg-foreground/10 rounded-lg transition-colors border border-foreground/5 group">
+                                            <PiLinkLight className="w-4 h-4" />
+                                            <span className="text-[9px] font-bold uppercase tracking-wider">{content.copy}</span>
                                         </button>
-
-                                        {/* 2. Reading Guide */}
-                                        <button
-                                            onClick={toggleGuide}
-                                            className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-md border transition-all duration-300 ${acModes.readingGuide ? 'bg-foreground text-background border-foreground ring-2 ring-offset-2 ring-foreground/20' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}
-                                        >
-                                            <PiRulerLight className="w-5 h-5" />
-                                            <span className="text-[7px] font-bold uppercase tracking-wider">{content.accessibility.guide}</span>
-                                        </button>
-
-                                        {/* 3. Speak */}
-                                        <button
-                                            onClick={toggleSpeech}
-                                            className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-md border transition-all duration-300 ${isReading ? 'bg-foreground text-background border-foreground ring-2 ring-offset-2 ring-foreground/20 animate-pulse' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}
-                                        >
-                                            <PiSpeakerHighLight className="w-5 h-5" />
-                                            <span className="text-[7px] font-bold uppercase tracking-wider">{isReading ? content.accessibility.reading : content.accessibility.speak}</span>
-                                        </button>
-
-                                        {/* 4. Motion */}
-                                        <button
-                                            onClick={toggleMotion}
-                                            className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-md border transition-all duration-300 ${acModes.motion ? 'bg-foreground text-background border-foreground ring-2 ring-offset-2 ring-foreground/20' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}
-                                        >
-                                            <PiPauseLight className="w-5 h-5" />
-                                            <span className="text-[7px] font-bold uppercase tracking-wider">{content.accessibility.motion}</span>
-                                        </button>
-
-                                        {/* 5. Sound */}
-                                        <button
-                                            onClick={toggleSound}
-                                            className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-md border transition-all duration-300 ${!soundEnabled ? 'bg-red-500/10 border-red-500/50 text-red-500' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}
-                                        >
-                                            {soundEnabled ? <PiSpeakerHighLight className="w-5 h-5" /> : <PiSpeakerSlashLight className="w-5 h-5" />}
-                                            <span className="text-[7px] font-bold uppercase tracking-wider">{soundEnabled ? content.accessibility.sound : content.accessibility.muted}</span>
-                                        </button>
-
-                                        {/* 6. Reset */}
-                                        <button
-                                            onClick={resetA11y}
-                                            className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-md border border-red-500/20 text-red-500 hover:bg-red-500 hover:text-white transition-all duration-300"
-                                        >
-                                            <PiArrowCounterClockwiseLight className="w-5 h-5" />
-                                            <span className="text-[7px] font-bold uppercase tracking-wider">{content.accessibility.reset}</span>
+                                        <button onClick={refreshSystem} className="flex items-center justify-center gap-2 p-3 bg-foreground/5 hover:bg-foreground/10 rounded-lg transition-colors border border-foreground/5 group">
+                                            <PiArrowsClockwiseLight className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" />
+                                            <span className="text-[9px] font-bold uppercase tracking-wider">{content.refresh}</span>
                                         </button>
                                     </div>
-                                </div>
-                            </div>
 
-                            <div className="w-full h-px bg-foreground/10" />
+                                    {/* Accessibility Controls */}
+                                    <div className="bg-foreground/5 rounded-lg p-3 space-y-3">
+                                        <h4 className="font-bold text-[10px] uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                                            <PiWheelchairLight className="w-4 h-4" />
+                                            {lang === 'ar' ? 'أدوات الوصول' : 'ACCESSIBILITY'}
+                                        </h4>
+                                        <div className="space-y-2">
+                                            <div className="flex items-center justify-between bg-background border border-foreground/10 rounded-md p-2">
+                                                <button onClick={() => adjustTextScale(-10)} aria-label="Decrease text size" className="w-8 h-8 flex items-center justify-center hover:bg-foreground/5 rounded text-sm">-</button>
+                                                <span className="text-[10px] font-mono font-bold tracking-widest">{content.accessibility.textScale}: {(textScale * 100).toFixed(0)}%</span>
+                                                <button onClick={() => adjustTextScale(10)} aria-label="Increase text size" className="w-8 h-8 flex items-center justify-center hover:bg-foreground/5 rounded text-sm">+</button>
+                                            </div>
+                                            <div className="grid grid-cols-3 gap-2">
+                                                <button onClick={cycleVisualMode} className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-md border transition-all duration-300 ${acModes.visualMode !== 'normal' ? 'bg-foreground text-background border-foreground ring-2 ring-offset-2 ring-foreground/20' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}>
+                                                    <PiSunLight className="w-5 h-5" />
+                                                    <span className="text-[7px] font-bold uppercase tracking-wider">{acModes.visualMode}</span>
+                                                </button>
+                                                <button onClick={toggleGuide} className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-md border transition-all duration-300 ${acModes.readingGuide ? 'bg-foreground text-background border-foreground ring-2 ring-offset-2 ring-foreground/20' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}>
+                                                    <PiRulerLight className="w-5 h-5" />
+                                                    <span className="text-[7px] font-bold uppercase tracking-wider">{content.accessibility.guide}</span>
+                                                </button>
+                                                <button onClick={toggleSpeech} className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-md border transition-all duration-300 ${isReading ? 'bg-foreground text-background border-foreground ring-2 ring-offset-2 ring-foreground/20 animate-pulse' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}>
+                                                    <PiSpeakerHighLight className="w-5 h-5" />
+                                                    <span className="text-[7px] font-bold uppercase tracking-wider">{isReading ? content.accessibility.reading : content.accessibility.speak}</span>
+                                                </button>
+                                            </div>
+                                            <div className="grid grid-cols-3 gap-2">
+                                                <button onClick={toggleMotion} className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-md border transition-all duration-300 ${acModes.motion ? 'bg-foreground text-background border-foreground ring-2 ring-offset-2 ring-foreground/20' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}>
+                                                    <PiPauseLight className="w-5 h-5" />
+                                                    <span className="text-[7px] font-bold uppercase tracking-wider">{content.accessibility.motion}</span>
+                                                </button>
+                                                <button onClick={toggleSound} className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-md border transition-all duration-300 ${!soundEnabled ? 'bg-red-500/10 border-red-500/50 text-red-500' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}>
+                                                    {soundEnabled ? <PiSpeakerHighLight className="w-5 h-5" /> : <PiSpeakerSlashLight className="w-5 h-5" />}
+                                                    <span className="text-[7px] font-bold uppercase tracking-wider">{soundEnabled ? content.accessibility.sound : content.accessibility.muted}</span>
+                                                </button>
+                                                <button onClick={resetA11y} className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-md border border-red-500/20 text-red-500 hover:bg-red-500 hover:text-white transition-all duration-300">
+                                                    <PiArrowCounterClockwiseLight className="w-5 h-5" />
+                                                    <span className="text-[7px] font-bold uppercase tracking-wider">{content.accessibility.reset}</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
 
-                            {/* WhatsApp Action (Priority) */}
-                            <a
-                                href="https://wa.me/201019443462"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-3 p-3 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 rounded-lg transition-colors group"
-                            >
-                                <div className="w-8 h-8 bg-emerald-500 text-white flex items-center justify-center rounded-md shadow-sm shadow-emerald-500/20 animate-pulse">
-                                    <PiWhatsappLogoLight className="w-5 h-5" />
-                                </div>
-                                <div>
-                                    <h4 className="font-bold text-xs uppercase tracking-wide text-emerald-600 dark:text-emerald-400">{content.chat}</h4>
-                                    <p className="text-[10px] text-muted-foreground font-sans flex items-center gap-1">
-                                        <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
-                                        {content.status}
-                                    </p>
-                                </div>
-                            </a>
+                            {/* TAB: CONTACT */}
+                            {activeTab === 'contact' && (
+                                <motion.div
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    className="space-y-4"
+                                >
+                                    {/* WhatsApp Action (Priority) */}
+                                    <a
+                                        href="https://wa.me/201019443462"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-3 p-4 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 rounded-xl transition-colors group"
+                                    >
+                                        <div className="w-10 h-10 bg-emerald-500 text-white flex items-center justify-center rounded-lg shadow-sm shadow-emerald-500/20 animate-pulse">
+                                            <PiWhatsappLogoLight className="w-6 h-6" />
+                                        </div>
+                                        <div>
+                                            <h4 className="font-bold text-sm uppercase tracking-wide text-emerald-600 dark:text-emerald-400">{content.chat}</h4>
+                                            <p className="text-xs text-muted-foreground font-sans flex items-center gap-1 mt-1">
+                                                <span className="w-2 h-2 bg-emerald-500 rounded-full" />
+                                                {content.status}
+                                            </p>
+                                        </div>
+                                    </a>
 
-                            {/* Email Action */}
-                            <a
-                                href="mailto:hazem.gamal1@outlook.com"
-                                className="flex items-center gap-3 p-3 hover:bg-foreground/5 rounded-lg transition-colors group border border-transparent hover:border-foreground/5"
-                            >
-                                <div className="w-8 h-8 bg-blue-500/10 text-blue-500 flex items-center justify-center rounded-md group-hover:bg-blue-500 group-hover:text-white transition-colors">
-                                    <PiEnvelopeSimpleLight />
-                                </div>
-                                <div>
-                                    <h4 className="font-bold text-xs uppercase tracking-wide">{content.email}</h4>
-                                    <p className="text-[10px] text-muted-foreground font-sans">hazem.gamal1@outlook.com</p>
-                                </div>
-                            </a>
+                                    {/* Email Action */}
+                                    <a
+                                        href="mailto:hazem.gamal1@outlook.com"
+                                        className="flex items-center gap-3 p-3 hover:bg-foreground/5 rounded-lg transition-colors group border border-transparent hover:border-foreground/5"
+                                    >
+                                        <div className="w-8 h-8 bg-blue-500/10 text-blue-500 flex items-center justify-center rounded-md group-hover:bg-blue-500 group-hover:text-white transition-colors">
+                                            <PiEnvelopeSimpleLight />
+                                        </div>
+                                        <div>
+                                            <h4 className="font-bold text-xs uppercase tracking-wide">{content.email}</h4>
+                                            <p className="text-[10px] text-muted-foreground font-sans">hazem.gamal1@outlook.com</p>
+                                        </div>
+                                    </a>
 
-                            {/* Legal Action */}
-                            <Link
-                                href="/legal"
-                                onClick={() => setIsOpen(false)}
-                                className="flex items-center gap-3 p-3 hover:bg-foreground/5 rounded-lg transition-colors group border border-transparent hover:border-foreground/5"
-                            >
-                                <div className="w-8 h-8 bg-purple-500/10 text-purple-500 flex items-center justify-center rounded-md group-hover:bg-purple-500 group-hover:text-white transition-colors">
-                                    <PiQuestionLight />
-                                </div>
-                                <h4 className="font-bold text-xs uppercase tracking-wide">{content.legal}</h4>
-                            </Link>
+                                    {/* Legal Action */}
+                                    <Link
+                                        href="/legal"
+                                        onClick={() => setIsOpen(false)}
+                                        className="flex items-center gap-3 p-3 hover:bg-foreground/5 rounded-lg transition-colors group border border-transparent hover:border-foreground/5"
+                                    >
+                                        <div className="w-8 h-8 bg-purple-500/10 text-purple-500 flex items-center justify-center rounded-md group-hover:bg-purple-500 group-hover:text-white transition-colors">
+                                            <PiQuestionLight />
+                                        </div>
+                                        <h4 className="font-bold text-xs uppercase tracking-wide">{content.legal}</h4>
+                                    </Link>
+
+                                    {/* Simple Note */}
+                                    <div className="p-4 rounded-lg bg-foreground/5 text-[10px] text-muted-foreground leading-relaxed text-center font-sans">
+                                        {lang === 'ar'
+                                            ? "أنا متاح للمشاريع الجديدة. لا تتردد في التواصل."
+                                            : "I am available for new projects. Feel free to reach out anytime."}
+                                    </div>
+                                </motion.div>
+                            )}
 
                         </div>
 
                         {/* Footer */}
-                        <div className="p-3 bg-foreground/5 text-center text-[10px] text-muted-foreground font-mono border-t border-foreground/5">
-                            SYSTEM_ID: WIDGET_V1.0
+                        <div className="p-3 bg-foreground/5 text-center text-[10px] text-muted-foreground font-mono border-t border-foreground/5 shrink-0">
+                            SYSTEM_ID: WIDGET_V2.0
                         </div>
 
                     </motion.div>
