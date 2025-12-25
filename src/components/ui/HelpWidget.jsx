@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSound } from '@/lib/context/SoundContext';
 import {
@@ -188,6 +189,9 @@ export default function HelpWidget() {
 
     const content = t[lang];
 
+    const pathname = usePathname();
+    const isHome = pathname === '/';
+
     return (
         <>
             {/* TRIGGER BUTTON */}
@@ -198,7 +202,7 @@ export default function HelpWidget() {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 aria-label={isOpen ? "Close Help Widget" : "Open Help Widget"}
-                className={`fixed bottom-32 md:bottom-6 z-[9990] w-14 h-14 bg-foreground text-background rounded-full flex items-center justify-center shadow-2xl shadow-blue-500/20 hover:shadow-blue-500/40 transition-shadow ${lang === 'ar' ? 'left-6' : 'right-6'}`}
+                className={`fixed z-[9990] w-14 h-14 bg-foreground text-background rounded-full flex items-center justify-center shadow-2xl shadow-blue-500/20 hover:shadow-blue-500/40 transition-all duration-500 ${lang === 'ar' ? 'left-6' : 'right-6'} ${isHome ? 'bottom-32 md:bottom-6' : 'bottom-6'}`}
             >
                 {isOpen ? <PiXLight className="w-6 h-6" /> : <PiHeadsetLight className="w-6 h-6" />}
 
@@ -216,7 +220,7 @@ export default function HelpWidget() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.95 }}
                         transition={{ duration: 0.3, ease: "circOut" }}
-                        className={`fixed bottom-48 md:bottom-24 z-[9990] w-[calc(100vw-3rem)] sm:w-80 max-h-[60vh] md:max-h-[75vh] overflow-y-auto bg-background/60 backdrop-blur-xl backdrop-saturate-150 border border-foreground/10 rounded-2xl shadow-2xl ${lang === 'ar' ? 'left-6' : 'right-6'}`}
+                        className={`fixed z-[9990] w-[calc(100vw-3rem)] sm:w-80 max-h-[60vh] md:max-h-[75vh] overflow-y-auto bg-background/60 backdrop-blur-xl backdrop-saturate-150 border border-foreground/10 rounded-2xl shadow-2xl ${lang === 'ar' ? 'left-6' : 'right-6'} ${isHome ? 'bottom-48 md:bottom-24' : 'bottom-24'}`}
                     >
 
                         {/* Header */}
