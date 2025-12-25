@@ -1,5 +1,5 @@
 import React from 'react';
-import { getLocalData } from '../../../lib/data.server';
+import { getLocalData } from '../../../../lib/data.server';
 import Link from 'next/link';
 import { PiArrowLeftLight } from 'react-icons/pi';
 

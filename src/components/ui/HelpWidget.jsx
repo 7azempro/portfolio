@@ -142,7 +142,47 @@ export default function HelpWidget() {
             legal: "LEGAL_PROTOCOLS",
             about: "ABOUT_SYSTEM",
             chat: "LIVE_CHAT",
-            connect: "CONNECT"
+            connect: "CONNECT",
+            accessibility: {
+                textScale: "TEXT SCALE",
+                color: "Color",
+                yellowBlack: "Yel/Blk",
+                guide: "Guide",
+                reading: "Reading",
+                speak: "Speak",
+                motion: "Motion",
+                sound: "Sound",
+                muted: "Muted",
+                reset: "Reset",
+                contrast: "Contrast",
+                invert: "Invert",
+                grayscale: "Gray"
+            }
+        },
+        ar: {
+            title: "مركز الدعم",
+            subtitle: "نظام المساعدة",
+            status: "متاح",
+            email: "مراسلة بريدية",
+            legal: "الشروط والخصوصية",
+            about: "حول النظام",
+            chat: "المحادثة الفورية",
+            connect: "تواصل معنا",
+            accessibility: {
+                textScale: "حجم النص",
+                color: "ألوان",
+                yellowBlack: "أصفر/أسود",
+                guide: "مسطرة",
+                reading: "يقرأ",
+                speak: "تحدث",
+                motion: "حركة",
+                sound: "صوت",
+                muted: "صامت",
+                reset: "إعادة",
+                contrast: "تباين",
+                invert: "عكس",
+                grayscale: "رمادي"
+            }
         }
     };
 
@@ -206,7 +246,7 @@ export default function HelpWidget() {
                                     {/* Text Scale Bar */}
                                     <div className="flex items-center justify-between bg-background border border-foreground/10 rounded-md p-2">
                                         <button onClick={() => adjustTextScale(-10)} aria-label="Decrease text size" className="w-8 h-8 flex items-center justify-center hover:bg-foreground/5 rounded text-sm">-</button>
-                                        <span className="text-[10px] font-mono font-bold tracking-widest">TEXT SCALE: {(textScale * 100).toFixed(0)}%</span>
+                                        <span className="text-[10px] font-mono font-bold tracking-widest">{content.accessibility.textScale}: {(textScale * 100).toFixed(0)}%</span>
                                         <button onClick={() => adjustTextScale(10)} aria-label="Increase text size" className="w-8 h-8 flex items-center justify-center hover:bg-foreground/5 rounded text-sm">+</button>
                                     </div>
 
@@ -223,7 +263,13 @@ export default function HelpWidget() {
                                             {acModes.visualMode === 'invert' && <PiArrowsLeftRightLight className="w-5 h-5" />}
                                             {acModes.visualMode === 'yellowBlack' && <PiWarningCircleLight className="w-5 h-5" />}
                                             {acModes.visualMode === 'grayscale' && <PiEyeClosedLight className="w-5 h-5" />}
-                                            <span className="text-[7px] font-bold uppercase tracking-wider">{acModes.visualMode === 'normal' ? 'Color' : acModes.visualMode === 'yellowBlack' ? 'Yel/Blk' : acModes.visualMode}</span>
+                                            <span className="text-[7px] font-bold uppercase tracking-wider">
+                                                {acModes.visualMode === 'normal' ? content.accessibility.color :
+                                                    acModes.visualMode === 'contrast' ? content.accessibility.contrast :
+                                                        acModes.visualMode === 'invert' ? content.accessibility.invert :
+                                                            acModes.visualMode === 'yellowBlack' ? content.accessibility.yellowBlack :
+                                                                content.accessibility.grayscale}
+                                            </span>
                                         </button>
 
                                         {/* 2. Reading Guide */}
@@ -232,7 +278,7 @@ export default function HelpWidget() {
                                             className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-md border transition-all duration-300 ${acModes.readingGuide ? 'bg-foreground text-background border-foreground ring-2 ring-offset-2 ring-foreground/20' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}
                                         >
                                             <PiRulerLight className="w-5 h-5" />
-                                            <span className="text-[7px] font-bold uppercase tracking-wider">Guide</span>
+                                            <span className="text-[7px] font-bold uppercase tracking-wider">{content.accessibility.guide}</span>
                                         </button>
 
                                         {/* 3. Speak */}
@@ -241,7 +287,7 @@ export default function HelpWidget() {
                                             className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-md border transition-all duration-300 ${isReading ? 'bg-foreground text-background border-foreground ring-2 ring-offset-2 ring-foreground/20 animate-pulse' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}
                                         >
                                             <PiSpeakerHighLight className="w-5 h-5" />
-                                            <span className="text-[7px] font-bold uppercase tracking-wider">{isReading ? 'Reading' : 'Speak'}</span>
+                                            <span className="text-[7px] font-bold uppercase tracking-wider">{isReading ? content.accessibility.reading : content.accessibility.speak}</span>
                                         </button>
 
                                         {/* 4. Motion */}
@@ -250,7 +296,7 @@ export default function HelpWidget() {
                                             className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-md border transition-all duration-300 ${acModes.motion ? 'bg-foreground text-background border-foreground ring-2 ring-offset-2 ring-foreground/20' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}
                                         >
                                             <PiPauseLight className="w-5 h-5" />
-                                            <span className="text-[7px] font-bold uppercase tracking-wider">Motion</span>
+                                            <span className="text-[7px] font-bold uppercase tracking-wider">{content.accessibility.motion}</span>
                                         </button>
 
                                         {/* 5. Sound */}
@@ -259,7 +305,7 @@ export default function HelpWidget() {
                                             className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-md border transition-all duration-300 ${!soundEnabled ? 'bg-red-500/10 border-red-500/50 text-red-500' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}
                                         >
                                             {soundEnabled ? <PiSpeakerHighLight className="w-5 h-5" /> : <PiSpeakerSlashLight className="w-5 h-5" />}
-                                            <span className="text-[7px] font-bold uppercase tracking-wider">{soundEnabled ? 'Sound' : 'Muted'}</span>
+                                            <span className="text-[7px] font-bold uppercase tracking-wider">{soundEnabled ? content.accessibility.sound : content.accessibility.muted}</span>
                                         </button>
 
                                         {/* 6. Reset */}
@@ -268,7 +314,7 @@ export default function HelpWidget() {
                                             className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-md border border-red-500/20 text-red-500 hover:bg-red-500 hover:text-white transition-all duration-300"
                                         >
                                             <PiArrowCounterClockwiseLight className="w-5 h-5" />
-                                            <span className="text-[7px] font-bold uppercase tracking-wider">Reset</span>
+                                            <span className="text-[7px] font-bold uppercase tracking-wider">{content.accessibility.reset}</span>
                                         </button>
                                     </div>
                                 </div>

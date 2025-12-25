@@ -101,17 +101,19 @@ export default function Footer({ socials }) {
                             {lang === 'ar' ? "بيانات" : "DATA"}
                         </h4>
                         <div className="space-y-6 font-sans text-sm">
-                            <div>
-                                <span className="block text-muted-foreground text-xs mb-1">LOCATION</span>
-                                CAIRO, EG
-                            </div>
-                            <div>
-                                <span className="block text-muted-foreground text-xs mb-1">LOCAL TIME</span>
-                                GMT+2
-                            </div>
-                            <div>
-                                <span className="block text-muted-foreground text-xs mb-1">VERSION</span>
-                                3.0.0 (STABLE)
+                            <div className="space-y-6 font-sans text-sm">
+                                <div>
+                                    <span className="block text-muted-foreground text-xs mb-1">{lang === 'ar' ? 'الموقع' : 'LOCATION'}</span>
+                                    {lang === 'ar' ? 'القاهرة، مصر' : 'CAIRO, EG'}
+                                </div>
+                                <div>
+                                    <span className="block text-muted-foreground text-xs mb-1">{lang === 'ar' ? 'التوقيت المحلي' : 'LOCAL TIME'}</span>
+                                    GMT+2
+                                </div>
+                                <div>
+                                    <span className="block text-muted-foreground text-xs mb-1">{lang === 'ar' ? 'الإصدار' : 'VERSION'}</span>
+                                    3.0.0 ({lang === 'ar' ? 'مستقر' : 'STABLE'})
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -122,7 +124,7 @@ export default function Footer({ socials }) {
             <div className="container mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center text-xs font-sans text-muted-foreground uppercase tracking-widest">
                 <p>© {year} 7AZEM.PRO</p>
                 <div className="flex gap-6 mt-4 md:mt-0">
-                    <Link href="/legal" className="hover:text-foreground cursor-pointer">LEGAL</Link>
+                    <Link href="/legal" className="hover:text-foreground cursor-pointer">{lang === 'ar' ? 'قانوني' : 'LEGAL'}</Link>
                 </div>
             </div>
         </footer>

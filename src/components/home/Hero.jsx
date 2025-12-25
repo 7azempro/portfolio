@@ -150,14 +150,14 @@ export default function Hero({ data }) {
             <div className="absolute bottom-0 left-0 right-0 h-12 border-t border-foreground/5 dark:border-white/5 flex items-center justify-between px-6 text-[10px] font-sans tracking-widest text-muted-foreground uppercase bg-background/50 backdrop-blur-sm">
                 <div className="flex items-center gap-2">
                     <PiArrowDownLight className="w-3 h-3 animate-bounce" />
-                    <span>SCROLL_TO_EXPLORE</span>
+                    <span>{lang === 'ar' ? 'اسحب للاستكشاف' : 'SCROLL_TO_EXPLORE'}</span>
                 </div>
                 <div className="hidden md:flex items-center gap-8">
                     <span>{t.location}</span>
                     <span>30.0444° N, 31.2357° E</span>
                 </div>
                 <div>
-                    <span>V3.0.0 SYS_ACTIVE</span>
+                    <span>V3.0.0 {lang === 'ar' ? 'النظام نشط' : 'SYS_ACTIVE'}</span>
                 </div>
             </div>
 

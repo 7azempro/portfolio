@@ -159,7 +159,7 @@ export default function Header({ nav }) {
                                     <h4 className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-4">
                                         {lang === 'ar' ? "الموقع" : "LOCATION"}
                                     </h4>
-                                    <p className="text-sm font-mono uppercase">CAIRO, EG</p>
+                                    <p className="text-sm font-mono uppercase">{lang === 'ar' ? 'القاهرة، مصر' : 'CAIRO, EG'}</p>
                                     <p className="text-sm font-mono uppercase text-muted-foreground mt-1">GMT+2</p>
                                 </div>
                             </div>

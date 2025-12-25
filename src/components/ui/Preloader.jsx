@@ -3,15 +3,28 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import clsx from 'clsx';
 
-const loadingMessages = [
-    "INITIALIZING SYSTEM...",
-    "LOADING ASSETS...",
-    "ESTABLISHING SECURE CONNECTION...",
-    "RENDERING UI...",
-    "SYSTEM READY."
-];
+import { useLanguage } from '@/lib/context/LanguageContext';
+
+const loadingMessages = {
+    en: [
+        "INITIALIZING SYSTEM...",
+        "LOADING ASSETS...",
+        "ESTABLISHING SECURE CONNECTION...",
+        "RENDERING UI...",
+        "SYSTEM READY."
+    ],
+    ar: [
+        "جاري تهيئة النظام...",
+        "تحميل الملفات...",
+        "تأمين الاتصال...",
+        "تجهيز الواجهة...",
+        "النظام جاهز."
+    ]
+};
 
 export default function Preloader() {
+    const { lang } = useLanguage();
+    const messages = loadingMessages[lang];
     const [count, setCount] = useState(0);
     const [messageIndex, setMessageIndex] = useState(0);
     const [isComplete, setIsComplete] = useState(false);
@@ -33,7 +46,7 @@ export default function Preloader() {
 
         // Message Cycler
         const messageInterval = setInterval(() => {
-            setMessageIndex(prev => (prev + 1) % loadingMessages.length);
+            setMessageIndex(prev => (prev + 1) % messages.length);
         }, 400);
 
         return () => {
@@ -60,8 +73,8 @@ export default function Preloader() {
                     />
 
                     {/* Top Bar */}
-                    <div className="relative z-10 flex justify-between items-start text-xs md:text-sm uppercase tracking-widest opacity-50">
-                        <span>System Boot // v2.0</span>
+                    <div className={`relative z-10 flex justify-between items-start text-xs md:text-sm uppercase tracking-widest opacity-50 ${lang === 'ar' ? 'flex-row-reverse' : ''}`}>
+                        <span>{lang === 'ar' ? 'إقلاع النظام // v2.0' : 'System Boot // v2.0'}</span>
                         <span>7azempro</span>
                     </div>
 
@@ -120,18 +133,18 @@ export default function Preloader() {
                     </div>
 
                     {/* Bottom Bar */}
-                    <div className="relative z-10 flex justify-between items-end text-xs md:text-sm uppercase tracking-widest">
+                    <div className={`relative z-10 flex justify-between items-end text-xs md:text-sm uppercase tracking-widest ${lang === 'ar' ? 'flex-row-reverse' : ''}`}>
 
                         {/* Dynamic Message */}
-                        <div className="flex flex-col gap-1">
-                            <span className="opacity-50">Status:</span>
+                        <div className={`flex flex-col gap-1 ${lang === 'ar' ? 'items-end' : ''}`}>
+                            <span className="opacity-50">{lang === 'ar' ? 'الحالة:' : 'Status:'}</span>
                             <motion.span
                                 key={messageIndex}
                                 initial={{ opacity: 0, y: 5 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 className="text-blue-400 font-semibold"
                             >
-                                {count === 100 ? "SYSTEM READY." : `> ${loadingMessages[messageIndex]}`}
+                                {count === 100 ? (lang === 'ar' ? "النظام جاهز." : "SYSTEM READY.") : `> ${messages[messageIndex]}`}
                             </motion.span>
                         </div>
 
