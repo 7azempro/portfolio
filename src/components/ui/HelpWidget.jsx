@@ -6,7 +6,8 @@ import {
     PiHeadsetLight, PiXLight, PiEnvelopeSimpleLight, PiQuestionLight, PiWhatsappLogoLight,
     PiWheelchairLight, PiEyeClosedLight, PiSunLight, PiPauseLight, PiArrowCounterClockwiseLight,
     PiArrowsLeftRightLight, PiWarningCircleLight,
-    PiSpeakerHighLight, PiSpeakerSlashLight, PiRulerLight, PiLinkLight, PiArrowsClockwiseLight
+    PiSpeakerHighLight, PiSpeakerSlashLight, PiRulerLight, PiLinkLight, PiArrowsClockwiseLight,
+    PiCloudSunLight, PiWifiHighLight, PiWifiSlashLight, PiClockLight
 } from 'react-icons/pi';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import Link from 'next/link';
@@ -31,6 +32,42 @@ export default function HelpWidget() {
     };
 
     const { soundEnabled, toggleSound: toggleCtxSound, playClick } = useSound();
+
+    // Smart Utils State
+    const [weather, setWeather] = useState(null);
+    const [time, setTime] = useState("");
+    const [isOnline, setIsOnline] = useState(true);
+
+    // Fetch Weather (Cairo - Host)
+    useEffect(() => {
+        if (!isOpen) return; // Only fetch when open to save resources
+        fetch('https://api.open-meteo.com/v1/forecast?latitude=30.04&longitude=31.23&current_weather=true')
+            .then(res => res.json())
+            .then(data => setWeather(data.current_weather))
+            .catch(() => setWeather(null));
+
+        // Network Status
+        setIsOnline(navigator.onLine);
+        const handleOnline = () => setIsOnline(true);
+        const handleOffline = () => setIsOnline(false);
+        window.addEventListener('online', handleOnline);
+        window.addEventListener('offline', handleOffline);
+
+        return () => {
+            window.removeEventListener('online', handleOnline);
+            window.removeEventListener('offline', handleOffline);
+        };
+    }, [isOpen]);
+
+    // Live Clock
+    useEffect(() => {
+        if (!isOpen) return;
+        const timer = setInterval(() => {
+            setTime(new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }));
+        }, 1000);
+        setTime(new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' })); // Initial
+        return () => clearInterval(timer);
+    }, [isOpen]);
 
     // Accessibility State
     const [textScale, setTextScale] = useState(1);
@@ -261,6 +298,25 @@ export default function HelpWidget() {
 
                         {/* Content */}
                         <div className="p-4 space-y-4">
+
+                            {/* Smart Status Grid */}
+                            <div className="grid grid-cols-3 gap-2">
+                                <div className="flex flex-col items-center justify-center gap-1 p-2 rounded-lg bg-foreground/5 border border-foreground/5">
+                                    <PiCloudSunLight className="w-5 h-5 text-amber-500" />
+                                    <span className="text-[10px] font-mono font-bold">{weather ? `${weather.temperature}°C` : '--'}</span>
+                                    <span className="text-[7px] uppercase tracking-wider opacity-60">CAIRO</span>
+                                </div>
+                                <div className="flex flex-col items-center justify-center gap-1 p-2 rounded-lg bg-foreground/5 border border-foreground/5">
+                                    <PiClockLight className="w-5 h-5 text-blue-500" />
+                                    <span className="text-[10px] font-mono font-bold">{time || '--:--'}</span>
+                                    <span className="text-[7px] uppercase tracking-wider opacity-60">LOCAL</span>
+                                </div>
+                                <div className={`flex flex-col items-center justify-center gap-1 p-2 rounded-lg border transition-colors ${isOnline ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600' : 'bg-red-500/10 border-red-500/20 text-red-600'}`}>
+                                    {isOnline ? <PiWifiHighLight className="w-5 h-5" /> : <PiWifiSlashLight className="w-5 h-5" />}
+                                    <span className="text-[10px] font-mono font-bold">{isOnline ? 'ON' : 'OFF'}</span>
+                                    <span className="text-[7px] uppercase tracking-wider opacity-60">NET</span>
+                                </div>
+                            </div>
 
                             {/* System Utilities */}
                             <div className="grid grid-cols-2 gap-2">
