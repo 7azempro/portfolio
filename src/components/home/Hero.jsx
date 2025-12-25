@@ -58,7 +58,7 @@ export default function Hero({ data }) {
     const t = content[lang];
 
     return (
-        <section ref={ref} className="relative min-h-screen flex flex-col justify-start lg:justify-center overflow-hidden bg-background text-foreground pt-40 lg:pt-0 border-b border-foreground/5 dark:border-white/5">
+        <section ref={ref} className="relative min-h-screen flex flex-col justify-start lg:justify-center overflow-hidden bg-background text-foreground pt-32 lg:pt-0 border-b border-foreground/5 dark:border-white/5">
 
             {/* Strict Grid Background - Parallaxed */}
             <motion.div style={{ y }} className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
@@ -116,7 +116,7 @@ export default function Hero({ data }) {
                                     href="/works"
                                     onClick={playClick}
                                     onMouseEnter={playHover}
-                                    className="flex-1 lg:flex-none text-center relative overflow-hidden px-2 sm:px-6 lg:px-8 py-4 lg:py-4 bg-foreground text-background font-sans text-[10px] sm:text-xs font-bold tracking-swiss-caps uppercase hover:bg-blue-600 transition-colors group rounded-xl lg:rounded-none"
+                                    className="flex-1 lg:flex-none text-center relative overflow-hidden px-2 sm:px-6 lg:px-8 py-4 lg:py-4 bg-foreground text-background font-sans text-[10px] sm:text-xs font-bold tracking-tight lg:tracking-swiss-caps uppercase hover:bg-blue-600 transition-colors group rounded-xl lg:rounded-none"
                                 >
                                     <span className="relative z-10">{t.ctaPrimary}</span>
                                     {/* Tech Corner */}
