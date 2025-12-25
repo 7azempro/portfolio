@@ -185,8 +185,9 @@ export default function ProjectSlider() {
             </div>
 
             {/* Mobile Floating Hint (Fixed relative to section) */}
-            <div className="absolute right-6 bottom-1/3 md:hidden z-20 pointer-events-none">
-                <div className="flex items-center gap-2 bg-background/90 backdrop-blur border border-foreground/10 px-3 py-1.5 rounded-full shadow-2xl animate-pulse">
+            {/* Mobile Floating Hint (Centered Bottom) */}
+            <div className="absolute bottom-14 left-1/2 -translate-x-1/2 md:hidden z-30 pointer-events-none">
+                <div className="flex items-center gap-2 bg-background/90 backdrop-blur border border-foreground/10 px-4 py-2 rounded-full shadow-2xl animate-pulse whitespace-nowrap">
                     <span className="text-[10px] font-mono tracking-widest uppercase text-blue-500">
                         {lang === 'ar' ? 'اسحب للتصفح' : 'SWIPE_TO_EXPLORE'}
                     </span>
