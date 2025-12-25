@@ -64,6 +64,7 @@ export async function generateMetadata() {
 }
 
 import ScrollProgress from '@/components/ui/ScrollProgress';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 export default function RootLayout({ children }) {
     return (
@@ -71,6 +72,9 @@ export default function RootLayout({ children }) {
             <body className="bg-background text-foreground transition-colors duration-300">
                 {children}
             </body>
+            {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID && (
+                <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID} />
+            )}
         </html>
     );
 }
