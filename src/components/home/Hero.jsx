@@ -116,7 +116,7 @@ export default function Hero({ data }) {
                                     href="/works"
                                     onClick={playClick}
                                     onMouseEnter={playHover}
-                                    className="flex-1 lg:flex-none text-center relative overflow-hidden px-6 lg:px-8 py-4 lg:py-4 bg-foreground text-background font-sans text-xs font-bold tracking-swiss-caps uppercase hover:bg-blue-600 transition-colors group rounded-xl lg:rounded-none"
+                                    className="flex-1 lg:flex-none text-center relative overflow-hidden px-2 sm:px-6 lg:px-8 py-4 lg:py-4 bg-foreground text-background font-sans text-[10px] sm:text-xs font-bold tracking-swiss-caps uppercase hover:bg-blue-600 transition-colors group rounded-xl lg:rounded-none"
                                 >
                                     <span className="relative z-10">{t.ctaPrimary}</span>
                                     {/* Tech Corner */}
@@ -126,7 +126,7 @@ export default function Hero({ data }) {
                                     href="/about"
                                     onClick={playClick}
                                     onMouseEnter={playHover}
-                                    className="flex-1 lg:flex-none text-center group flex items-center justify-center gap-3 px-4 py-4 lg:py-4 text-foreground font-sans text-xs font-bold tracking-swiss-caps uppercase hover:text-blue-600 transition-colors border border-foreground/20 lg:border-none rounded-xl lg:rounded-none"
+                                    className="flex-1 lg:flex-none text-center group flex items-center justify-center gap-3 px-4 py-4 lg:py-4 text-foreground font-sans text-[10px] sm:text-xs font-bold tracking-swiss-caps uppercase hover:text-blue-600 transition-colors border border-foreground/20 lg:border-none rounded-xl lg:rounded-none"
                                 >
                                     <span>{t.ctaSecondary}</span>
                                     <div className="w-1.5 h-1.5 border border-foreground group-hover:bg-blue-600 group-hover:border-blue-600 transition-colors rotate-45 rtl:-rotate-45" />
