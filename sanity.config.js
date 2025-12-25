@@ -30,8 +30,8 @@ export default defineConfig({
         // Vision is a tool that lets you query your content with GROQ in the studio
         // https://www.sanity.io/docs/the-vision-plugin
         visionTool({ defaultApiVersion: apiVersion }),
-        // Media Library Plugin
-        media(),
+        // Media Library Plugin (Disabled due to Next 16 conflict)
+        // media(),
         // Code Input Plugin
         codeInput(),
         // SEO Pane Plugin (Experimental)
