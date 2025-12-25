@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSound } from '@/lib/context/SoundContext';
 import {
     PiHeadsetLight, PiXLight, PiEnvelopeSimpleLight, PiQuestionLight, PiWhatsappLogoLight,
     PiWheelchairLight, PiEyeClosedLight, PiSunLight, PiPauseLight, PiArrowCounterClockwiseLight,
@@ -14,13 +15,14 @@ export default function HelpWidget() {
     const { lang } = useLanguage();
     const [isOpen, setIsOpen] = useState(false);
 
+    const { soundEnabled, toggleSound: toggleCtxSound, playClick } = useSound();
+
     // Accessibility State
     const [textScale, setTextScale] = useState(1);
     const [acModes, setAcModes] = useState({
         visualMode: 'normal',
         motion: false,
         readingGuide: false,
-        soundEnabled: true
     });
     const [isReading, setIsReading] = useState(false);
 
@@ -94,7 +96,7 @@ export default function HelpWidget() {
     };
 
     const toggleSound = () => {
-        setAcModes(prev => ({ ...prev, soundEnabled: !prev.soundEnabled }));
+        toggleCtxSound();
     };
 
     const toggleSpeech = () => {
@@ -114,7 +116,9 @@ export default function HelpWidget() {
 
     const resetA11y = () => {
         setTextScale(1);
-        setAcModes({ visualMode: 'normal', motion: false, readingGuide: false, soundEnabled: true });
+        setTextScale(1);
+        setAcModes({ visualMode: 'normal', motion: false, readingGuide: false });
+        if (!soundEnabled) toggleCtxSound();
         window.speechSynthesis.cancel();
         setIsReading(false);
     };
@@ -252,10 +256,10 @@ export default function HelpWidget() {
                                         {/* 5. Sound */}
                                         <button
                                             onClick={toggleSound}
-                                            className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-md border transition-all duration-300 ${!acModes.soundEnabled ? 'bg-red-500/10 border-red-500/50 text-red-500' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}
+                                            className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-md border transition-all duration-300 ${!soundEnabled ? 'bg-red-500/10 border-red-500/50 text-red-500' : 'bg-background hover:bg-foreground/5 border-foreground/10'}`}
                                         >
-                                            {acModes.soundEnabled ? <PiSpeakerHighLight className="w-5 h-5" /> : <PiSpeakerSlashLight className="w-5 h-5" />}
-                                            <span className="text-[7px] font-bold uppercase tracking-wider">{acModes.soundEnabled ? 'Sound' : 'Muted'}</span>
+                                            {soundEnabled ? <PiSpeakerHighLight className="w-5 h-5" /> : <PiSpeakerSlashLight className="w-5 h-5" />}
+                                            <span className="text-[7px] font-bold uppercase tracking-wider">{soundEnabled ? 'Sound' : 'Muted'}</span>
                                         </button>
 
                                         {/* 6. Reset */}

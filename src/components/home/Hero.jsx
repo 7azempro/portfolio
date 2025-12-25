@@ -1,13 +1,24 @@
 'use client';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/context/LanguageContext';
-import { useEffect, useState } from 'react';
+import { useSound } from '@/lib/context/SoundContext';
+import { useRef } from 'react';
 import DashboardWidget from './DashboardWidget';
 import { PiArrowDownLight } from 'react-icons/pi';
 
-export default function HeroArabic({ data }) {
+export default function Hero({ data }) {
     const { lang } = useLanguage();
+    const { playHover, playClick } = useSound();
+
+    // Parallax logic
+    const ref = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: ref,
+        offset: ["start start", "end start"]
+    });
+    const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+    const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
     // Content Dictionary
     const hasArabic = (text) => /[\u0600-\u06FF]/.test(text || "");
@@ -34,20 +45,20 @@ export default function HeroArabic({ data }) {
     const t = content[lang];
 
     return (
-        <section className="relative min-h-[100dvh] flex flex-col justify-center overflow-hidden bg-background text-foreground pt-20 lg:pt-24 border-b border-foreground/5 dark:border-white/5">
+        <section ref={ref} className="relative min-h-[100dvh] flex flex-col justify-center overflow-hidden bg-background text-foreground pt-20 lg:pt-24 border-b border-foreground/5 dark:border-white/5">
 
-            {/* Strict Grid Background */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+            {/* Strict Grid Background - Parallaxed */}
+            <motion.div style={{ y }} className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
 
             <div className="container mx-auto px-6 relative z-10 h-full flex flex-col justify-center flex-1">
 
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div className="flex flex-col-reverse lg:grid lg:grid-cols-12 gap-10 lg:gap-12 items-center relative z-20">
 
                     {/* TEXT CONTENT (Strict Typographic Hierarchy) */}
-                    <div className="lg:col-span-7 rtl:text-right ltr:text-left">
+                    <div className="w-full lg:col-span-7 rtl:text-right ltr:text-left relative z-30 pb-32 lg:pb-0">
 
                         {/* Status Indicator (Technical) */}
-                        <div className="inline-flex items-center gap-3 border border-foreground/10 px-3 py-1 mb-8 md:mb-12 font-sans text-[10px] tracking-[0.2em] uppercase text-muted-foreground w-fit bg-foreground/5 backdrop-blur-sm">
+                        <div className="inline-flex items-center gap-3 border border-foreground/10 px-3 py-1 mb-6 md:mb-12 font-sans text-[10px] tracking-[0.2em] uppercase text-muted-foreground w-fit bg-foreground/5 backdrop-blur-sm">
                             <span className="w-1.5 h-1.5 bg-emerald-500 rounded-none animate-pulse shadow-sm shadow-emerald-500/50" />
                             <span className="opacity-50">sys_001 ::</span>
                             {t.status}
@@ -58,7 +69,7 @@ export default function HeroArabic({ data }) {
                             initial="hidden"
                             animate="visible"
                             variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
-                            className={`${lang === 'ar' ? 'text-4xl md:text-6xl lg:text-8xl leading-[1.4] font-bold tracking-normal py-2 mb-8 mt-4' : 'text-[11vw] md:text-[8vw] lg:text-[7vw] leading-[0.95] font-black tracking-tighter mb-8'} text-foreground mix-blend-difference`}
+                            className={`${lang === 'ar' ? 'text-4xl md:text-6xl lg:text-8xl leading-[1.4] font-bold tracking-normal py-2 mb-6 md:mb-8 mt-4' : 'text-[11vw] md:text-[8vw] lg:text-[7vw] leading-[0.95] font-black tracking-tighter mb-6 md:mb-8'} text-foreground mix-blend-difference`}
                         >
                             {(t.title || "").split("\n").map((line, i) => (
                                 <div key={i} className={`overflow-hidden py-1 ${lang === 'ar' ? 'pb-4' : 'pb-1'}`}>
@@ -75,52 +86,56 @@ export default function HeroArabic({ data }) {
                         </motion.h1>
 
                         {/* Description & CTAs */}
-                        <div className="flex flex-col gap-10 items-start border-t border-foreground/10 pt-8 mt-4 mb-12 lg:mb-0 relative">
+                        <div className="flex flex-col gap-8 md:gap-10 items-start border-t border-foreground/10 pt-6 md:pt-8 mt-2 relative">
                             {/* Decorative Marker */}
-                            <div className="absolute top-0 right-0 w-8 h-px bg-foreground" />
+                            <div className="absolute top-0 right-0 rtl:left-0 rtl:right-auto w-8 h-px bg-foreground" />
 
-                            <div className="space-y-6 max-w-xl ltr:pl-6 rtl:pr-6 border-l rtl:border-r rtl:border-l-0 border-foreground/20">
+                            <div className="space-y-4 md:space-y-6 max-w-xl ltr:pl-6 rtl:pr-6 border-l rtl:border-r rtl:border-l-0 border-foreground/20">
                                 <h3 className={`font-bold ${lang === 'ar' ? 'text-2xl text-foreground' : 'text-xl text-foreground font-mono tracking-widest'}`}>
                                     {t.subtitle}
                                 </h3>
-                                <p className={`${lang === 'ar' ? 'text-xl leading-relaxed opacity-90' : 'text-lg text-muted-foreground leading-relaxed'}`}>
+                                <p className={`${lang === 'ar' ? 'text-lg md:text-xl leading-relaxed opacity-90' : 'text-base md:text-lg text-muted-foreground leading-relaxed'}`}>
                                     {t.desc}
                                 </p>
                             </div>
 
-                            <div className="flex flex-wrap items-center gap-6 w-full mt-4">
+                            <div className="fixed bottom-6 left-6 right-6 lg:static lg:w-full flex items-center justify-between lg:justify-start gap-4 z-50 lg:mt-4 p-4 lg:p-0 rounded-2xl lg:rounded-none bg-background/80 lg:bg-transparent backdrop-blur-xl lg:backdrop-blur-none border border-foreground/10 lg:border-none shadow-2xl lg:shadow-none">
                                 <Link
                                     href="/works"
-                                    className="relative overflow-hidden px-8 py-4 bg-foreground text-background font-sans text-xs font-bold tracking-widest uppercase hover:bg-blue-600 transition-colors group"
+                                    onClick={playClick}
+                                    onMouseEnter={playHover}
+                                    className="flex-1 lg:flex-none text-center relative overflow-hidden px-6 lg:px-8 py-3 lg:py-4 bg-foreground text-background font-sans text-xs font-bold tracking-widest uppercase hover:bg-blue-600 transition-colors group rounded lg:rounded-none"
                                 >
                                     <span className="relative z-10">{t.ctaPrimary}</span>
                                     {/* Tech Corner */}
-                                    <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-background opacity-50" />
+                                    <div className="absolute top-0 right-0 rtl:left-0 rtl:right-auto w-2 h-2 border-t border-r rtl:border-l rtl:border-r-0 border-background opacity-50" />
                                 </Link>
                                 <Link
                                     href="/about"
-                                    className="group flex items-center gap-3 px-4 py-4 text-foreground font-sans text-xs font-bold tracking-widest uppercase hover:text-blue-600 transition-colors"
+                                    onClick={playClick}
+                                    onMouseEnter={playHover}
+                                    className="flex-1 lg:flex-none text-center group flex items-center justify-center gap-3 px-4 py-3 lg:py-4 text-foreground font-sans text-xs font-bold tracking-widest uppercase hover:text-blue-600 transition-colors border border-foreground/20 lg:border-none rounded lg:rounded-none"
                                 >
                                     <span>{t.ctaSecondary}</span>
-                                    <div className="w-1.5 h-1.5 border border-foreground group-hover:bg-blue-600 group-hover:border-blue-600 transition-colors rotate-45" />
+                                    <div className="w-1.5 h-1.5 border border-foreground group-hover:bg-blue-600 group-hover:border-blue-600 transition-colors rotate-45 rtl:-rotate-45" />
                                 </Link>
                             </div>
                         </div>
                     </div>
 
                     {/* VISUAL CONTENT (Technical Display) */}
-                    <div className="lg:col-span-5 h-[400px] lg:h-[600px] relative flex items-center justify-center">
-                        {/* Frame Markers */}
-                        <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-foreground/30" />
-                        <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-foreground/30" />
-                        <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-foreground/30" />
-                        <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-foreground/30" />
+                    <div className="w-full lg:col-span-5 h-[300px] md:h-[400px] lg:h-[600px] relative flex items-center justify-center z-10 mb-8 lg:mb-0">
+                        {/* Frame Markers (RTL Aware) */}
+                        <div className="absolute top-0 left-0 rtl:right-0 rtl:left-auto w-4 h-4 border-t border-l rtl:border-r rtl:border-l-0 border-foreground/30" />
+                        <div className="absolute top-0 right-0 rtl:left-0 rtl:right-auto w-4 h-4 border-t border-r rtl:border-l rtl:border-r-0 border-foreground/30" />
+                        <div className="absolute bottom-0 left-0 rtl:right-0 rtl:left-auto w-4 h-4 border-b border-l rtl:border-r rtl:border-l-0 border-foreground/30" />
+                        <div className="absolute bottom-0 right-0 rtl:left-0 rtl:right-auto w-4 h-4 border-b border-r rtl:border-l rtl:border-r-0 border-foreground/30" />
 
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 1.2, ease: "circOut" }}
-                            className="w-full"
+                            className="w-full h-full flex items-center justify-center"
                         >
                             {/* The Dashboard Widget lives inside this strict frame */}
                             <DashboardWidget />

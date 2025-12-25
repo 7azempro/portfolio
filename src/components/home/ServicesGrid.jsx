@@ -2,8 +2,9 @@
 import { motion } from 'framer-motion';
 import { PiLayoutLight, PiDeviceMobileLight, PiHardDrivesLight, PiPenNibLight, PiArrowUpRightLight } from 'react-icons/pi';
 import { useLanguage } from '@/lib/context/LanguageContext';
+import { useSound } from '@/lib/context/SoundContext';
 
-function ServiceCard({ service, index, spanClass }) {
+function ServiceCard({ service, index, spanClass, onHover }) {
     const icons = {
         web: PiLayoutLight,
         mobile: PiDeviceMobileLight,
@@ -21,6 +22,7 @@ function ServiceCard({ service, index, spanClass }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.1 }}
+            onMouseEnter={onHover}
             className={`group relative flex flex-col justify-between p-8 md:p-12 border border-foreground/10 bg-background hover:bg-foreground/5 transition-colors duration-500 ${spanClass}`}
         >
             {/* Top Row: Icon & Number */}
@@ -53,6 +55,7 @@ function ServiceCard({ service, index, spanClass }) {
 
 export default function ServicesGrid({ services = [] }) {
     const { lang } = useLanguage();
+    const { playHover } = useSound();
 
     const t = {
         ar: {
@@ -105,6 +108,7 @@ export default function ServicesGrid({ services = [] }) {
                             service={service}
                             index={index}
                             spanClass={spanClass}
+                            onHover={playHover}
                         />
                     );
                 })}

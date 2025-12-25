@@ -9,6 +9,7 @@ import ThemeSync from '@/components/layout/ThemeSync';
 import Cursor from '@/components/ui/Cursor';
 import Preloader from '@/components/ui/Preloader';
 import HelpWidget from '@/components/ui/HelpWidget';
+import { SoundProvider } from '@/lib/context/SoundContext';
 
 export default function ClientProviders({ children, fontVariables }) {
     const [isLoading, setIsLoading] = useState(true);
@@ -31,19 +32,21 @@ export default function ClientProviders({ children, fontVariables }) {
     }, []);
 
     return (
-        <LanguageProvider>
-            {/* ThemeSync uses the variables passed from layout */}
-            <ThemeSync {...fontVariables} />
+        <SoundProvider>
+            <LanguageProvider>
+                {/* ThemeSync uses the variables passed from layout */}
+                <ThemeSync {...fontVariables} />
 
-            <AnimatePresence mode="wait">
-                {isLoading && <Preloader />}
-            </AnimatePresence>
+                <AnimatePresence mode="wait">
+                    {isLoading && <Preloader />}
+                </AnimatePresence>
 
-            <Cursor />
-            <Header />
-            {children}
-            <HelpWidget />
-            <Footer />
-        </LanguageProvider>
+                <Cursor />
+                <Header />
+                {children}
+                <HelpWidget />
+                <Footer />
+            </LanguageProvider>
+        </SoundProvider>
     );
 }

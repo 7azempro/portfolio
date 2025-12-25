@@ -1,5 +1,5 @@
 import { getLocalData } from "@/lib/data.server";
-import HeroArabic from "@/components/home/HeroArabic";
+import Hero from "@/components/home/Hero";
 import ServicesGrid from "@/components/home/ServicesGrid";
 import ProjectSlider from "@/components/home/ProjectSlider";
 import TechStack from "@/components/home/TechStack";
@@ -12,7 +12,7 @@ export default async function Home() {
 
     return (
         <main className="min-h-screen">
-            <HeroArabic data={heroData} />
+            <Hero data={heroData} />
 
             <TechStack data={techData} />
 

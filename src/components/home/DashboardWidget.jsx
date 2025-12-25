@@ -1,6 +1,7 @@
 'use client';
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import { useSound } from '@/lib/context/SoundContext';
 
 // Counter Component
 function Counter({ from, to, duration, suffix = "", decimals = 0, colorClass = "" }) {
@@ -145,6 +146,7 @@ function PerformanceCycler() {
 
 export default function DashboardWidget() {
     const { lang } = useLanguage();
+    const { playHover } = useSound();
 
     const t = {
         ar: {
@@ -196,6 +198,7 @@ export default function DashboardWidget() {
 
                 {/* Uptime Module */}
                 <motion.div
+                    onMouseEnter={playHover}
                     whileHover={{ scale: 1.02 }}
                     className="bg-foreground/5 dark:bg-white/5 p-4 rounded-xl border border-foreground/5 dark:border-white/5 cursor-crosshair group"
                 >
@@ -208,6 +211,7 @@ export default function DashboardWidget() {
 
                 {/* Performance Module (Replaces Latency) */}
                 <motion.div
+                    onMouseEnter={playHover}
                     whileHover={{ scale: 1.02 }}
                     className="bg-foreground/5 dark:bg-white/5 p-4 rounded-xl border border-foreground/5 dark:border-white/5 cursor-crosshair group relative overflow-hidden"
                 >
@@ -216,6 +220,7 @@ export default function DashboardWidget() {
 
                 {/* Architecture Graph Module */}
                 <motion.div
+                    onMouseEnter={playHover}
                     whileHover={{ scale: 1.01 }}
                     className="bg-foreground/5 dark:bg-white/5 p-4 rounded-xl border border-foreground/5 dark:border-white/5 relative overflow-hidden group min-h-[120px]"
                 >
@@ -227,6 +232,7 @@ export default function DashboardWidget() {
 
                 {/* System Logs Module (New) */}
                 <motion.div
+                    onMouseEnter={playHover}
                     whileHover={{ scale: 1.01 }}
                     className="bg-foreground/5 dark:bg-white/5 p-4 rounded-xl border border-foreground/5 dark:border-white/5 relative overflow-hidden group min-h-[120px] flex flex-col"
                 >

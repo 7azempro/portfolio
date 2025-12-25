@@ -4,10 +4,12 @@ import Link from 'next/link';
 import { PiListLight, PiXLight, PiArrowUpRightLight } from 'react-icons/pi';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSound } from '@/lib/context/SoundContext';
 import Logo from '@/components/ui/Logo';
 
 export default function Header() {
     const { lang, toggleLanguage } = useLanguage();
+    const { playHover, playClick } = useSound();
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleMenu = () => setIsOpen(!isOpen);
@@ -36,16 +38,16 @@ export default function Header() {
 
                     {/* 1. Brand Identity (Left) */}
                     <div className="h-full flex items-center px-6 md:px-8 border-r rtl:border-r-0 rtl:border-l border-foreground/10 md:w-auto w-full justify-between md:justify-start">
-                        <Link href="/" onClick={() => setIsOpen(false)}>
+                        <Link href="/" onClick={() => { setIsOpen(false); playClick(); }} onMouseEnter={playHover}>
                             <Logo />
                         </Link>
 
                         {/* Mobile Trigger (Inside Logo Box for Mobile) */}
                         <div className="flex items-center gap-4 md:hidden">
-                            <button onClick={toggleLanguage} aria-label="Switch Language" className="text-xs font-sans font-bold tracking-widest uppercase">
+                            <button onClick={() => { toggleLanguage(); playClick(); }} aria-label="Switch Language" className="text-xs font-sans font-bold tracking-widest uppercase">
                                 {lang === 'ar' ? 'EN' : 'AR'}
                             </button>
-                            <button onClick={toggleMenu} aria-label="Toggle navigation menu" className="p-2 -mr-2">
+                            <button onClick={() => { toggleMenu(); playClick(); }} aria-label="Toggle navigation menu" className="p-2 -mr-2">
                                 {isOpen ? <PiXLight className="w-6 h-6" /> : <PiListLight className="w-6 h-6" />}
                             </button>
                         </div>
@@ -58,6 +60,8 @@ export default function Header() {
                                 <li key={link.href} className="h-full">
                                     <Link
                                         href={link.href}
+                                        onClick={playClick}
+                                        onMouseEnter={playHover}
                                         className="h-full flex items-center px-8 text-xs font-sans tracking-widest text-muted-foreground hover:text-foreground hover:bg-foreground/5 transition-colors uppercase border-l border-foreground/10 rtl:border-l-0 rtl:border-r"
                                     >
                                         {lang === 'ar' ? link.label.ar : link.label.en}
@@ -71,7 +75,8 @@ export default function Header() {
                     <div className="hidden md:flex h-full">
                         {/* Language */}
                         <button
-                            onClick={toggleLanguage}
+                            onClick={() => { toggleLanguage(); playClick(); }}
+                            onMouseEnter={playHover}
                             className="h-full px-6 flex items-center justify-center text-xs font-sans font-bold tracking-widest hover:bg-foreground/5 transition-colors border-l border-foreground/10 rtl:border-l-0 rtl:border-r w-20"
                         >
                             {lang === 'ar' ? 'EN' : 'AR'}
