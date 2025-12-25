@@ -4,7 +4,11 @@ import Link from 'next/link';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { useSound } from '@/lib/context/SoundContext';
 import { useRef } from 'react';
-import DashboardWidget from './DashboardWidget';
+import dynamic from 'next/dynamic';
+const DashboardWidget = dynamic(() => import('./DashboardWidget'), {
+    ssr: false,
+    loading: () => <div className="w-full h-full bg-white/5 animate-pulse rounded-2xl" />
+});
 import { PiArrowDownLight } from 'react-icons/pi';
 
 export default function Hero({ data }) {
@@ -59,7 +63,7 @@ export default function Hero({ data }) {
                     <div className="w-full lg:col-span-7 rtl:text-right ltr:text-left relative z-30 mb-8 lg:mb-0">
 
                         {/* Status Indicator (Technical) */}
-                        <div className="inline-flex items-center gap-3 border border-foreground/10 px-3 py-1 mb-6 md:mb-12 font-sans text-[10px] tracking-[0.2em] uppercase text-muted-foreground w-fit bg-foreground/5 backdrop-blur-sm">
+                        <div className="inline-flex items-center gap-3 border border-foreground/10 px-3 py-1 mb-4 md:mb-8 font-sans text-[10px] tracking-swiss-caps uppercase text-muted-foreground w-fit bg-foreground/5 backdrop-blur-sm">
                             <span className="w-1.5 h-1.5 bg-emerald-500 rounded-none animate-pulse shadow-sm shadow-emerald-500/50" />
                             <span className="opacity-50">sys_001 ::</span>
                             {t.status}
@@ -70,10 +74,10 @@ export default function Hero({ data }) {
                             initial="hidden"
                             animate="visible"
                             variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
-                            className={`${lang === 'ar' ? 'text-4xl md:text-6xl lg:text-8xl leading-[1.4] font-bold tracking-normal py-2 mb-6 md:mb-8 mt-4' : 'text-[11vw] md:text-[8vw] lg:text-[7vw] leading-[0.95] font-black tracking-tighter mb-6 md:mb-8'} text-foreground mix-blend-difference`}
+                            className="text-swiss-poster text-foreground mix-blend-difference mb-4 md:mb-6"
                         >
                             {(t.title || "").split("\n").map((line, i) => (
-                                <div key={i} className={`overflow-hidden py-1 ${lang === 'ar' ? 'pb-4' : 'pb-1'}`}>
+                                <div key={i} className="overflow-hidden py-1 pb-2">
                                     <motion.div
                                         variants={{
                                             hidden: { y: "100%" },
@@ -87,7 +91,7 @@ export default function Hero({ data }) {
                         </motion.h1>
 
                         {/* Description & CTAs */}
-                        <div className="flex flex-col gap-8 md:gap-10 items-start border-t border-foreground/10 pt-6 md:pt-8 mt-2 relative">
+                        <div className="flex flex-col gap-6 md:gap-8 items-start border-t border-foreground/10 pt-4 md:pt-6 mt-0 relative">
                             {/* Decorative Marker */}
                             <div className="absolute top-0 right-0 rtl:left-0 rtl:right-auto w-8 h-px bg-foreground" />
 
@@ -100,12 +104,12 @@ export default function Hero({ data }) {
                                 </p>
                             </div>
 
-                            <div className="w-full lg:w-full flex items-center justify-between lg:justify-start gap-4 z-50 mt-8 lg:mt-4 p-4 lg:p-0 rounded-2xl lg:rounded-none bg-background/50 lg:bg-transparent backdrop-blur-xl lg:backdrop-blur-none border border-foreground/10 lg:border-none shadow-xl lg:shadow-none">
+                            <div className="w-full lg:w-full flex items-center justify-between lg:justify-start gap-4 z-50 p-4 lg:p-0 rounded-2xl lg:rounded-none bg-background/50 lg:bg-transparent backdrop-blur-xl lg:backdrop-blur-none border border-foreground/10 lg:border-none shadow-xl lg:shadow-none">
                                 <Link
                                     href="/works"
                                     onClick={playClick}
                                     onMouseEnter={playHover}
-                                    className="flex-1 lg:flex-none text-center relative overflow-hidden px-6 lg:px-8 py-3 lg:py-4 bg-foreground text-background font-sans text-xs font-bold tracking-widest uppercase hover:bg-blue-600 transition-colors group rounded lg:rounded-none"
+                                    className="flex-1 lg:flex-none text-center relative overflow-hidden px-6 lg:px-8 py-3 lg:py-4 bg-foreground text-background font-sans text-xs font-bold tracking-swiss-caps uppercase hover:bg-blue-600 transition-colors group rounded lg:rounded-none"
                                 >
                                     <span className="relative z-10">{t.ctaPrimary}</span>
                                     {/* Tech Corner */}
@@ -115,7 +119,7 @@ export default function Hero({ data }) {
                                     href="/about"
                                     onClick={playClick}
                                     onMouseEnter={playHover}
-                                    className="flex-1 lg:flex-none text-center group flex items-center justify-center gap-3 px-4 py-3 lg:py-4 text-foreground font-sans text-xs font-bold tracking-widest uppercase hover:text-blue-600 transition-colors border border-foreground/20 lg:border-none rounded lg:rounded-none"
+                                    className="flex-1 lg:flex-none text-center group flex items-center justify-center gap-3 px-4 py-3 lg:py-4 text-foreground font-sans text-xs font-bold tracking-swiss-caps uppercase hover:text-blue-600 transition-colors border border-foreground/20 lg:border-none rounded lg:rounded-none"
                                 >
                                     <span>{t.ctaSecondary}</span>
                                     <div className="w-1.5 h-1.5 border border-foreground group-hover:bg-blue-600 group-hover:border-blue-600 transition-colors rotate-45 rtl:-rotate-45" />
@@ -147,7 +151,7 @@ export default function Hero({ data }) {
             </div>
 
             {/* Bottom Status Bar */}
-            <div className="absolute bottom-0 left-0 right-0 h-12 border-t border-foreground/5 dark:border-white/5 flex items-center justify-between px-6 text-[10px] font-sans tracking-widest text-muted-foreground uppercase bg-background/50 backdrop-blur-sm">
+            <div className="absolute bottom-0 left-0 right-0 h-12 border-t border-foreground/5 dark:border-white/5 flex items-center justify-between px-6 text-[10px] font-sans tracking-swiss-caps text-muted-foreground uppercase bg-background/50 backdrop-blur-sm">
                 <div className="flex items-center gap-2">
                     <PiArrowDownLight className="w-3 h-3 animate-bounce" />
                     <span>{lang === 'ar' ? 'اسحب للاستكشاف' : 'SCROLL_TO_EXPLORE'}</span>
