@@ -2,9 +2,8 @@
 import { motion } from 'framer-motion';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { PortableText } from '@portabletext/react';
-import Image from 'next/image';
 import Link from 'next/link';
-import { RiArrowLeftLine, RiLinkedinFill, RiTwitterXFill, RiFileCopyLine, RiCheckLine, RiWhatsappLine, RiFacebookCircleLine, RiArrowRightUpLine } from 'react-icons/ri';
+import { RiArrowLeftLine, RiLinkedinFill, RiTwitterXFill, RiFileCopyLine, RiCheckLine, RiWhatsappLine, RiFacebookCircleLine } from 'react-icons/ri';
 import { urlFor } from '@/sanity/lib/image';
 import { estimateReadingTime } from '@/lib/readingTime';
 import { useState } from 'react';
@@ -60,7 +59,7 @@ export default function ArticleDetail({ article, settings, relatedArticles = [] 
             normal: ({ children }) => <p className="mb-6 leading-loose text-lg text-foreground/80 font-normal">{children}</p>,
             blockquote: ({ children }) => (
                 <div className="border-l-2 border-blue-500 pl-6 py-4 my-10 italic text-2xl font-light text-foreground/70 bg-foreground/5 dark:bg-white/5">
-                    "{children}"
+                    &quot;{children}&quot;
                 </div>
             ),
         },
@@ -286,7 +285,6 @@ export default function ArticleDetail({ article, settings, relatedArticles = [] 
                         </div>
                     </div>
                 </div>
-
 
                 {/* Mobile Share (Bottom Fixed) */}
                 <div className="lg:hidden fixed bottom-0 left-0 right-0 p-4 border-t border-foreground/10 bg-background/90 backdrop-blur-md z-40 flex justify-between items-center">

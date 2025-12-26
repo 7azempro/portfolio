@@ -17,7 +17,17 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 const nextConfig: NextConfig = {
   /* config options here */
-  reactCompiler: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+      },
+    ],
+  },
+  experimental: {
+    optimizePackageImports: ['react-icons'],
+  },
 };
 
 export default withBundleAnalyzer(withPWA(nextConfig));

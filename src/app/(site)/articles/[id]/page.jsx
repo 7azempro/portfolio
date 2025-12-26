@@ -6,14 +6,7 @@ import { urlFor } from '@/sanity/lib/image';
 // Revalidate every 60 seconds
 export const revalidate = 60;
 
-// Fetch params for static generation (optional, but good for SEO)
-export async function generateStaticParams() {
-    const query = `*[_type == "article"]{ _id }`;
-    const articles = await client.fetch(query);
-    return articles.map((article) => ({
-        id: article._id,
-    }));
-}
+
 
 export async function generateMetadata({ params }) {
     const { id } = await params;
