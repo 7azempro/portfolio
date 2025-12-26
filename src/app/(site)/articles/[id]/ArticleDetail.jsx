@@ -9,7 +9,7 @@ import { urlFor } from '@/sanity/lib/image';
 import { estimateReadingTime } from '@/lib/readingTime';
 import { useState } from 'react';
 
-export default function ArticleDetail({ article }) {
+export default function ArticleDetail({ article, settings }) {
     const { lang } = useLanguage();
     const isAr = lang === 'ar';
     const [copied, setCopied] = useState(false);
@@ -122,6 +122,20 @@ export default function ArticleDetail({ article }) {
                 >
                     {/* Industrial Meta Bar */}
                     <div className="flex flex-wrap items-center gap-6 mb-8 font-mono text-xs text-blue-500 uppercase tracking-widest border-b border-foreground/10 pb-6">
+                        {/* Author Badge */}
+                        {settings?.profileImage && (
+                            <div className="flex items-center gap-3 pr-6 border-r border-foreground/10 mr-2">
+                                <div className="w-8 h-8 rounded-full overflow-hidden border border-foreground/10">
+                                    <img
+                                        src={urlFor(settings.profileImage).width(100).height(100).url()}
+                                        alt="Author"
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                                <span className="hidden sm:inline-block">EDITOR // 7AZEMPRO</span>
+                            </div>
+                        )}
+
                         <span className="flex items-center gap-2">
                             <span className="w-2 h-2 bg-blue-500" />
                             {article.category || 'GENERAL'}
@@ -158,19 +172,19 @@ export default function ArticleDetail({ article }) {
                                 {staticText.share}
                             </div>
 
-                            {/* Share Buttons */}
-                            <button onClick={handleCopy} className="p-3 border border-foreground/10 hover:border-blue-500 hover:text-blue-500 text-muted-foreground transition-all group relative" title="Copy Link">
-                                {copied ? <RiCheckLine className="text-xl" /> : <RiFileCopyLine className="text-xl" />}
-                                {copied && <span className="absolute left-full ml-2 top-1/2 -translate-y-1/2 bg-blue-500 text-white text-[10px] px-2 py-1 font-mono whitespace-nowrap">{staticText.copied}</span>}
+                            {/* Share Buttons (Tech Boxes) */}
+                            <button onClick={handleCopy} className="w-full aspect-[3/2] flex items-center justify-center border border-foreground/10 hover:border-blue-500 hover:text-blue-500 text-muted-foreground transition-all group relative" title="Copy Link">
+                                {copied ? <RiCheckLine className="text-2xl" /> : <RiFileCopyLine className="text-2xl" />}
+                                {copied && <span className="absolute left-full ml-4 bg-blue-500 text-white text-[10px] px-2 py-1 font-mono whitespace-nowrap tracking-widest">COPIED</span>}
                             </button>
 
-                            <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${typeof window !== 'undefined' ? window.location.href : ''}`} target="_blank" rel="noopener noreferrer" className="p-3 border border-foreground/10 hover:bg-black hover:border-black hover:text-white dark:hover:bg-white dark:hover:border-white dark:hover:text-black text-muted-foreground transition-all">
-                                <RiTwitterXFill className="text-xl" />
+                            <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${typeof window !== 'undefined' ? window.location.href : ''}`} target="_blank" rel="noopener noreferrer" className="w-full aspect-[3/2] flex items-center justify-center border border-foreground/10 hover:bg-foreground hover:text-background text-muted-foreground transition-all">
+                                <RiTwitterXFill className="text-2xl" />
                             </a>
 
                             {article.linkedinUrl && (
-                                <a href={article.linkedinUrl} target="_blank" rel="noopener noreferrer" className="p-3 border border-foreground/10 hover:bg-[#0077b5] hover:border-[#0077b5] hover:text-white text-muted-foreground transition-all">
-                                    <RiLinkedinFill className="text-xl" />
+                                <a href={article.linkedinUrl} target="_blank" rel="noopener noreferrer" className="w-full aspect-[3/2] flex items-center justify-center border border-foreground/10 hover:border-[#0077b5] hover:text-[#0077b5] text-muted-foreground transition-all">
+                                    <RiLinkedinFill className="text-2xl" />
                                 </a>
                             )}
                         </div>
@@ -183,21 +197,32 @@ export default function ArticleDetail({ article }) {
                         transition={{ delay: 0.4, duration: 0.8 }}
                         className="lg:col-span-8 prose prose-lg prose-invert max-w-none prose-headings:font-bold prose-p:leading-loose prose-p:text-foreground/80 prose-li:text-foreground/80"
                     >
-                        {/* Featured Image (Schematic) */}
-                        {article.thumbnail && (
-                            <div className="mb-20 relative rounded-none overflow-hidden bg-muted border-y border-foreground/20">
-                                <Image
-                                    src={article.thumbnail ? urlFor(article.thumbnail).url() : '/placeholder.jpg'}
-                                    alt={title}
-                                    width={1200}
-                                    height={800}
-                                    className="w-full h-auto object-cover grayscale aspect-video"
-                                    priority
-                                />
-                                {/* Overlay Grid */}
-                                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:100px_100px] pointer-events-none" />
-                            </div>
-                        )}
+                        {/* Featured Image (Schematic OG Cover) */}
+                        <div className="mb-20 relative rounded-xl overflow-hidden bg-muted border border-foreground/10 aspect-[1200/630] group">
+                            {(() => {
+                                const titleEn = article.title_en || article.title;
+                                const imageId = article.thumbnail?.asset?._id || article.thumbnail?.asset?._ref;
+                                const authorId = settings?.profileImage?.asset?._id || settings?.profileImage?.asset?._ref;
+                                const ogUrl = `/api/og?title=${encodeURIComponent(titleEn)}&type=ARTICLE&subtitle=READING_ENTRY${imageId ? `&imageId=${imageId}` : ''}${authorId ? `&authorImageId=${authorId}` : ''}`;
+
+                                return (
+                                    <>
+                                        <img
+                                            src={ogUrl}
+                                            alt={title}
+                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                        />
+                                        {/* Overlay Grid */}
+                                        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:100px_100px] pointer-events-none mix-blend-overlay" />
+
+                                        {/* Technical Markers */}
+                                        <div className="absolute top-4 left-4 z-20 px-3 py-1 bg-black/50 backdrop-blur-md border border-white/10 text-[10px] font-mono text-white/80 tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity">
+                                            FIG_MAIN :: COVER_ART
+                                        </div>
+                                    </>
+                                );
+                            })()}
+                        </div>
 
                         {/* Article Text */}
                         {content ? (

@@ -8,5 +8,6 @@ export const metadata = {
 
 export default async function ArticlesPage() {
     const articles = await getLocalData('articles') || [];
-    return <ArticlesView articles={articles} />;
+    const settings = await getLocalData('settings');
+    return <ArticlesView articles={articles} settings={settings} />;
 }

@@ -47,6 +47,13 @@ export const settings = {
             fieldset: 'contact'
         },
         {
+            name: 'profileImage',
+            title: 'Profile Picture (Avatar)',
+            type: 'image',
+            fieldset: 'contact',
+            options: { hotspot: true }
+        },
+        {
             name: 'socialLinks',
             title: 'Social Media Links',
             type: 'array',

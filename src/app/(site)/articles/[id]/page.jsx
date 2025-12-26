@@ -17,8 +17,11 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }) {
     const { id } = await params;
-    const query = `*[_type == "article" && _id == $id][0]`;
-    const article = await client.fetch(query, { id });
+    const query = `{
+        "article": *[_type == "article" && _id == $id][0] { ..., thumbnail { asset-> } },
+        "settings": *[_type == "settings"][0] { siteTitle, profileImage { asset-> } }
+    }`;
+    const { article, settings } = await client.fetch(query, { id });
 
     if (!article) return {};
 
@@ -32,7 +35,7 @@ export async function generateMetadata({ params }) {
             description: article.excerpt_en || article.excerpt,
             images: [
                 {
-                    url: `/api/og?title=${encodeURIComponent(article.title_en || article.title)}&type=ARTICLE&subtitle=${encodeURIComponent('READING_ENTRY')}${imageUrl ? `&image=${encodeURIComponent(imageUrl)}` : ''}`,
+                    url: `/api/og?title=${encodeURIComponent(article.title_en || article.title)}&type=ARTICLE&subtitle=${encodeURIComponent('READING_ENTRY')}${article.thumbnail?.asset?._ref ? `&imageId=${article.thumbnail.asset._ref}` : ''}${settings?.profileImage?.asset?._ref ? `&authorImageId=${settings.profileImage.asset._ref}` : ''}`,
                     width: 1200,
                     height: 630,
                 },
@@ -44,9 +47,12 @@ export async function generateMetadata({ params }) {
 export default async function ArticlePage({ params }) {
     const { id } = await params;
 
-    // Fetch specific article by ID
-    const query = `*[_type == "article" && _id == $id][0]`;
-    const article = await client.fetch(query, { id });
+    // Fetch specific article by ID + Global Settings (for Author)
+    const query = `{
+        "article": *[_type == "article" && _id == $id][0] { ..., thumbnail { asset-> } },
+        "settings": *[_type == "settings"][0] { siteTitle, profileImage { asset-> } }
+    }`;
+    const { article, settings } = await client.fetch(query, { id });
 
     if (!article) {
         return (
@@ -56,5 +62,5 @@ export default async function ArticlePage({ params }) {
         );
     }
 
-    return <ArticleDetail article={article} />;
+    return <ArticleDetail article={article} settings={settings} />;
 }

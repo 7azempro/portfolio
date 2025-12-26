@@ -159,6 +159,7 @@ export default function Footer({ socials }) {
                         <ul className="flex flex-col gap-3 font-medium">
                             <li><Link href="/" onClick={playClick} onMouseEnter={playHover} className="hover:text-blue-500 transition-colors">{lang === 'ar' ? "الرئيسية" : "Home"}</Link></li>
                             <li><Link href="/works" onClick={playClick} onMouseEnter={playHover} className="hover:text-blue-500 transition-colors">{lang === 'ar' ? "الأعمال" : "Works"}</Link></li>
+                            <li><Link href="/articles" onClick={playClick} onMouseEnter={playHover} className="hover:text-blue-500 transition-colors">{lang === 'ar' ? "المقالات" : "Articles"}</Link></li>
                             <li><Link href="/about" onClick={playClick} onMouseEnter={playHover} className="hover:text-blue-500 transition-colors">{lang === 'ar' ? "عني" : "About"}</Link></li>
                         </ul>
                     </div>

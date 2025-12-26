@@ -10,7 +10,29 @@ export async function GET(request) {
         const title = searchParams.get('title') || '7AZEMPRO';
         const subtitle = searchParams.get('subtitle') || 'SYSTEM ARCHITECT';
         const type = searchParams.get('type')?.toUpperCase() || 'INDEX';
-        const bgImage = searchParams.get('image');
+
+        // Helper to reconstruct Sanity URL
+        const buildSanityUrl = (ref) => {
+            if (!ref) return null;
+            const parts = ref.split('-');
+            if (parts.length >= 4) {
+                const assetId = parts[1];
+                const dimensions = parts[2];
+                const format = parts[3];
+                const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+                const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET;
+                if (projectId && dataset) {
+                    return `https://cdn.sanity.io/images/${projectId}/${dataset}/${assetId}-${dimensions}.${format}`;
+                }
+            }
+            return null;
+        }
+
+        const imageId = searchParams.get('imageId');
+        const authorImageId = searchParams.get('authorImageId');
+
+        const bgImage = imageId ? buildSanityUrl(imageId) : searchParams.get('image');
+        const authorImage = buildSanityUrl(authorImageId);
 
         // Font Loading (Theme Fonts)
         const fontJakarta = await fetch(new URL('https://cdn.jsdelivr.net/fontsource/fonts/plus-jakarta-sans@latest/latin-700-normal.woff', request.url)).then((res) => res.arrayBuffer());
@@ -23,187 +45,157 @@ export async function GET(request) {
                         height: '100%',
                         width: '100%',
                         display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
                         backgroundColor: '#050505',
                         color: 'white',
                         fontFamily: '"Plus Jakarta Sans", "IBM Plex Sans Arabic", sans-serif',
-                        position: 'relative',
-                        overflow: 'hidden', // Ensure image doesn't bleed
                     }}
                 >
-                    {/* 0. BACKGROUND IMAGE (Optional) */}
-                    {bgImage && (
-                        <img
-                            src={bgImage}
+                    {/* LEFT PANEL (Content) - 65% */}
+                    <div style={{
+                        width: '65%',
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        padding: '60px',
+                        position: 'relative',
+                        borderRight: '1px solid rgba(255,255,255,0.1)',
+                    }}>
+                        {/* Grid Background */}
+                        <div
                             style={{
                                 position: 'absolute',
                                 inset: 0,
-                                width: '100%',
-                                height: '100%',
-                                objectFit: 'cover',
-                                opacity: 0.4, // Dim it for text readability
-                                filter: 'grayscale(100%)', // Swiss style
+                                backgroundImage: 'linear-gradient(to right, #ffffff08 1px, transparent 1px), linear-gradient(to bottom, #ffffff08 1px, transparent 1px)',
+                                backgroundSize: '40px 40px',
+                                zIndex: 0,
                             }}
                         />
-                    )}
 
-                    {/* 1. BLUEPRINT GRID BACKGROUND */}
-                    <div
-                        style={{
-                            position: 'absolute',
-                            inset: 0,
-                            backgroundImage: 'linear-gradient(to right, #ffffff10 1px, transparent 1px), linear-gradient(to bottom, #ffffff10 1px, transparent 1px)',
-                            backgroundSize: '40px 40px',
-                            opacity: 0.2, // Boosted opacity
-                        }}
-                    />
-
-                    {/* 2. BRAND LOGO (Top Left) */}
-                    <div style={{
-                        position: 'absolute',
-                        top: 60,
-                        left: 60,
-                        display: 'flex',
-                        alignItems: 'center',
-                    }}>
-                        {/* The "7" Diamond */}
-                        <div style={{
-                            width: 60,
-                            height: 60,
-                            background: 'linear-gradient(45deg, #3b82f6, #06b6d4)',
-                            transform: 'rotate(45deg)',
-                            borderRadius: 12,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            boxShadow: '0 0 30px rgba(59, 130, 246, 0.4)',
-                        }}>
+                        {/* TOP: Brand & Type */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 20, zIndex: 10 }}>
                             <div style={{
-                                transform: 'rotate(-45deg)',
-                                fontSize: 32,
-                                fontWeight: 900,
-                                color: 'white',
-                                fontFamily: '"Plus Jakarta Sans", sans-serif'
-                            }}>7</div>
-                        </div>
-                    </div>
-
-                    {/* 3. DYNAMIC GRAPHIC (Right Side - Abstract) */}
-                    <div style={{
-                        position: 'absolute',
-                        right: -100,
-                        top: '50%',
-                        transform: 'translateY(-50%)',
-                        display: 'flex',
-                        opacity: 0.1,
-                    }}>
-                        {type === 'PROJECT' && (
-                            // Diamond Cluster (Structure)
-                            <div style={{ display: 'flex' }}>
-                                <div style={{ width: 300, height: 300, border: '4px solid white', transform: 'rotate(45deg)', margin: -50 }} />
-                                <div style={{ width: 300, height: 300, border: '4px solid white', transform: 'rotate(45deg)', margin: -50 }} />
-                            </div>
-                        )}
-                        {type === 'ARTICLE' && (
-                            // Text Lines (Knowledge)
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: 40, alignItems: 'flex-end' }}>
-                                <div style={{ width: 600, height: 20, background: 'white' }} />
-                                <div style={{ width: 400, height: 20, background: 'white' }} />
-                                <div style={{ width: 500, height: 20, background: 'white' }} />
-                                <div style={{ width: 300, height: 20, background: 'white' }} />
-                                <div style={{ width: 600, height: 20, background: 'white' }} />
-                                <div style={{ width: 400, height: 20, background: 'white' }} />
-                            </div>
-                        )}
-                        {type !== 'PROJECT' && type !== 'ARTICLE' && (
-                            // Radar/Pulse (System)
-                            <div style={{
-                                width: 600,
-                                height: 600,
-                                border: '2px dashed white',
-                                borderRadius: '50%',
+                                width: 50,
+                                height: 50,
+                                background: '#3b82f6',
                                 display: 'flex',
                                 alignItems: 'center',
-                                justifyContent: 'center'
+                                justifyContent: 'center',
+                                borderRadius: 8,
+                                fontSize: 28,
+                                fontWeight: 900,
+                            }}>7</div>
+                            <div style={{
+                                fontFamily: 'monospace',
+                                fontSize: 16,
+                                letterSpacing: '0.2em',
+                                color: '#94a3b8',
+                                textTransform: 'uppercase',
                             }}>
-                                <div style={{ width: 400, height: 400, border: '2px solid white', borderRadius: '50%' }} />
+                                系统 :: {type}
                             </div>
-                        )}
-                    </div>
-
-
-                    {/* 4. CORNER MARKERS (Remaining) */}
-                    <div style={{ position: 'absolute', top: 60, right: 60, width: 20, height: 20, borderTop: '2px solid rgba(255,255,255,0.3)', borderRight: '2px solid rgba(255,255,255,0.3)' }} />
-                    <div style={{ position: 'absolute', bottom: 60, left: 60, width: 20, height: 20, borderBottom: '2px solid rgba(255,255,255,0.3)', borderLeft: '2px solid rgba(255,255,255,0.3)' }} />
-                    <div style={{ position: 'absolute', bottom: 60, right: 60, width: 20, height: 20, borderBottom: '2px solid rgba(255,255,255,0.3)', borderRight: '2px solid rgba(255,255,255,0.3)' }} />
-
-
-                    {/* 5. CENTER CONTENT */}
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10, textAlign: 'center', padding: '0 80px', gap: 20, maxWidth: 900 }}>
-
-                        {/* TYPE BADGE */}
-                        <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 12,
-                            fontSize: 18,
-                            fontFamily: 'monospace',
-                            letterSpacing: '0.2em',
-                            background: 'rgba(255,255,255,0.05)',
-                            border: '1px solid rgba(255,255,255,0.1)',
-                            padding: '10px 30px',
-                            color: '#94a3b8'
-                        }}>
-                            <div style={{ width: 8, height: 8, background: '#3b82f6' }} />
-                            SYS :: {type}
                         </div>
 
-                        {/* TITLE */}
+                        {/* MIDDLE: Title */}
                         <div style={{
-                            fontSize: 70,
-                            fontWeight: 900,
-                            lineHeight: 1,
-                            textTransform: 'uppercase',
-                            letterSpacing: '-0.03em',
-                            color: 'white',
-                            textShadow: '0 0 40px rgba(255,255,255,0.2)',
                             display: 'flex',
                             flexDirection: 'column',
-                            alignItems: 'center',
+                            gap: 10,
+                            zIndex: 10,
                         }}>
-                            {title}
+                            <div style={{
+                                fontSize: 64,
+                                fontWeight: 900,
+                                lineHeight: 1,
+                                letterSpacing: '-0.03em',
+                                textTransform: 'uppercase',
+                                color: 'white',
+                                // Clamp title length visualization
+                                display: '-webkit-box',
+                                WebkitLineClamp: 3,
+                                WebkitBoxOrient: 'vertical',
+                                overflow: 'hidden',
+                            }}>
+                                {title}
+                            </div>
+                            <div style={{
+                                fontFamily: '"IBM Plex Sans Arabic", monospace',
+                                fontSize: 24,
+                                color: '#64748b',
+                                marginTop: 10,
+                            }}>
+                                {subtitle} // KNOWLEDGE_BASE
+                            </div>
                         </div>
 
-                        {/* SUBTITLE */}
-                        <div style={{
-                            fontSize: 32, // Bumped up slightly
-                            color: '#94a3b8',
-                            lineHeight: 1.4,
-                            fontFamily: '"IBM Plex Sans Arabic", monospace'
-                        }}>
-                            {subtitle}
+                        {/* BOTTOM: Author & Meta */}
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 10 }}>
+                            {/* Author */}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                                {authorImage ? (
+                                    <img src={authorImage} style={{ width: 60, height: 60, borderRadius: '50%', objectFit: 'cover', border: '2px solid rgba(255,255,255,0.2)' }} />
+                                ) : (
+                                    <div style={{ width: 60, height: 60, borderRadius: '50%', background: '#333' }} />
+                                )}
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                                    <div style={{ fontSize: 18, fontWeight: 700 }}>7AZEMPRO</div>
+                                    <div style={{ fontSize: 12, fontFamily: 'monospace', color: '#94a3b8', letterSpacing: '0.1em' }}>EDITOR_IN_CHIEF</div>
+                                </div>
+                            </div>
+
+                            {/* Tech Markers */}
+                            <div style={{ display: 'flex', gap: 10 }}>
+                                <div style={{ width: 10, height: 10, background: '#3b82f6' }} />
+                                <div style={{ width: 10, height: 10, background: '#10b981' }} />
+                                <div style={{ width: 10, height: 10, background: '#f59e0b' }} />
+                            </div>
                         </div>
                     </div>
 
-                    {/* 6. FOOTER METADATA */}
+                    {/* RIGHT PANEL (Image) - 35% */}
                     <div style={{
-                        position: 'absolute',
-                        bottom: 60,
-                        width: '100%',
+                        width: '35%',
+                        height: '100%',
+                        position: 'relative',
+                        backgroundColor: '#111',
                         display: 'flex',
+                        alignItems: 'center',
                         justifyContent: 'center',
-                        gap: 40,
-                        fontSize: 16,
-                        fontFamily: 'monospace',
-                        color: 'rgba(255,255,255,0.3)',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.1em'
+                        overflow: 'hidden',
                     }}>
-                        <div>30.0444° N, 31.2357° E</div>
-                        <div>///</div>
-                        <div>SYSTEM ARCHITECTURE</div>
+                        {bgImage ? (
+                            <img
+                                src={bgImage}
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'cover',
+                                    filter: 'grayscale(100%) contrast(120%)',
+                                    opacity: 0.8,
+                                }}
+                            />
+                        ) : (
+                            // Geometric Fallback
+                            <div style={{
+                                width: '100%',
+                                height: '100%',
+                                backgroundImage: 'repeating-linear-gradient(45deg, #1f2937 0, #1f2937 10px, #111827 0, #111827 50%)',
+                                opacity: 0.5,
+                            }} />
+                        )}
+
+                        {/* Overlay Tint */}
+                        <div style={{
+                            position: 'absolute',
+                            inset: 0,
+                            background: 'linear-gradient(to bottom, rgba(59, 130, 246, 0.2), transparent)',
+                            mixBlendMode: 'overlay',
+                        }} />
+
+                        {/* Technical Crosshair */}
+                        <div style={{ position: 'absolute', inset: 0, border: '20px solid rgba(0,0,0,0.5)' }} />
+                        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 2, height: 40, background: 'rgba(255,255,255,0.5)' }} />
+                        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 40, height: 2, background: 'rgba(255,255,255,0.5)' }} />
                     </div>
                 </div>
             ),
