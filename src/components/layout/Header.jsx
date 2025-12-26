@@ -20,17 +20,19 @@ export default function Header({ nav }) {
     }, [lang]);
 
     // Format CMS nav or Fallback
-    const links = nav?.map(item => ({
+    // Format CMS nav or Fallback
+    const links = (nav && nav.length > 0) ? nav.map(item => ({
         href: item.link || '/',
         label: {
             ar: item.label || 'رابط',
             en: item.label_en || 'Link'
         }
-    })) || [
-            { href: "/", label: { ar: "الرئيسية", en: "INDEX" } },
-            { href: "/works", label: { ar: "أعمالي", en: "PROJECTS" } },
-            { href: "/about", label: { ar: "عني", en: "BIO" } },
-        ];
+    })) : [
+        { href: "/", label: { ar: "الرئيسية", en: "INDEX" } },
+        { href: "/works", label: { ar: "أعمالي", en: "PROJECTS" } },
+        { href: "/articles", label: { ar: "المقالات", en: "ARTICLES" } },
+        { href: "/about", label: { ar: "عني", en: "BIO" } },
+    ];
 
     const socials = [
         { name: "Twitter / X", link: "https://twitter.com/7azempro" },

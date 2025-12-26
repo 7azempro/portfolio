@@ -7,6 +7,7 @@ export const settings = {
     icon: RiSettings4Line,
     fieldsets: [
         { name: 'general', title: 'General', options: { collapsible: true, collapsed: false } },
+        { name: 'appearance', title: 'Appearance (Theme)', options: { collapsible: true, collapsed: false } },
         { name: 'seo', title: 'SEO & Meta', options: { collapsible: true, collapsed: false } },
         { name: 'contact', title: 'Contact & Resume', options: { collapsible: true, collapsed: false } }
     ],
@@ -16,6 +17,14 @@ export const settings = {
             title: 'Site Title',
             type: 'string',
             fieldset: 'general'
+        },
+        {
+            name: 'themeColor',
+            title: 'Theme Color (PWA & Brand)',
+            type: 'string',
+            initialValue: '#030303',
+            description: 'Hex code for the browser frame and PWA installation.',
+            fieldset: 'appearance'
         },
         {
             name: 'seoDescription',

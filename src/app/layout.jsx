@@ -1,6 +1,19 @@
 import '../styles/globals.css';
 import { getLocalData } from '@/lib/data.server';
 
+export async function generateViewport() {
+    const settings = await getLocalData('settings');
+    const color = settings?.themeColor || '#030303';
+
+    return {
+        themeColor: color,
+        width: 'device-width',
+        initialScale: 1,
+        maximumScale: 1,
+        userScalable: false,
+    };
+}
+
 export async function generateMetadata() {
     const settings = await getLocalData('settings');
 
@@ -20,6 +33,14 @@ export async function generateMetadata() {
         authors: [{ name: 'Hazem Gamal', url: baseUrl }],
         creator: 'Hazem Gamal',
         publisher: 'Hazem Gamal',
+        appleWebApp: {
+            capable: true,
+            statusBarStyle: 'black-translucent',
+            title: title,
+        },
+        formatDetection: {
+            telephone: false,
+        },
         openGraph: {
             title: `${title} | Premium Product Design & Development`,
             description: description,
@@ -48,7 +69,7 @@ export async function generateMetadata() {
             shortcut: '/favicon.ico',
             apple: '/apple-touch-icon.png',
         },
-        manifest: '/site.webmanifest',
+        manifest: '/manifest.json',
         robots: {
             index: true,
             follow: true,

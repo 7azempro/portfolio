@@ -15,6 +15,7 @@ export function SoundProvider({ children }) {
     useEffect(() => {
         const saved = localStorage.getItem('sound-enabled');
         if (saved !== null) {
+            // eslint-disable-next-line
             setSoundEnabled(saved === 'true');
         }
     }, []);

@@ -27,7 +27,7 @@ export default async function Home() {
             <ProjectSlider projects={projectData} />
 
             {/* Insights / Articles */}
-            <Insights articles={await getLocalData('articles')} />
+            <Insights articles={await getLocalData('latest_articles')} />
 
 
         </main>

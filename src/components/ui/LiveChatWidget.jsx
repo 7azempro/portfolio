@@ -1,5 +1,5 @@
 'use client';
-import { motion, AnimatePresence, useSpring, useMotionValue } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { SiWhatsapp } from 'react-icons/si';
 import { PiCoffeeFill, PiXBold } from 'react-icons/pi';
 import { useState, useEffect, useRef } from 'react';
@@ -18,34 +18,7 @@ export default function LiveChatWidget() {
     const ref = useRef(null);
     const { playHover, playClick } = useSound();
 
-    // Magnetic Logic
-    const x = useMotionValue(0);
-    const y = useMotionValue(0);
-
-    const springConfig = { damping: 20, stiffness: 300, mass: 0.1 };
-    const springX = useSpring(x, springConfig);
-    const springY = useSpring(y, springConfig);
-
-    const handleMouseMove = (e) => {
-        if (!ref.current) return;
-        const rect = ref.current.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        const distance = Math.sqrt(Math.pow(e.clientX - centerX, 2) + Math.pow(e.clientY - centerY, 2));
-
-        if (distance < 120) {
-            x.set((e.clientX - centerX) * 0.3);
-            y.set((e.clientY - centerY) * 0.3);
-        } else {
-            x.set(0);
-            y.set(0);
-        }
-    };
-
-    useEffect(() => {
-        window.addEventListener('mousemove', handleMouseMove);
-        return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, []);
+    // Magnetic Logic Removed
 
     useEffect(() => {
         // Sequence: Wait -> Typing -> Message + Sound -> Auto Hide
@@ -73,7 +46,7 @@ export default function LiveChatWidget() {
 
     return (
         <div ref={ref} className={`fixed z-[9980] ${lang === 'ar' ? 'left-6' : 'right-6'} bottom-20 sm:bottom-24 w-14 h-14`}>
-            <motion.div style={{ x: springX, y: springY }} className="relative w-full h-full">
+            <div className="relative w-full h-full">
 
                 {/* 1. SMART HINT CARD */}
                 <AnimatePresence>
@@ -169,7 +142,7 @@ export default function LiveChatWidget() {
                     </span>
                 </motion.a>
 
-            </motion.div>
+            </div>
         </div>
     );
 }

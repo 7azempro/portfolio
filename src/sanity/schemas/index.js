@@ -14,10 +14,12 @@ import { lesson } from './lesson'
 import { product } from './product'
 import { order } from './order'
 import { socialPost } from './socialPost'
+import { blockContent } from './blockContent'
 
 export const schemaTypes = [
     hero,
     about,
+    blockContent,
     project,
     service,
     tech,

@@ -1,0 +1,226 @@
+'use client';
+import { motion } from 'framer-motion';
+import { useLanguage } from '@/lib/context/LanguageContext';
+import { PortableText } from '@portabletext/react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { RiArrowLeftLine, RiLinkedinFill, RiTwitterXFill, RiFileCopyLine, RiCheckLine } from 'react-icons/ri';
+import { urlFor } from '@/sanity/lib/image';
+import { estimateReadingTime } from '@/lib/readingTime';
+import { useState } from 'react';
+
+export default function ArticleDetail({ article }) {
+    const { lang } = useLanguage();
+    const isAr = lang === 'ar';
+    const [copied, setCopied] = useState(false);
+
+    // Bilingual Data Helper
+    const t = (field) => {
+        if (!article) return '';
+        if (lang === 'en' && article[`${field}_en`]) return article[`${field}_en`];
+        return article[field];
+    };
+
+    const title = t('title');
+    const content = t('content');
+    const date = new Date(article.date).toLocaleDateString(isAr ? 'ar-EG' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    const readTime = estimateReadingTime(content);
+
+    const staticText = {
+        back: isAr ? 'فهرس_المقالات' : 'INDEX :: ARTICLES',
+        share: isAr ? 'مشاركة' : 'SHARE_ENTRY',
+        readTime: readTime,
+        sys: isAr ? 'عرض_المقال :: نظام_المعرفة' : 'VIEW_ENTRY :: KNOWLEDGE_SYS',
+        copy: isAr ? 'نسخ' : 'COPY_LINK',
+        copied: isAr ? 'تم النسخ' : 'LINK_COPIED'
+    };
+
+    const handleCopy = () => {
+        const url = window.location.href;
+        navigator.clipboard.writeText(url).then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        });
+    };
+
+    // Portable Text Components (Strict Swiss)
+    const components = {
+        block: {
+            h1: ({ children }) => <h1 className="text-3xl md:text-5xl font-black mt-16 mb-8 leading-none tracking-tighter uppercase">{children}</h1>,
+            h2: ({ children }) => <h2 className="text-2xl md:text-3xl font-bold mt-12 mb-6 text-foreground flex items-center gap-4"><span className="w-4 h-1 bg-blue-500" />{children}</h2>,
+            h3: ({ children }) => <h3 className="text-xl md:text-2xl font-bold mt-8 mb-4 border-l-4 border-foreground/20 pl-4">{children}</h3>,
+            normal: ({ children }) => <p className="mb-6 leading-loose text-lg text-foreground/80 font-normal">{children}</p>,
+            blockquote: ({ children }) => (
+                <div className="border-l-2 border-blue-500 pl-6 py-4 my-10 italic text-2xl font-light text-foreground/70 bg-foreground/5 dark:bg-white/5">
+                    "{children}"
+                </div>
+            ),
+        },
+        list: {
+            bullet: ({ children }) => <ul className="list-square list-outside ml-6 mb-8 space-y-3 marker:text-blue-500">{children}</ul>,
+            number: ({ children }) => <ol className="list-decimal list-outside ml-6 mb-8 space-y-3 marker:font-mono marker:text-blue-500">{children}</ol>,
+        },
+        marks: {
+            code: ({ children }) => <code className="bg-blue-500/10 text-blue-500 font-mono px-2 py-1 mx-1 rounded-sm text-sm border border-blue-500/20">{children}</code>,
+            link: ({ value, children }) => (
+                <a href={value.href} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-400 border-b border-blue-500/30 hover:border-blue-500 transition-colors pb-0.5">
+                    {children}
+                </a>
+            ),
+        },
+        types: {
+            image: ({ value }) => (
+                <div className="my-16 relative">
+                    {/* Frame */}
+                    <div className="absolute -inset-2 border border-foreground/10 z-0" />
+                    <div className="absolute -inset-2 border-l border-t border-foreground opacity-20 w-4 h-4 z-0" />
+                    <div className="absolute -bottom-2 -right-2 border-r border-b border-foreground opacity-20 w-4 h-4 z-0" />
+
+                    <div className="relative z-10 bg-muted overflow-hidden">
+                        <img
+                            src={urlFor(value).url()}
+                            alt={value.alt || 'Article Image'}
+                            className="w-full h-auto object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                        />
+                    </div>
+                    {value.caption && (
+                        <div className="flex justify-between items-center mt-3 pt-3 border-t border-foreground/10 font-mono text-[10px] text-muted-foreground uppercase tracking-widest">
+                            <span>FIG_REF :: {value.caption}</span>
+                            <span>IMG_00X</span>
+                        </div>
+                    )}
+                </div>
+            ),
+        }
+    };
+
+    return (
+        <article className="min-h-screen bg-background text-foreground pt-32 pb-32 relative overflow-hidden" dir={isAr ? 'rtl' : 'ltr'}>
+            {/* Swiss Grid Background */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+
+            {/* Top Navigation Bar */}
+            <div className="fixed top-0 left-0 right-0 h-20 bg-background/80 backdrop-blur-md border-b border-foreground/10 z-50 flex items-center px-6 md:px-12 justify-between">
+                <Link href="/articles" className="inline-flex items-center gap-3 font-mono text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-blue-500 transition-colors group">
+                    <RiArrowLeftLine className={`text-lg ${isAr ? 'rotate-180' : ''}`} />
+                    <span>{staticText.back}</span>
+                </Link>
+                <div className="hidden md:flex items-center gap-2 font-mono text-[10px] text-muted-foreground uppercase tracking-widest opacity-50">
+                    <span className="w-2 h-2 bg-blue-500 animate-pulse rounded-full" />
+                    {staticText.sys}
+                </div>
+            </div>
+
+            <div className="container mx-auto px-6 max-w-5xl relative z-10">
+
+                {/* Header Block */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
+                    className="mb-20 pt-12"
+                >
+                    {/* Industrial Meta Bar */}
+                    <div className="flex flex-wrap items-center gap-6 mb-8 font-mono text-xs text-blue-500 uppercase tracking-widest border-b border-foreground/10 pb-6">
+                        <span className="flex items-center gap-2">
+                            <span className="w-2 h-2 bg-blue-500" />
+                            {article.category || 'GENERAL'}
+                        </span>
+                        <span className="text-foreground/20">/</span>
+                        <span>{date}</span>
+                        <span className="text-foreground/20">/</span>
+                        <span>{staticText.readTime}</span>
+                    </div>
+
+                    {/* Title */}
+                    <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] text-foreground mb-12 uppercase">
+                        {title}
+                    </h1>
+
+                    {/* Tags Row */}
+                    {article.tags && (
+                        <div className="flex flex-wrap gap-3">
+                            {article.tags.map((tag, i) => (
+                                <span key={i} className="px-3 py-1 border border-foreground/20 text-[10px] font-mono uppercase tracking-wider text-muted-foreground hover:bg-foreground hover:text-background transition-colors cursor-default">
+                                    {tag}
+                                </span>
+                            ))}
+                        </div>
+                    )}
+                </motion.div>
+
+                {/* Main Content Layout */}
+                <div className="grid lg:grid-cols-12 gap-12">
+                    {/* Sidebar (Share & TOC if needed) - Sticky */}
+                    <div className="hidden lg:flex lg:col-span-2 flex-col gap-12 sticky top-32 h-fit">
+                        <div className="flex flex-col gap-4 border-l border-foreground/10 pl-6">
+                            <div className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest mb-2 opacity-50">
+                                {staticText.share}
+                            </div>
+
+                            {/* Share Buttons */}
+                            <button onClick={handleCopy} className="p-3 border border-foreground/10 hover:border-blue-500 hover:text-blue-500 text-muted-foreground transition-all group relative" title="Copy Link">
+                                {copied ? <RiCheckLine className="text-xl" /> : <RiFileCopyLine className="text-xl" />}
+                                {copied && <span className="absolute left-full ml-2 top-1/2 -translate-y-1/2 bg-blue-500 text-white text-[10px] px-2 py-1 font-mono whitespace-nowrap">{staticText.copied}</span>}
+                            </button>
+
+                            <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${typeof window !== 'undefined' ? window.location.href : ''}`} target="_blank" rel="noopener noreferrer" className="p-3 border border-foreground/10 hover:bg-black hover:border-black hover:text-white dark:hover:bg-white dark:hover:border-white dark:hover:text-black text-muted-foreground transition-all">
+                                <RiTwitterXFill className="text-xl" />
+                            </a>
+
+                            {article.linkedinUrl && (
+                                <a href={article.linkedinUrl} target="_blank" rel="noopener noreferrer" className="p-3 border border-foreground/10 hover:bg-[#0077b5] hover:border-[#0077b5] hover:text-white text-muted-foreground transition-all">
+                                    <RiLinkedinFill className="text-xl" />
+                                </a>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Content Body */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.4, duration: 0.8 }}
+                        className="lg:col-span-8 prose prose-lg prose-invert max-w-none prose-headings:font-bold prose-p:leading-loose prose-p:text-foreground/80 prose-li:text-foreground/80"
+                    >
+                        {/* Featured Image (Schematic) */}
+                        {article.thumbnail && (
+                            <div className="mb-20 relative rounded-none overflow-hidden bg-muted border-y border-foreground/20">
+                                <Image
+                                    src={article.thumbnail ? urlFor(article.thumbnail).url() : '/placeholder.jpg'}
+                                    alt={title}
+                                    width={1200}
+                                    height={800}
+                                    className="w-full h-auto object-cover grayscale aspect-video"
+                                    priority
+                                />
+                                {/* Overlay Grid */}
+                                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:100px_100px] pointer-events-none" />
+                            </div>
+                        )}
+
+                        {/* Article Text */}
+                        {content ? (
+                            <PortableText value={content} components={components} />
+                        ) : (
+                            <div className="p-12 border border-dashed border-foreground/20 text-center font-mono text-muted-foreground bg-foreground/5 uppercase tracking-widest">
+                                {isAr ? 'لا يوجد محتوى' : 'NO_CONTENT_AVAILABLE'}
+                            </div>
+                        )}
+                    </motion.div>
+                </div>
+
+
+                {/* Mobile Share (Bottom Fixed) */}
+                <div className="lg:hidden fixed bottom-0 left-0 right-0 p-4 border-t border-foreground/10 bg-background/90 backdrop-blur-md z-40 flex justify-between items-center">
+                    <span className="font-mono text-xs uppercase tracking-widest">{staticText.share}</span>
+                    <div className="flex gap-4">
+                        <button onClick={handleCopy} className="p-2 border border-foreground/10 rounded-full"><RiFileCopyLine /></button>
+                        <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}`} target="_blank" className="p-2 border border-foreground/10 rounded-full"><RiTwitterXFill /></a>
+                    </div>
+                </div>
+
+            </div>
+        </article>
+    );
+}

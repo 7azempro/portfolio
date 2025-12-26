@@ -1,87 +1,111 @@
 import {
-    RiLayoutTopLine, RiSettings4Line, RiUser3Line,
-    RiFolder3Line, RiArticleLine, RiServiceLine, RiCodeBoxLine,
-    RiBriefcase4Line, RiGraduationCapLine, RiDoubleQuotesR,
-    RiBookOpenLine, RiShoppingBag3Line, RiTwitterXLine
+    RiLayoutTopLine, RiUser3Line, RiBriefcaseLine, RiArticleLine,
+    RiServerLine, RiShoppingCartLine, RiBookOpenLine,
+    RiDatabase2Line, RiSettings3Line, RiShieldUserLine
 } from "react-icons/ri";
+// Helper: Define the "SEO View" for standard documents - REMOVED (Incompatible Plugin)
+
 
 export const structure = (S) =>
     S.list()
-        .title('Control Center')
+        .title('Content Studio')
         .items([
-            // 1. HOME & PORTFOLIO ENGINE
+            // --------------------------------------------------------
+            // 1. WEBSITE CORE (Singletons & Main Pages)
+            // --------------------------------------------------------
             S.listItem()
-                .title('Portfolio Engine')
+                .title('Website Core')
                 .icon(RiLayoutTopLine)
                 .child(
                     S.list()
-                        .title('Portfolio Content')
+                        .title('Website Pages')
                         .items([
-                            S.documentTypeListItem('hero').title('Hero Section').icon(RiLayoutTopLine),
-                            S.documentTypeListItem('about').title('About Bio').icon(RiUser3Line),
-                            S.documentTypeListItem('project').title('Projects (Case Studies)').icon(RiFolder3Line),
-                            S.documentTypeListItem('service').title('Services').icon(RiServiceLine),
-                            S.documentTypeListItem('experience').title('Experience').icon(RiBriefcase4Line),
-                            S.documentTypeListItem('education').title('Education').icon(RiGraduationCapLine),
-                            S.documentTypeListItem('testimonial').title('Testimonials').icon(RiDoubleQuotesR),
+                            S.listItem()
+                                .title('Home Page (Hero)')
+                                .icon(RiLayoutTopLine)
+                                .child(S.document().schemaType('hero').documentId('hero').title('Home Hero')),
+                            S.listItem()
+                                .title('About Page')
+                                .icon(RiUser3Line)
+                                .child(S.document().schemaType('about').documentId('about').title('About Bio')),
+                            S.divider(),
+                            S.documentTypeListItem('project').title('Projects'),
+                            S.documentTypeListItem('service').title('Services'),
                         ])
                 ),
 
-            S.divider(),
-
-            // 2. KNOWLEDGE BASE (LMS)
+            // --------------------------------------------------------
+            // 2. BLOG & CONTENT (Articles)
+            // --------------------------------------------------------
             S.listItem()
-                .title('Knowledge Base')
-                .icon(RiBookOpenLine)
-                .child(
-                    S.list()
-                        .title('LMS Management')
-                        .items([
-                            S.documentTypeListItem('course').title('Courses'),
-                            S.documentTypeListItem('lesson').title('Lessons'),
-                        ])
-                ),
-
-            // 3. COMMERCE
-            S.listItem()
-                .title('Commerce')
-                .icon(RiShoppingBag3Line)
-                .child(
-                    S.list()
-                        .title('Store Management')
-                        .items([
-                            S.documentTypeListItem('product').title('Products'),
-                            S.documentTypeListItem('order').title('Orders'),
-                        ])
-                ),
-
-            S.divider(),
-
-            // 4. CONTENT HUB
-            S.listItem()
-                .title('Content Hub')
+                .title('Blog & Articles')
                 .icon(RiArticleLine)
                 .child(
+                    S.documentTypeList('article')
+                        .title('All Articles')
+                        .child(documentId =>
+                            S.document()
+                                .documentId(documentId)
+                                .schemaType('article')
+                        )
+                ),
+
+            // --------------------------------------------------------
+            // 3. BUSINESS ENGINE (Shop & LMS)
+            // --------------------------------------------------------
+            S.listItem()
+                .title('Business Engine')
+                .icon(RiShoppingCartLine)
+                .child(
                     S.list()
-                        .title('Blog & Social')
+                        .title('Commerce & Courses')
                         .items([
-                            S.documentTypeListItem('article').title('Articles'),
+                            S.listItem().title('Shop').child(
+                                S.list().title('Shop').items([
+                                    S.documentTypeListItem('product').title('Products'),
+                                    S.documentTypeListItem('order').title('Orders')
+                                ])
+                            ),
+                            S.listItem().title('Academy').child(
+                                S.list().title('Academy').items([
+                                    S.documentTypeListItem('course').title('Courses'),
+                                    S.documentTypeListItem('lesson').title('Lessons')
+                                ])
+                            )
+                        ])
+                ),
+
+            S.divider(),
+
+            // --------------------------------------------------------
+            // 4. DATABASE (References & Metadata)
+            // --------------------------------------------------------
+            S.listItem()
+                .title('Data & Assets')
+                .icon(RiDatabase2Line)
+                .child(
+                    S.list()
+                        .title('Database')
+                        .items([
+                            S.documentTypeListItem('tech').title('Tech Stack'),
+                            S.documentTypeListItem('experience').title('Experience'),
+                            S.documentTypeListItem('education').title('Education'),
+                            S.documentTypeListItem('testimonial').title('Testimonials'),
                             S.documentTypeListItem('socialPost').title('Social Feed'),
                         ])
                 ),
 
+            // --------------------------------------------------------
+            // 5. GLOBAL CONFIGURATION
+            // --------------------------------------------------------
             S.divider(),
-
-            // 5. SYSTEM
             S.listItem()
-                .title('System')
-                .icon(RiSettings4Line)
+                .title('Global Settings')
+                .icon(RiSettings3Line)
                 .child(
-                    S.list()
-                        .title('System Config')
-                        .items([
-                            S.documentTypeListItem('settings').title('Global Settings').icon(RiSettings4Line),
-                            S.documentTypeListItem('tech').title('Tech Stack Assets').icon(RiCodeBoxLine),
-                        ])
+                    S.document()
+                        .schemaType('settings')
+                        .documentId('settings')
+                        .title('Site Settings')
                 ),
         ]);
