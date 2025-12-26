@@ -4,21 +4,29 @@ import { useLanguage } from '@/lib/context/LanguageContext';
 import { PortableText } from '@portabletext/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { RiArrowLeftLine, RiLinkedinFill, RiTwitterXFill, RiFileCopyLine, RiCheckLine } from 'react-icons/ri';
+import { RiArrowLeftLine, RiLinkedinFill, RiTwitterXFill, RiFileCopyLine, RiCheckLine, RiWhatsappLine, RiFacebookCircleLine, RiArrowRightUpLine } from 'react-icons/ri';
 import { urlFor } from '@/sanity/lib/image';
 import { estimateReadingTime } from '@/lib/readingTime';
 import { useState } from 'react';
 
-export default function ArticleDetail({ article, settings }) {
+export default function ArticleDetail({ article, settings, relatedArticles = [] }) {
     const { lang } = useLanguage();
     const isAr = lang === 'ar';
     const [copied, setCopied] = useState(false);
 
     // Bilingual Data Helper
-    const t = (field) => {
-        if (!article) return '';
-        if (lang === 'en' && article[`${field}_en`]) return article[`${field}_en`];
-        return article[field];
+    const t = (field, item = article) => {
+        if (!item) return '';
+        if (lang === 'en' && item[`${field}_en`]) return item[`${field}_en`];
+        return item[field];
+    };
+
+    // Helper for OG Url (reuse for related)
+    const getOgUrl = (item) => {
+        const titleEn = item.title_en || item.title;
+        const imageId = item.thumbnail?.asset?._ref || item.thumbnail?.asset?._id;
+        const authorId = settings?.profileImage?.asset?._ref || settings?.profileImage?.asset?._id;
+        return `/api/og?title=${encodeURIComponent(titleEn)}&type=ARTICLE&subtitle=READING_ENTRY${imageId ? `&imageId=${imageId}` : ''}${authorId ? `&authorImageId=${authorId}` : ''}`;
     };
 
     const title = t('title');
@@ -178,61 +186,105 @@ export default function ArticleDetail({ article, settings }) {
                                 {copied && <span className="absolute left-full ml-4 bg-blue-500 text-white text-[10px] px-2 py-1 font-mono whitespace-nowrap tracking-widest">COPIED</span>}
                             </button>
 
-                            <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${typeof window !== 'undefined' ? window.location.href : ''}`} target="_blank" rel="noopener noreferrer" className="w-full aspect-[3/2] flex items-center justify-center border border-foreground/10 hover:bg-foreground hover:text-background text-muted-foreground transition-all">
+                            <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${typeof window !== 'undefined' ? window.location.href : ''}`} target="_blank" rel="noopener noreferrer" className="w-full aspect-[3/2] flex items-center justify-center border border-foreground/10 hover:bg-foreground hover:text-background text-muted-foreground transition-all" title="Twitter / X">
                                 <RiTwitterXFill className="text-2xl" />
                             </a>
 
-                            {article.linkedinUrl && (
-                                <a href={article.linkedinUrl} target="_blank" rel="noopener noreferrer" className="w-full aspect-[3/2] flex items-center justify-center border border-foreground/10 hover:border-[#0077b5] hover:text-[#0077b5] text-muted-foreground transition-all">
-                                    <RiLinkedinFill className="text-2xl" />
-                                </a>
-                            )}
+                            <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${typeof window !== 'undefined' ? window.location.href : ''}`} target="_blank" rel="noopener noreferrer" className="w-full aspect-[3/2] flex items-center justify-center border border-foreground/10 hover:border-[#0077b5] hover:text-[#0077b5] text-muted-foreground transition-all" title="LinkedIn">
+                                <RiLinkedinFill className="text-2xl" />
+                            </a>
+
+                            <a href={`https://wa.me/?text=${encodeURIComponent(title + ' ' + (typeof window !== 'undefined' ? window.location.href : ''))}`} target="_blank" rel="noopener noreferrer" className="w-full aspect-[3/2] flex items-center justify-center border border-foreground/10 hover:border-[#25D366] hover:text-[#25D366] text-muted-foreground transition-all" title="WhatsApp">
+                                <RiWhatsappLine className="text-2xl" />
+                            </a>
+
+                            <a href={`https://www.facebook.com/sharer/sharer.php?u=${typeof window !== 'undefined' ? window.location.href : ''}`} target="_blank" rel="noopener noreferrer" className="w-full aspect-[3/2] flex items-center justify-center border border-foreground/10 hover:border-[#1877F2] hover:text-[#1877F2] text-muted-foreground transition-all" title="Facebook">
+                                <RiFacebookCircleLine className="text-2xl" />
+                            </a>
                         </div>
                     </div>
 
                     {/* Content Body */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.4, duration: 0.8 }}
-                        className="lg:col-span-8 prose prose-lg prose-invert max-w-none prose-headings:font-bold prose-p:leading-loose prose-p:text-foreground/80 prose-li:text-foreground/80"
-                    >
-                        {/* Featured Image (Schematic OG Cover) */}
-                        <div className="mb-20 relative rounded-xl overflow-hidden bg-muted border border-foreground/10 aspect-[1200/630] group">
-                            {(() => {
-                                const titleEn = article.title_en || article.title;
-                                const imageId = article.thumbnail?.asset?._id || article.thumbnail?.asset?._ref;
-                                const authorId = settings?.profileImage?.asset?._id || settings?.profileImage?.asset?._ref;
-                                const ogUrl = `/api/og?title=${encodeURIComponent(titleEn)}&type=ARTICLE&subtitle=READING_ENTRY${imageId ? `&imageId=${imageId}` : ''}${authorId ? `&authorImageId=${authorId}` : ''}`;
+                    <div className="lg:col-span-8">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.4, duration: 0.8 }}
+                            className="prose prose-lg prose-invert max-w-none prose-headings:font-bold prose-p:leading-loose prose-p:text-foreground/80 prose-li:text-foreground/80 mb-32"
+                        >
+                            {/* Featured Image (Schematic OG Cover) */}
+                            <div className="mb-20 relative rounded-xl overflow-hidden bg-muted border border-foreground/10 aspect-[1200/630] group">
+                                {(() => {
+                                    const titleEn = article.title_en || article.title;
+                                    const imageId = article.thumbnail?.asset?._id || article.thumbnail?.asset?._ref;
+                                    const authorId = settings?.profileImage?.asset?._id || settings?.profileImage?.asset?._ref;
+                                    const ogUrl = `/api/og?title=${encodeURIComponent(titleEn)}&type=ARTICLE&subtitle=READING_ENTRY${imageId ? `&imageId=${imageId}` : ''}${authorId ? `&authorImageId=${authorId}` : ''}`;
 
-                                return (
-                                    <>
-                                        <img
-                                            src={ogUrl}
-                                            alt={title}
-                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                        />
-                                        {/* Overlay Grid */}
-                                        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:100px_100px] pointer-events-none mix-blend-overlay" />
+                                    return (
+                                        <>
+                                            <img
+                                                src={ogUrl}
+                                                alt={title}
+                                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                            />
+                                            {/* Overlay Grid */}
+                                            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:100px_100px] pointer-events-none mix-blend-overlay" />
 
-                                        {/* Technical Markers */}
-                                        <div className="absolute top-4 left-4 z-20 px-3 py-1 bg-black/50 backdrop-blur-md border border-white/10 text-[10px] font-mono text-white/80 tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity">
-                                            FIG_MAIN :: COVER_ART
-                                        </div>
-                                    </>
-                                );
-                            })()}
-                        </div>
-
-                        {/* Article Text */}
-                        {content ? (
-                            <PortableText value={content} components={components} />
-                        ) : (
-                            <div className="p-12 border border-dashed border-foreground/20 text-center font-mono text-muted-foreground bg-foreground/5 uppercase tracking-widest">
-                                {isAr ? 'لا يوجد محتوى' : 'NO_CONTENT_AVAILABLE'}
+                                            {/* Technical Markers */}
+                                            <div className="absolute top-4 left-4 z-20 px-3 py-1 bg-black/50 backdrop-blur-md border border-white/10 text-[10px] font-mono text-white/80 tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity">
+                                                FIG_MAIN :: COVER_ART
+                                            </div>
+                                        </>
+                                    );
+                                })()}
                             </div>
-                        )}
-                    </motion.div>
+
+                            {/* Article Text */}
+                            {content ? (
+                                <PortableText value={content} components={components} />
+                            ) : (
+                                <div className="p-12 border border-dashed border-foreground/20 text-center font-mono text-muted-foreground bg-foreground/5 uppercase tracking-widest">
+                                    {isAr ? 'لا يوجد محتوى' : 'NO_CONTENT_AVAILABLE'}
+                                </div>
+                            )}
+                        </motion.div>
+
+                        {/* RELATED ARTICLES SECTION */}
+                        <div className="pt-20 border-t border-foreground/10">
+                            <div className="flex items-center gap-3 mb-12 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                                <span className="w-2 h-2 bg-blue-500 rounded-full" />
+                                <span>{isAr ? 'مقالات ذات صلة' : 'SYSTEM_RECOMMENDATIONS'}</span>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+                                {relatedArticles.map((related, i) => (
+                                    <Link key={related._id} href={`/articles/${related.slug.current}`} className="group block border border-foreground/10 bg-background hover:border-blue-500/50 transition-colors">
+                                        <div className="aspect-[1200/630] relative overflow-hidden border-b border-foreground/10 bg-muted">
+                                            <img
+                                                src={getOgUrl(related)}
+                                                alt={t('title', related) || related.title}
+                                                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                                            />
+                                        </div>
+                                        <div className="p-6">
+                                            <h4 className="text-lg font-bold uppercase leading-tight group-hover:text-blue-500 transition-colors mb-2">
+                                                {t('title', related) || related.title}
+                                            </h4>
+                                            <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
+                                                READ_ENTRY :: 0{i + 1}
+                                            </span>
+                                        </div>
+                                    </Link>
+                                ))}
+                            </div>
+
+                            {/* RETURN BUTTON */}
+                            <Link href="/articles" className="inline-flex w-full md:w-auto h-16 px-12 items-center justify-center gap-4 bg-foreground text-background font-mono text-sm font-bold uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all group">
+                                <RiArrowLeftLine className={`text-lg transition-transform group-hover:-translate-x-1 ${isAr ? 'rotate-180 group-hover:translate-x-1 group-hover:-translate-x-0' : ''}`} />
+                                <span>{isAr ? 'العودة إلى الفهرس' : 'RETURN TO ARCHIVE'}</span>
+                            </Link>
+                        </div>
+                    </div>
                 </div>
 
 

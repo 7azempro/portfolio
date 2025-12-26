@@ -47,12 +47,13 @@ export async function generateMetadata({ params }) {
 export default async function ArticlePage({ params }) {
     const { id } = await params;
 
-    // Fetch specific article by ID + Global Settings (for Author)
+    // Fetch specific article by ID + Global Settings + Related Articles
     const query = `{
         "article": *[_type == "article" && _id == $id][0] { ..., thumbnail { asset-> } },
-        "settings": *[_type == "settings"][0] { siteTitle, profileImage { asset-> } }
+        "settings": *[_type == "settings"][0] { siteTitle, profileImage { asset-> } },
+        "relatedArticles": *[_type == "article" && _id != $id] | order(date desc)[0...3] { ..., thumbnail { asset-> } }
     }`;
-    const { article, settings } = await client.fetch(query, { id });
+    const { article, settings, relatedArticles } = await client.fetch(query, { id });
 
     if (!article) {
         return (
@@ -62,5 +63,5 @@ export default async function ArticlePage({ params }) {
         );
     }
 
-    return <ArticleDetail article={article} settings={settings} />;
+    return <ArticleDetail article={article} settings={settings} relatedArticles={relatedArticles} />;
 }

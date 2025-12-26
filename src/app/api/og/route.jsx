@@ -72,27 +72,28 @@ export async function GET(request) {
                             }}
                         />
 
-                        {/* TOP: Brand & Type */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 20, zIndex: 10 }}>
-                            <div style={{
-                                width: 50,
-                                height: 50,
-                                background: '#3b82f6',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                borderRadius: 8,
-                                fontSize: 28,
-                                fontWeight: 900,
-                            }}>7</div>
+                        {/* TOP: Full Brand Logo */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 16, zIndex: 10 }}>
+                            {/* Logo Mark */}
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <div style={{ fontSize: 40, fontWeight: 900, color: 'white', letterSpacing: '-0.05em' }}>7azem</div>
+                                <div style={{ fontSize: 40, fontWeight: 300, color: '#94a3b8', letterSpacing: '-0.05em' }}>pro</div>
+                                <div style={{ width: 10, height: 10, marginLeft: 4, background: '#3b82f6', transform: 'rotate(45deg)', borderRadius: 2 }} />
+                            </div>
+
+                            {/* Divider */}
+                            <div style={{ width: 1, height: 30, background: 'rgba(255,255,255,0.2)' }} />
+
+                            {/* System Tag */}
                             <div style={{
                                 fontFamily: 'monospace',
-                                fontSize: 16,
+                                fontSize: 14,
                                 letterSpacing: '0.2em',
-                                color: '#94a3b8',
+                                color: '#64748b',
                                 textTransform: 'uppercase',
+                                display: 'flex',
                             }}>
-                                系统 :: {type}
+                                {`SYS :: ${type}`}
                             </div>
                         </div>
 
@@ -123,8 +124,9 @@ export async function GET(request) {
                                 fontSize: 24,
                                 color: '#64748b',
                                 marginTop: 10,
+                                display: 'flex', // Safety
                             }}>
-                                {subtitle} // KNOWLEDGE_BASE
+                                {`${subtitle} // KNOWLEDGE_BASE`}
                             </div>
                         </div>
 
