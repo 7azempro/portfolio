@@ -2,6 +2,7 @@
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { motion } from 'framer-motion';
 import { PiArrowUpRightLight, PiDownloadSimpleLight, PiMapPinLight, PiClockLight, PiStackLight, PiGraduationCapLight } from 'react-icons/pi';
+import Image from 'next/image';
 
 export default function AboutClient({ data }) {
     const { lang } = useLanguage();
@@ -39,6 +40,7 @@ export default function AboutClient({ data }) {
         role: (isAr ? data?.role : data?.role_en) || (isAr ? FALLBACK_CONTENT.role : FALLBACK_CONTENT.role_en),
         location: (isAr ? data?.location : data?.location_en) || (isAr ? FALLBACK_CONTENT.location : FALLBACK_CONTENT.location_en),
         bio: (isAr ? data?.bio : data?.bio_en) || (isAr ? FALLBACK_CONTENT.bio : FALLBACK_CONTENT.bio_en),
+        image: data?.image || '/assets/hazem-upwork.jpg',
         stats: (data?.stats && data.stats.length > 0) ? data.stats : FALLBACK_CONTENT.stats,
         tools: (data?.tools && data.tools.length > 0) ? data.tools : FALLBACK_CONTENT.tools,
         education: (data?.education && data.education.length > 0) ? data.education : FALLBACK_CONTENT.education,
@@ -83,7 +85,23 @@ export default function AboutClient({ data }) {
                     <div className="absolute inset-0 bg-grid-pattern opacity-[0.05] pointer-events-none" />
                     <div className="relative z-10 flex flex-col h-full justify-between gap-12">
                         <div>
-                            <div className="w-20 h-20 bg-foreground text-background flex items-center justify-center text-3xl font-bold mb-8 rounded-full">7Z</div>
+                            {/* Profile Picture */}
+                            <div className="relative w-24 h-24 mb-8">
+                                <div className="w-full h-full rounded-full overflow-hidden border-2 border-foreground/10 shadow-xl relative z-10">
+                                    <Image
+                                        src={finalData.image}
+                                        alt="Hazem"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </div>
+                                {/* Decorative Rings */}
+                                <div className="absolute inset-0 rounded-full border border-blue-500/30 scale-110 animate-pulse" />
+                                <div className="absolute -right-2 -bottom-2 bg-blue-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full z-20 border-2 border-background">
+                                    PRO
+                                </div>
+                            </div>
+
                             <h2 className="text-xl font-bold uppercase tracking-tight mb-2 leading-tight">{finalData.role}</h2>
                             <div className="flex items-center gap-2 text-muted-foreground text-sm font-sans mb-8">
                                 <PiMapPinLight />

@@ -8,7 +8,8 @@ import { LanguageProvider } from '@/lib/context/LanguageContext';
 import ThemeSync from '@/components/layout/ThemeSync';
 import Cursor from '@/components/ui/Cursor';
 import Preloader from '@/components/ui/Preloader';
-import HelpWidget from '@/components/ui/HelpWidget';
+import HelpWidget from '@/components/ui/help-widget';
+import LiveChatWidget from '@/components/ui/LiveChatWidget';
 import { SoundProvider } from '@/lib/context/SoundContext';
 
 export default function ClientProviders({ children, fontVariables, nav, socials }) {
@@ -44,7 +45,11 @@ export default function ClientProviders({ children, fontVariables, nav, socials 
                 <Cursor />
                 <Header nav={nav} />
                 {children}
+
+                {/* Global Widgets */}
                 <HelpWidget />
+                <LiveChatWidget />
+
                 <Footer socials={socials} />
             </LanguageProvider>
         </SoundProvider>

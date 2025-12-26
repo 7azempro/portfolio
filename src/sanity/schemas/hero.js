@@ -60,18 +60,21 @@ export const hero = {
             title: 'Title (English)',
             type: 'text',
             rows: 2,
+            initialValue: 'Engineering The\nDigital Future.',
             validation: Rule => Rule.required()
         },
         {
             name: 'subtitle_en',
             title: 'Subtitle (English)',
             type: 'string',
+            initialValue: 'Precision-Engineered.'
         },
         {
             name: 'desc_en',
             title: 'Description (English)',
             type: 'text',
-            rows: 3
+            rows: 3,
+            initialValue: 'We transform complex vision into high-performance digital reality. Precision-engineered systems for brands that demand excellence.'
         },
         {
             name: 'roles_en',
@@ -84,7 +87,7 @@ export const hero = {
             name: 'availability_en',
             title: 'Status Text (English)',
             type: 'string',
-            initialValue: 'AVAILABLE_FOR_WORK'
+            initialValue: 'Available for Work'
         },
         {
             name: 'location_en',
@@ -96,13 +99,13 @@ export const hero = {
             name: 'cta_primary_en',
             title: 'Primary Button (English)',
             type: 'string',
-            initialValue: 'INITIATE_PROJECT'
+            initialValue: 'Start Project'
         },
         {
             name: 'cta_secondary_en',
             title: 'Secondary Button (English)',
             type: 'string',
-            initialValue: 'VIEW_INDEX'
+            initialValue: 'View Works'
         }
     ],
     preview: {

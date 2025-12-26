@@ -11,15 +11,15 @@ export default function Insights({ articles = [] }) {
 
     const t = {
         ar: {
-            heading: "أفكار ورؤى",
-            sub: "مقتطفات من لينكد إن",
-            readMore: "اقرأ على LinkedIn",
+            heading: "المقالات",
+            sub: "أحدث المنشورات",
+            readMore: "اقرأ المزيد",
             fallbackDate: "2025-01-01"
         },
         en: {
-            heading: "INSIGHTS",
-            sub: "THOUGHTS_ON_SYSTEMS",
-            readMore: "Read on LinkedIn",
+            heading: "ARTICLES",
+            sub: "LATEST_POSTS",
+            readMore: "Read Article",
             fallbackDate: "JAN 01, 2025"
         }
     };

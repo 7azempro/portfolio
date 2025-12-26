@@ -51,9 +51,8 @@ export default function TechStack({ data = [] }) {
     ];
 
     // Priority: Sanity Data > Fallback
-    // User requested "Start from Sanity", so we disable fallback to ensure we see only CMS data.
-    // const displayData = data.length > 0 ? data : FALLBACK_TECH;
-    const displayData = data;
+    // Ensure data is an array to prevent crashes
+    const displayData = Array.isArray(data) ? data : [];
 
     // Filter rows (if data has 'row' field, otherwise split evenly or default to row 1)
     // If coming from CMS without explicit row, we might want to distribute them.
