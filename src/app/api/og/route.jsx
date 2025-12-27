@@ -49,17 +49,12 @@ export async function GET(request) {
             loadFont('https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-sans-arabic@latest/arabic-700-normal.woff', 'IBM Plex Sans Arabic', 700)
         ]);
 
-        // Filter out failed fonts
         const validFonts = [fontJakarta, fontJakartaLight, fontArabic].filter(Boolean);
-
-        // Helper: Detect Arabic
         const hasArabic = (text) => /[\u0600-\u06FF]/.test(text || "");
 
-        // Theme Constants
+        // Theme Constants (Swiss Clean)
         const COLOR_BG = '#020617';
         const COLOR_GRID = '#ffffff08';
-        const COLOR_ACCENT = '#3b82f6';
-        const COLOR_ACCENT_2 = '#8b5cf6';
         const COLOR_TEXT = '#ffffff';
         const COLOR_MUTED = '#94a3b8';
         const COLOR_BORDER = 'rgba(255,255,255,0.1)';
@@ -82,29 +77,7 @@ export async function GET(request) {
                         padding: '60px',
                     }}
                 >
-                    {/* 1. LAYER: Aurora Gradient (Atmospheric Background) */}
-                    <div style={{
-                        position: 'absolute',
-                        top: '-50%',
-                        left: '-20%',
-                        width: '140%',
-                        height: '200%',
-                        background: 'radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.15), transparent 60%)',
-                        zIndex: 0,
-                        transform: 'rotate(-10deg)',
-                    }} />
-                    <div style={{
-                        position: 'absolute',
-                        bottom: '-50%',
-                        right: '-20%',
-                        width: '140%',
-                        height: '200%',
-                        background: 'radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.1), transparent 60%)',
-                        zIndex: 0,
-                        transform: 'rotate(10deg)',
-                    }} />
-
-                    {/* 2. LAYER: Blueprint Grid */}
+                    {/* 1. LAYER: Blueprint Grid (No Aurora) */}
                     <div
                         style={{
                             position: 'absolute',
@@ -115,28 +88,9 @@ export async function GET(request) {
                         }}
                     />
 
-                    {/* 3. LAYER: Geometric Scaffolding (Thin Circles) */}
-                    <div style={{
-                        position: 'absolute',
-                        width: 900,
-                        height: 900,
-                        border: '1px solid rgba(255,255,255,0.03)',
-                        borderRadius: '50%',
-                        zIndex: 1,
-                    }} />
-                    <div style={{
-                        position: 'absolute',
-                        width: 1200,
-                        height: 1200,
-                        border: '1px dashed rgba(255,255,255,0.02)',
-                        borderRadius: '50%',
-                        zIndex: 1,
-                        transform: 'rotate(45deg)',
-                    }} />
-
-                    {/* 4. LAYER: Background Image (Deep Integration) */}
+                    {/* 2. LAYER: Background Image */}
                     {bgImage && (
-                        <div style={{ position: 'absolute', inset: 0, zIndex: 0, opacity: 0.3, display: 'flex' }}>
+                        <div style={{ position: 'absolute', inset: 0, zIndex: 0, opacity: 0.2, display: 'flex' }}>
                             <img src={bgImage} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </div>
                     )}
@@ -144,33 +98,30 @@ export async function GET(request) {
                         <div style={{ position: 'absolute', inset: 0, zIndex: 0, opacity: 0.3, background: `radial-gradient(circle at center, transparent 20%, ${COLOR_BG} 100%)` }} />
                     )}
 
-                    {/* 5. LAYER: Tech Tags */}
-                    {/* System Tag */}
+                    {/* 3. LAYER: Tech Tags (Minimal) */}
                     <div style={{ position: 'absolute', top: 40, left: 40, display: 'flex', alignItems: 'center', gap: 8, zIndex: 10 }}>
-                        <div style={{ width: 6, height: 6, background: COLOR_ACCENT, borderRadius: '50%', boxShadow: `0 0 10px ${COLOR_ACCENT}` }} />
+                        <div style={{ width: 6, height: 6, background: 'white', borderRadius: '50%' }} />
                         <div style={{ fontFamily: 'monospace', fontSize: 12, letterSpacing: '0.2em', color: COLOR_MUTED, textTransform: 'uppercase', display: 'flex' }}>
                             SYS :: {type}
                         </div>
                     </div>
 
-                    {/* Barcode */}
-                    <div style={{ position: 'absolute', top: 40, right: 40, display: 'flex', gap: 3, opacity: 0.4, zIndex: 10 }}>
+                    {/* Barcode (Swiss style) */}
+                    <div style={{ position: 'absolute', top: 40, right: 40, display: 'flex', gap: 3, opacity: 0.3, zIndex: 10 }}>
                         {[...Array(12)].map((_, i) => (
                             <div key={i} style={{ width: [1, 2, 1, 3][i % 4], height: 20, background: 'white' }} />
                         ))}
                     </div>
 
-                    {/* 6. LAYER: Framing - FLATTENED for Satori Stability */}
-                    {/* Top Left */}
-                    <div style={{ position: 'absolute', top: 30, left: 30, width: 1, height: 30, background: 'linear-gradient(to bottom, white, transparent)', zIndex: 5 }} />
-                    <div style={{ position: 'absolute', top: 30, left: 30, width: 30, height: 1, background: 'linear-gradient(to right, white, transparent)', zIndex: 5 }} />
+                    {/* 4. LAYER: Framing - Clean Lines */}
+                    <div style={{ position: 'absolute', top: 30, left: 30, width: 1, height: 30, background: 'white', zIndex: 5, opacity: 0.3 }} />
+                    <div style={{ position: 'absolute', top: 30, left: 30, width: 30, height: 1, background: 'white', zIndex: 5, opacity: 0.3 }} />
 
-                    {/* Bottom Right */}
-                    <div style={{ position: 'absolute', bottom: 30, right: 30, width: 1, height: 30, background: 'linear-gradient(to top, white, transparent)', zIndex: 5 }} />
-                    <div style={{ position: 'absolute', bottom: 30, right: 30, width: 30, height: 1, background: 'linear-gradient(to left, white, transparent)', zIndex: 5 }} />
+                    <div style={{ position: 'absolute', bottom: 30, right: 30, width: 1, height: 30, background: 'white', zIndex: 5, opacity: 0.3 }} />
+                    <div style={{ position: 'absolute', bottom: 30, right: 30, width: 30, height: 1, background: 'white', zIndex: 5, opacity: 0.3 }} />
 
 
-                    {/* 7. LAYER: Content Core (Centered) */}
+                    {/* 5. LAYER: Content Core (Centered) */}
                     <div style={{
                         display: 'flex',
                         flexDirection: 'column',
@@ -182,34 +133,27 @@ export async function GET(request) {
                         textAlign: 'center',
                     }}>
 
-                        {/* Brand Pill */}
+                        {/* 7AZEMPRO Signature (Stark White) */}
                         <div style={{
                             display: 'flex',
                             alignItems: 'center',
                             gap: 8,
-                            padding: '6px 16px',
-                            background: 'rgba(255,255,255,0.05)',
-                            borderRadius: 100,
-                            border: `1px solid ${COLOR_BORDER}`,
                             marginBottom: 10
                         }}>
-                            <div style={{ fontSize: 16, fontWeight: 700, color: 'white', display: 'flex' }}>7azempro</div>
-                            <div style={{ width: 1, height: 12, background: 'rgba(255,255,255,0.2)' }} />
-                            <div style={{ width: 16, height: 16, borderRadius: '50%', background: `linear-gradient(135deg, ${COLOR_ACCENT}, ${COLOR_ACCENT_2})`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <div style={{ width: 6, height: 6, background: 'white', borderRadius: '50%' }} />
+                            <div style={{ fontSize: 14, fontFamily: 'monospace', letterSpacing: '0.1em', color: COLOR_MUTED, display: 'flex' }}>
+                                 // 7AZEMPRO
                             </div>
                         </div>
 
                         {/* Monumental Title */}
                         <div style={{
-                            fontSize: 84, // Slightly larger
+                            fontSize: 84,
                             fontWeight: hasArabic(title) ? 700 : 900,
                             fontFamily: hasArabic(title) ? '"IBM Plex Sans Arabic", sans-serif' : '"Plus Jakarta Sans", sans-serif',
                             lineHeight: 0.9,
                             letterSpacing: hasArabic(title) ? '0' : '-0.06em',
                             textTransform: 'uppercase',
                             color: COLOR_TEXT,
-                            textShadow: '0 0 80px rgba(59, 130, 246, 0.5)',
                             textAlign: 'center',
                             display: 'flex',
                             justifyContent: 'center',
@@ -228,7 +172,6 @@ export async function GET(request) {
                                 fontWeight: 600,
                                 color: '#cbd5e1',
                                 marginTop: -8,
-                                display: 'flex', // Satori Fix
                             }}>
                                 {titleAr}
                             </div>
@@ -240,17 +183,17 @@ export async function GET(request) {
                                 fontFamily: 'monospace',
                                 fontSize: 16,
                                 letterSpacing: '0.2em',
-                                color: COLOR_ACCENT,
+                                color: COLOR_MUTED, // Muted instead of Accent
                                 textTransform: 'uppercase',
                                 marginTop: 8
                             }}>
-                                // {subtitle}
+                                {subtitle} _
                             </div>
                         )}
 
                     </div>
 
-                    {/* 8. LAYER: Footer (Reduced Visual Weight) */}
+                    {/* 6. Footer */}
                     <div style={{
                         position: 'absolute',
                         bottom: 40,
@@ -260,7 +203,6 @@ export async function GET(request) {
                         zIndex: 10,
                         opacity: 0.8,
                     }}>
-                        {/* Minimalist Avatar */}
                         {authorImage ? (
                             <img
                                 src={authorImage}
