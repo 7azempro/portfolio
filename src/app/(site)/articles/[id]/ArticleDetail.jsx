@@ -212,7 +212,7 @@ export default function ArticleDetail({ article, settings, relatedArticles = [] 
                             className="prose prose-lg prose-invert max-w-none prose-headings:font-bold prose-p:leading-loose prose-p:text-foreground/80 prose-li:text-foreground/80 mb-32"
                         >
                             {/* Featured Image (Schematic OG Cover) */}
-                            <div className="mb-20 relative rounded-none overflow-hidden bg-transparent border border-foreground/20 aspect-[1200/630] group">
+                            <div className="mb-20 relative rounded-xl overflow-hidden shadow-2xl shadow-blue-900/10 aspect-[1200/630] group">
                                 {(() => {
                                     const titleEn = article.title_en || article.title;
                                     const imageId = article.thumbnail?.asset?._id || article.thumbnail?.asset?._ref;
@@ -241,8 +241,11 @@ export default function ArticleDetail({ article, settings, relatedArticles = [] 
                                             {/* Overlay Grid */}
                                             <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:100px_100px] pointer-events-none mix-blend-overlay" />
 
+                                            {/* Gradient Fade */}
+                                            <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-60" />
+
                                             {/* Technical Markers */}
-                                            <div className="absolute top-4 left-4 z-20 px-3 py-1 bg-black/50 backdrop-blur-md border border-white/10 text-[10px] font-mono text-white/80 tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <div className="absolute bottom-4 left-4 z-20 px-3 py-1 bg-background/50 backdrop-blur-md border border-foreground/10 text-[10px] font-mono text-foreground/80 tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity">
                                                 FIG_MAIN :: {article.thumbnail?.asset ? 'STORED_ASSET' : 'LIVE_GEN'}
                                             </div>
                                         </>

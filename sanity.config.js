@@ -6,7 +6,8 @@
 
 import { visionTool } from '@sanity/vision'
 import { defineConfig } from 'sanity'
-import { structureTool } from 'sanity/structure'
+import { structureTool } from 'sanity/structure' // Helper for Web Previews
+import { Iframe } from 'sanity-plugin-iframe-pane'
 import { media } from 'sanity-plugin-media'
 import { codeInput } from '@sanity/code-input'
 import { dashboardTool, projectUsersWidget, projectInfoWidget } from '@sanity/dashboard'

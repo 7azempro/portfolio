@@ -10,7 +10,7 @@ export default async function BlogPage() {
             <h1 className="text-4xl font-bold mb-12">الكتابة والأفكار</h1>
 
             <div className="space-y-10">
-                {articles.map((article) => (
+                {articles.filter(a => a.slug?.current).map((article) => (
                     <Link key={article._id} href={`/blog/${article.slug.current}`} className="group block border-b border-border pb-10">
                         <div className="flex items-center gap-3 text-sm text-muted-foreground mb-3">
                             <PiCalendarBlankLight className="w-4 h-4" />
@@ -23,7 +23,7 @@ export default async function BlogPage() {
                         </h2>
                         <p className="text-muted-foreground">
                             {/* Truncate content or add snippet field in sanity later */}
-                            Click to read more...
+                            {article.excerpt || "Click to read more..."}
                         </p>
                     </Link>
                 ))}

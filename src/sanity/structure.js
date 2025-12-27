@@ -4,11 +4,12 @@ import {
     RiDatabase2Line, RiSettings3Line, RiShieldUserLine
 } from "react-icons/ri";
 // Helper for Web Previews
-import { Iframe } from 'sanity-plugin-iframe-pane'
+// import { Iframe } from 'sanity-plugin-iframe-pane'
 
 // Define the "Web Preview" view
 export const defaultDocumentNode = (S, { schemaType }) => {
     // Only enable for specific types
+    /*
     if (['article', 'project', 'hero'].includes(schemaType)) {
         return S.document().views([
             S.view.form(), // Default Form
@@ -23,11 +24,12 @@ export const defaultDocumentNode = (S, { schemaType }) => {
                         return 'http://localhost:3000';
                     },
                     defaultSize: 'desktop',
-                    reload: { button: true },
+                    reload: { button: true }, 
                 })
                 .title('Live Preview'),
         ])
     }
+    */
     return S.document().views([S.view.form()])
 }
 
