@@ -41,6 +41,7 @@
     "react-icons": "^5.5.0",
     "sanity": "^5.1.0",
     "sanity-plugin-dashboard-widget-document-list": "^2.1.1",
+    "sanity-plugin-iframe-pane": "^4.0.0",
     "sanity-plugin-media": "^4.1.1",
     "sanity-plugin-seo-pane": "^2.0.1",
     "sharp": "^0.34.5",

@@ -21,6 +21,17 @@ export const project = {
             validation: Rule => Rule.required()
         },
         {
+            name: 'slug',
+            title: 'Slug',
+            type: 'slug',
+            fieldset: 'arabic',
+            options: {
+                source: 'title',
+                maxLength: 96,
+            },
+            validation: Rule => Rule.required()
+        },
+        {
             name: 'category',
             title: 'Category (Arabic)',
             type: 'string',

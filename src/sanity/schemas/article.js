@@ -22,6 +22,17 @@ export const article = {
             validation: Rule => Rule.required()
         },
         {
+            name: 'slug',
+            title: 'Slug',
+            type: 'slug',
+            fieldset: 'content',
+            options: {
+                source: 'title',
+                maxLength: 96,
+            },
+            validation: Rule => Rule.required()
+        },
+        {
             name: 'title_en',
             title: 'Title (English)',
             type: 'string',
@@ -30,14 +41,16 @@ export const article = {
         },
         {
             name: 'excerpt',
-            title: 'Excerpt (Arabic)',
+            description: 'Short summary for SEO and Cards (Google/Twitter). Max 160 chars recommended.',
             type: 'text',
             rows: 3,
-            fieldset: 'content'
+            fieldset: 'content',
+            validation: Rule => Rule.max(200)
         },
         {
             name: 'excerpt_en',
             title: 'Excerpt (English)',
+            description: 'English summary for SEO. Important for international sharing.',
             type: 'text',
             rows: 3,
             fieldset: 'content'

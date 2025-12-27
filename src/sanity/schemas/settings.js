@@ -47,6 +47,20 @@ export const settings = {
             fieldset: 'contact'
         },
         {
+            name: 'authorName',
+            title: 'Author Name',
+            type: 'string',
+            fieldset: 'contact',
+            initialValue: 'Hazem Ismail'
+        },
+        {
+            name: 'authorRole',
+            title: 'Author Role',
+            type: 'string',
+            fieldset: 'contact',
+            initialValue: 'System Architect'
+        },
+        {
             name: 'profileImage',
             title: 'Profile Picture (Avatar)',
             type: 'image',

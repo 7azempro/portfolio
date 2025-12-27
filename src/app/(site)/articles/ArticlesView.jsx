@@ -6,6 +6,8 @@ import { RiTimeLine, RiArrowRightUpLine, RiHashtag } from 'react-icons/ri';
 import { PiArrowDownLight } from 'react-icons/pi';
 import { useLanguage } from '@/lib/context/LanguageContext';
 
+import { urlFor } from '@/sanity/lib/image';
+
 import { estimateReadingTime } from '@/lib/readingTime';
 
 export default function ArticlesView({ articles, settings }) {
@@ -39,9 +41,17 @@ export default function ArticlesView({ articles, settings }) {
 
     // OG Helper
     const getOgUrl = (article) => {
+        // PRIORITY 1: Stored Static Asset
+        if (article.thumbnail?.asset) {
+            try {
+                return urlFor(article.thumbnail).width(1200).height(630).url();
+            } catch (e) { console.error("URL Builder Error", e); }
+        }
+
+        // PRIORITY 2: Dynamic Fallback
         const titleEn = article.title_en || article.title;
-        const imageId = article.thumbnail?.asset?._ref;
-        const authorId = settings?.profileImage?.asset?._ref;
+        const imageId = article.thumbnail?.asset?._ref || article.thumbnail?.asset?._id;
+        const authorId = settings?.profileImage?.asset?._ref || settings?.profileImage?.asset?._id;
         return `/api/og?title=${encodeURIComponent(titleEn)}&type=ARTICLE&subtitle=READING_ENTRY${imageId ? `&imageId=${imageId}` : ''}${authorId ? `&authorImageId=${authorId}` : ''}`;
     };
 

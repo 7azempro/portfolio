@@ -125,7 +125,7 @@ export default function ArticleDetail({ article, settings, relatedArticles = [] 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
-                    className="mb-20 pt-12"
+                    className="mb-10"
                 >
                     {/* Industrial Meta Bar */}
                     <div className="flex flex-wrap items-center gap-6 mb-8 font-mono text-xs text-blue-500 uppercase tracking-widest border-b border-foreground/10 pb-6">
@@ -212,17 +212,29 @@ export default function ArticleDetail({ article, settings, relatedArticles = [] 
                             className="prose prose-lg prose-invert max-w-none prose-headings:font-bold prose-p:leading-loose prose-p:text-foreground/80 prose-li:text-foreground/80 mb-32"
                         >
                             {/* Featured Image (Schematic OG Cover) */}
-                            <div className="mb-20 relative rounded-xl overflow-hidden bg-muted border border-foreground/10 aspect-[1200/630] group">
+                            <div className="mb-20 relative rounded-none overflow-hidden bg-transparent border border-foreground/20 aspect-[1200/630] group">
                                 {(() => {
                                     const titleEn = article.title_en || article.title;
                                     const imageId = article.thumbnail?.asset?._id || article.thumbnail?.asset?._ref;
                                     const authorId = settings?.profileImage?.asset?._id || settings?.profileImage?.asset?._ref;
-                                    const ogUrl = `/api/og?title=${encodeURIComponent(titleEn)}&type=ARTICLE&subtitle=READING_ENTRY${imageId ? `&imageId=${imageId}` : ''}${authorId ? `&authorImageId=${authorId}` : ''}`;
+
+                                    // PRIORITY 1: Stored Static Asset
+                                    let displayUrl;
+                                    try {
+                                        if (article.thumbnail?.asset) {
+                                            displayUrl = urlFor(article.thumbnail).width(1200).height(630).url();
+                                        }
+                                    } catch (e) { console.error(e); }
+
+                                    // PRIORITY 2: Dynamic Fallback
+                                    if (!displayUrl) {
+                                        displayUrl = `/api/og?title=${encodeURIComponent(titleEn)}&type=ARTICLE&subtitle=READING_ENTRY${imageId ? `&imageId=${imageId}` : ''}${authorId ? `&authorImageId=${authorId}` : ''}`;
+                                    }
 
                                     return (
                                         <>
                                             <img
-                                                src={ogUrl}
+                                                src={displayUrl}
                                                 alt={title}
                                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                             />
@@ -231,7 +243,7 @@ export default function ArticleDetail({ article, settings, relatedArticles = [] 
 
                                             {/* Technical Markers */}
                                             <div className="absolute top-4 left-4 z-20 px-3 py-1 bg-black/50 backdrop-blur-md border border-white/10 text-[10px] font-mono text-white/80 tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity">
-                                                FIG_MAIN :: COVER_ART
+                                                FIG_MAIN :: {article.thumbnail?.asset ? 'STORED_ASSET' : 'LIVE_GEN'}
                                             </div>
                                         </>
                                     );

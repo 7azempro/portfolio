@@ -26,10 +26,22 @@ export default function OGGeneratorInput(props) {
                 return;
             }
 
+            setStatus('Fetching Global Settings...');
+
+            // 2. Fetch Settings for Author Data
+            const settings = await client.fetch(`*[_type == "settings"][0]{ 
+                "imageId": profileImage.asset._ref,
+                "name": authorName,
+                "role": authorRole
+            }`);
+
+            const authorImageId = settings?.imageId;
+            const authorName = settings?.name;
+            const authorRole = settings?.role;
+
             setStatus('Generating OG Image from API...');
 
-            // 2. Call Local OG API
-            // Use relative path to avoid CORS/Origin issues in Next.js embedded studio
+            // 3. Call Local OG API
             const params = new URLSearchParams({
                 title: title,
                 type: 'ARTICLE',
@@ -40,6 +52,10 @@ export default function OGGeneratorInput(props) {
                 params.append('title_ar', titleAr);
             }
 
+            if (authorImageId) params.append('authorImageId', authorImageId);
+            if (authorName) params.append('authorName', authorName);
+            if (authorRole) params.append('authorRole', authorRole);
+
             const apiUrl = `/api/og?${params.toString()}`;
             console.log("Fetching OG from:", apiUrl);
 
@@ -47,7 +63,6 @@ export default function OGGeneratorInput(props) {
             const response = await fetch(apiUrl);
 
             if (!response.ok) {
-                // Try to read error text
                 const text = await response.text();
                 throw new Error(`API Error ${response.status}: ${text.substring(0, 100)}`);
             }
@@ -56,14 +71,14 @@ export default function OGGeneratorInput(props) {
 
             setStatus('Uploading to Sanity...');
 
-            // 3. Upload to Sanity Assets
+            // 4. Upload to Sanity Assets
             const asset = await client.assets.upload('image', blob, {
                 filename: `og-${title.substring(0, 20)}.png`
             });
 
             setStatus('Patching Document...');
 
-            // 4. Update the Field (Patch)
+            // 5. Update the Field (Patch)
             await client
                 .patch(document._id)
                 .set({
@@ -96,7 +111,7 @@ export default function OGGeneratorInput(props) {
                 </Flex>
 
                 <Text size={1} muted>
-                    This will auto-generate a brand-aligned social cover image based on the article's titles and category, then upload it to the <strong>Thumbnail</strong> field.
+                    This will auto-generate a brand-aligned social cover image based on the article's titles and category. It fetches your **Profile Picture** from Global Settings and includes it in the design.
                 </Text>
 
                 {status && (
