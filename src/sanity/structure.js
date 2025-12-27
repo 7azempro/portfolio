@@ -61,29 +61,41 @@ export const structure = (S) =>
     S.list()
         .title('CMS Dashboard')
         .items([
-            // 1. CORE PAGES (Top Level)
+            // 1. CONTENT ENGINE (Daily Drivers)
             S.listItem()
-                .title('Home Page')
-                .icon(RiLayoutTopLine)
-                .child(S.document().schemaType('hero').documentId('hero').title('Home Content')),
-
-            S.listItem()
-                .title('About Bio')
-                .icon(RiUser3Line)
-                .child(S.document().schemaType('about').documentId('about').title('About Me')),
+                .title('Content Engine')
+                .icon(RiArticleLine)
+                .child(
+                    S.list()
+                        .title('Content')
+                        .items([
+                            S.documentTypeListItem('article').title('Articles'),
+                            S.documentTypeListItem('project').title('Projects'),
+                            S.documentTypeListItem('service').title('Services'),
+                            S.documentTypeListItem('socialPost').title('Social Feed'),
+                        ])
+                ),
 
             S.divider(),
 
-            // 2. MAIN CONTENT
-            S.documentTypeListItem('article').title('Articles').icon(RiArticleLine),
-            S.documentTypeListItem('project').title('Projects').icon(RiBriefcaseLine),
-            S.documentTypeListItem('service').title('Services').icon(RiServerLine),
-
-            S.divider(),
-
-            // 3. COMMERCE & LMS (Grouped)
+            // 2. KNOWLEDGE BASE (CV & Data)
             S.listItem()
-                .title('Business Engine')
+                .title('Knowledge Base')
+                .icon(RiDatabase2Line)
+                .child(
+                    S.list()
+                        .title('Knowledge')
+                        .items([
+                            S.documentTypeListItem('tech').title('Tech Stack'),
+                            S.documentTypeListItem('experience').title('Experience'),
+                            S.documentTypeListItem('education').title('Education'),
+                            S.documentTypeListItem('testimonial').title('Testimonials'),
+                        ])
+                ),
+
+            // 3. COMMERCE & LMS (Business Logic)
+            S.listItem()
+                .title('Commerce & LMS')
                 .icon(RiShoppingCartLine)
                 .child(
                     S.list()
@@ -99,32 +111,55 @@ export const structure = (S) =>
 
             S.divider(),
 
-            // 4. DATABASE / ASSETS (Grouped)
+            // 4. SITE ARCHITECTURE (Page Builders)
             S.listItem()
-                .title('Asset Library')
-                .icon(RiDatabase2Line)
+                .title('Site Architecture')
+                .icon(RiLayoutTopLine)
                 .child(
                     S.list()
-                        .title('Assets')
+                        .title('Pages')
                         .items([
-                            S.documentTypeListItem('tech').title('Tech Stack'),
-                            S.documentTypeListItem('experience').title('Experience'),
-                            S.documentTypeListItem('education').title('Education'),
-                            S.documentTypeListItem('testimonial').title('Testimonials'),
-                            S.documentTypeListItem('socialPost').title('Social Feed'),
+                            S.listItem()
+                                .title('Home Page')
+                                .icon(RiLayoutTopLine)
+                                .child(
+                                    S.document()
+                                        .schemaType('hero')
+                                        .documentId('hero')
+                                        .title('Home Page')
+                                ),
+                            S.listItem()
+                                .title('About Bio')
+                                .icon(RiUser3Line)
+                                .child(
+                                    S.document()
+                                        .schemaType('about')
+                                        .documentId('about')
+                                        .title('About Bio')
+                                ),
                         ])
                 ),
 
             S.divider(),
 
-            // 5. GLOBAL CONFIG
+            // 5. SYSTEM (Global Config)
             S.listItem()
-                .title('Site Settings')
+                .title('System')
                 .icon(RiSettings3Line)
                 .child(
-                    S.document()
-                        .schemaType('settings')
-                        .documentId('settings')
-                        .title('Global Settings')
+                    S.list()
+                        .title('System')
+                        .items([
+                            S.listItem()
+                                .title('Global Settings')
+                                .icon(RiSettings3Line)
+                                .child(
+                                    S.document()
+                                        .schemaType('settings')
+                                        .documentId('settings')
+                                        .title('Global Settings')
+                                ),
+                            // Add future system docs here (e.g., Redirects, Menus)
+                        ])
                 ),
         ]);

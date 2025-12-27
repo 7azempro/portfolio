@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { PiXLight, PiSquaresFourLight } from 'react-icons/pi';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { useWidgetState } from './useWidgetState';
+import { useScrollDirection } from '@/lib/hooks/useScrollDirection';
 // Hook imported correctly
 
 // Content Components
@@ -131,6 +132,9 @@ export default function HelpWidget() {
 
     if (!content) return null; // Ultra safe guard
 
+    const scrollDirection = useScrollDirection();
+    const hideOffset = widgetPosition.isTop ? -200 : 200;
+
     return (
         <motion.div
             drag
@@ -143,11 +147,17 @@ export default function HelpWidget() {
                 const isTop = y < window.innerHeight / 2;
                 setWidgetPosition({ isTop, isRight });
             }}
-            animate={{ x: 0, y: 0, opacity: 1 }}
+            animate={{
+                x: 0,
+                y: scrollDirection === 'down' ? hideOffset : 0,
+                opacity: 1
+            }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
             className={`fixed z-[9995] flex flex-col gap-4 transition-all duration-300
                 ${widgetPosition.isTop ? 'top-4 sm:top-6' : 'bottom-4 sm:bottom-6'} 
-                ${isVisuallyRight ? 'items-end right-4 sm:right-6' : 'items-start left-4 sm:left-6'}
+                bg-transparent
+                left-4 right-auto sm:left-auto sm:right-6
+                ${isVisuallyRight ? 'sm:items-end' : 'sm:items-start sm:left-6 sm:right-auto'}
             `}
         >
             {/* TRIGGER BUTTON */}
@@ -158,7 +168,7 @@ export default function HelpWidget() {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 aria-label={isOpen ? "Close Help Widget" : "Open Help Widget"}
-                className={`w-14 h-14 bg-foreground text-background rounded-full flex items-center justify-center shadow-2xl shadow-blue-500/20 hover:shadow-blue-500/40 transition-shadow`}
+                className={`w-12 h-12 sm:w-14 sm:h-14 bg-foreground text-background rounded-full flex items-center justify-center shadow-2xl shadow-blue-500/20 hover:shadow-blue-500/40 transition-shadow`}
             >
                 {isOpen ? <PiXLight className="w-6 h-6" /> : <PiSquaresFourLight className="w-6 h-6" />}
                 {!isOpen && <span className="absolute inset-0 rounded-full border border-foreground/30 animate-ping opacity-20" />}

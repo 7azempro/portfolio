@@ -7,14 +7,12 @@
 import { visionTool } from '@sanity/vision'
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure' // Helper for Web Previews
-import { Iframe } from 'sanity-plugin-iframe-pane'
 import { media } from 'sanity-plugin-media'
 import { codeInput } from '@sanity/code-input'
 import { dashboardTool, projectUsersWidget, projectInfoWidget } from '@sanity/dashboard'
 import { documentListWidget } from 'sanity-plugin-dashboard-widget-document-list'
 import { unsplashImageAsset } from 'sanity-plugin-asset-source-unsplash'
 import { assist } from '@sanity/assist'
-import { graphiQLTool } from 'sanity-plugin-graphiql'
 
 // Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
 import { apiVersion, dataset, projectId } from './src/sanity/env'
@@ -43,11 +41,11 @@ export default defineConfig({
         unsplashImageAsset(),
         // AI Assist (Article Generator)
         assist(),
-        // GraphiQL (GraphQL Playground)
-        graphiQLTool({
-            apiVersion: '2023-01-01',
-            title: 'GraphQL'
-        }),
+        // GraphiQL (GraphQL Playground) // Removed
+        // graphiQLTool({
+        //     apiVersion: '2023-01-01',
+        //     title: 'GraphQL'
+        // }),
         // SEO Pane Plugin (Moved to Structure)
         // Dashboard
         dashboardTool({

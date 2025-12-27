@@ -44,7 +44,19 @@ export const seoDetails = {
     options: { collapsible: true, collapsed: true },
     fields: [
         { name: 'metaTitle', title: 'Meta Title', type: 'string' },
-        { name: 'metaDesc', title: 'Meta Description', type: 'text', rows: 3 },
+        {
+            name: 'metaDesc',
+            title: 'Meta Description',
+            type: 'text',
+            rows: 3,
+            options: {
+                aiAssist: {
+                    instruction: 'Generate a high-CTR SEO description (max 155 chars). Include primary keywords early. Use an active, professional voice. No clickbait.'
+                }
+            }
+        },
+        { name: 'canonicalUrl', title: 'Canonical URL', type: 'url' },
+        { name: 'seoImage', title: 'Share Image (Overrides Page Thumbnail)', type: 'image' },
         { name: 'keywords', title: 'Keywords', type: 'array', of: [{ type: 'string' }], options: { layout: 'tags' } },
         { name: 'synonyms', title: 'Synonyms', type: 'string' }
     ]

@@ -1,72 +1,15 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
-// Force Refresh v2
 import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
-import { PiArrowUpRightLight, PiArrowRightLight } from 'react-icons/pi';
+import { motion, useScroll } from 'framer-motion';
+import { PiArrowUpRightLight, PiArrowRightLight, PiEye } from 'react-icons/pi';
 import { useLanguage } from '@/lib/context/LanguageContext';
-import { urlFor } from '@/sanity/lib/image';
+import { getSafeImage } from '@/lib/constants';
+import millify from 'millify';
 
-// --- Configuration & Data ---
-// --- Configuration & Data ---
-// Removed STATIC_IMAGES in favor of CMS Thumbnails
-
-const FALLBACK_IMAGES = {
-    '1': 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?q=80&w=1200', // Medical
-    '2': 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200', // Real Estate
-    '3': 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1200', // Travel
-    '5': 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=1200', // Business
-    '6': 'https://images.unsplash.com/photo-1555421689-492a6c3ae4eb?q=80&w=1200', // Tech
-};
-
-// Fallback Data if Sanity is empty
-const FALLBACK_PROJECTS = [
-    {
-        _id: '1',
-        title: 'نادي الاستسقاء المصري', title_en: 'Egyptian Club of Ascites',
-        category: 'طبي / مؤسسي', category_en: 'Medical / Organization',
-        year: '2025',
-        link: 'https://egyptianclubofascites.com/',
-        desc: 'المنصة الرقمية لنادي الاستسقاء المصري.', desc_en: 'Official digital presence for the Egyptian Club of Ascites.',
-        color: 'bg-emerald-500'
-    },
-    {
-        _id: '2',
-        title: 'مسار العقارية', title_en: 'Masar Real Estate',
-        category: 'عقارات', category_en: 'Real Estate Hub',
-        year: '2024',
-        link: 'https://example.com',
-        desc: 'منصة عقارية شاملة لبيع وإدارة الأصول.', desc_en: 'Comprehensive real estate asset management platform.',
-        color: 'bg-blue-600'
-    },
-    {
-        _id: '3',
-        title: 'رحلات', title_en: 'Rihlat Travel',
-        category: 'سفر وسياحة', category_en: 'Travel & Tourism',
-        year: '2023',
-        link: 'https://example.com',
-        desc: 'تجربة حجز سلسة للمسافر العصري.', desc_en: 'Seamless booking experience for modern travelers.',
-        color: 'bg-orange-500'
-    },
-    {
-        _id: '5',
-        title: 'كورب تك', title_en: 'CorpTech Solutions',
-        category: 'شركات', category_en: 'Enterprise',
-        year: '2023',
-        link: 'https://example.com',
-        desc: 'لوحة تحكم إدارية للشركات الكبرى.', desc_en: 'Administrative dashboard for large scale enterprises.',
-        color: 'bg-slate-800'
-    },
-    {
-        _id: '6',
-        title: 'ديف كور', title_en: 'DevCore Systems',
-        category: 'تقنية', category_en: 'SaaS Platform',
-        year: '2022',
-        link: 'https://example.com',
-        desc: 'أدوات تطوير متقدمة للفرق التقنية.', desc_en: 'Advanced development tools for engineering teams.',
-        color: 'bg-indigo-600'
-    }
-];
+// Minimal Fallback for safety (Client-side only if server fails entirely)
+const FALLBACK_PROJECTS = [];
 
 // --- Sub-Components ---
 
@@ -79,134 +22,112 @@ const getLoc = (item, field, lang) => {
 };
 
 function ProjectCard({ project, lang }) {
-    // Determine Image Source:
-    // 1. If ID 4 (Behance), use Static Abstract.
-    // 2. Otherwise, try Microlink (Live Screenshot).
-    // Determine Image Source:
-    // Prioritize CMS Thumbnail -> Then Microlink -> Then Fallback
-    // Determine Image Source:
-    // 1. CMS Thumbnail (Highest Priority)
-    // 2. Curated Fallback Image (for Demo Data)
-    // 3. Microlink (Live Backup)
-    const imageUrl = project.thumbnail
-        ? urlFor(project.thumbnail).width(800).height(600).url()
-        : (FALLBACK_IMAGES[project._id] || `https://api.microlink.io/?url=${encodeURIComponent(project.link)}&screenshot=true&meta=false&embed=screenshot.url&overlay.browser=dark&viewport.width=1280&viewport.height=800`);
-
     return (
-        <a href={project.link} target="_blank" rel="noopener noreferrer" className="block relative group-hover:-translate-y-2 transition-transform duration-500">
-            {/* Browser Frame */}
-            <div className="overflow-hidden rounded-xl border border-foreground/10 dark:border-white/10 bg-background/50 backdrop-blur-sm mb-6 shadow-2xl transition-all duration-700 group-hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)]">
-                {/* Browser Toolbar */}
-                <div className="h-9 bg-foreground/5 border-b border-foreground/5 flex items-center px-4 gap-2">
-                    <div className="w-2.5 h-2.5 rounded-full bg-red-500/20 group-hover:bg-red-500 transition-colors" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-amber-500/20 group-hover:bg-amber-500 transition-colors" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-green-500/20 group-hover:bg-green-500 transition-colors" />
-                    <div className="flex-1 ml-4">
-                        <div className="h-1.5 w-32 bg-foreground/5 rounded-full" />
+        <Link href={`/works/${project.slug?.current}`} className="block group relative h-full">
+            <div className="border border-foreground/10 bg-background h-full flex flex-col hover:border-blue-500/50 transition-colors duration-500">
+                {/* Image Section */}
+                <div className="relative aspect-[16/9] overflow-hidden border-b border-foreground/10 bg-muted">
+                    <img
+                        src={getSafeImage(project.thumbnail)}
+                        alt={getLoc(project, 'title', lang)}
+                        className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-blue-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay" />
+
+                    {/* Floating Badge */}
+                    <div className="absolute top-4 left-4 px-2 py-1 bg-black/50 backdrop-blur text-[11px] sm:text-xs font-mono text-white/80 border border-white/10 uppercase tracking-widest">
+                        {project.year || "2025"}
                     </div>
                 </div>
 
-                {/* Viewport */}
-                <div className="aspect-[16/9] relative group">
-                    <img
-                        src={imageUrl}
-                        alt={getLoc(project, 'title', lang)}
-                        className="absolute inset-0 w-full h-full object-cover object-top filter grayscale contrast-[1.1] group-hover:grayscale-0 group-hover:contrast-100 transition-all duration-700 ease-out"
-                        onError={(e) => {
-                            // Fallback to Thematic Unsplash if Screenshot Fails
-                            e.currentTarget.onerror = null;
-                            e.currentTarget.src = FALLBACK_IMAGES[project._id] || "https://placehold.co/1200x800/101010/FFFFFF/png?text=Preview";
-                        }}
-                    />
-
-                    {/* Effects */}
-                    <div className="absolute inset-0 bg-noise opacity-[0.05] mix-blend-overlay pointer-events-none" />
-                    <div className="absolute inset-0 bg-foreground/5 mix-blend-multiply opacity-100 group-hover:opacity-0 transition-opacity duration-500" />
-
-                    {/* Action Button */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
-                        <div className="px-6 py-3 rounded-full bg-background/90 backdrop-blur text-foreground border border-foreground/10 flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 font-sans text-sm">
-                            <span>VISIT_SITE</span>
-                            <PiArrowUpRightLight className="w-4 h-4" />
+                {/* Content Section */}
+                <div className="p-8 flex flex-col flex-grow">
+                    <div className="flex justify-between items-start mb-6">
+                        <span className="text-[11px] sm:text-xs font-mono uppercase tracking-widest rtl:tracking-normal text-blue-500 border border-blue-500/20 bg-blue-500/5 px-2 py-1">
+                            {getLoc(project, 'category', lang) || "SYSTEM"}
+                        </span>
+                        <div className="flex items-center gap-1.5 text-[11px] sm:text-xs font-mono text-muted-foreground opacity-60">
+                            <PiEye className="text-sm" />
+                            <span>{millify(project.views || 0)}</span>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            {/* Meta Data */}
-            <div className="flex justify-between items-start border-t border-foreground/10 dark:border-white/10 pt-6">
-                <div>
-                    <h3 className="text-3xl font-bold mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    <h3 className="text-3xl font-bold uppercase tracking-tight rtl:tracking-normal mb-4 group-hover:text-blue-500 transition-colors">
                         {getLoc(project, 'title', lang)}
                     </h3>
-                    <p className="text-muted-foreground text-lg max-w-md">{getLoc(project, 'desc', lang)}</p>
-                </div>
-                <div className="text-right">
-                    <span className="block text-4xl font-sans font-bold text-foreground/10 group-hover:text-foreground/30 transition-colors">
-                        {project.year}
-                    </span>
-                    <span className="inline-block mt-2 px-3 py-1 bg-foreground/5 rounded text-xs font-sans text-foreground/60 uppercase tracking-wider">
-                        {getLoc(project, 'category', lang) || "PROJECT"}
-                    </span>
+
+                    <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2 mb-8">
+                        {getLoc(project, 'desc', lang)}
+                    </p>
+
+                    <div className="mt-auto pt-6 border-t border-foreground/10 flex justify-between items-center text-xs font-mono uppercase tracking-widest rtl:tracking-normal text-muted-foreground">
+                        <span>Project_ID :: {project._id?.slice(0, 4)}</span>
+                        <PiArrowRightLight className="w-4 h-4 group-hover:text-blue-500 transition-colors" />
+                    </div>
                 </div>
             </div>
-        </a>
+        </Link>
     );
 }
 
 // --- Main Component ---
 
-export default function ProjectSlider({ projects = [] }) {
-    console.log('[ProjectSlider] Received:', projects.length, 'Fallback needed:', projects.length === 0);
+export default function ProjectSlider({ projects = [], settings = {} }) {
     const displayProjects = projects.length > 0 ? projects : FALLBACK_PROJECTS;
     const containerRef = useRef(null);
     const { scrollXProgress } = useScroll({ container: containerRef });
     const { lang } = useLanguage();
 
     const t = {
-        ar: { title: "أعمال مختارة", subtitle: "مشروعات حية" },
-        en: { title: "Selected Work", subtitle: "Live Projects" }
+        ar: { title: settings?.projects_title || "أعمال مختارة", subtitle: "مشروعات حية" },
+        en: { title: settings?.projects_title_en || "Selected Work", subtitle: settings?.projects_subtitle_en || "Live Projects" }
     };
     const content = t[lang];
+
+    // Don't render empty slider
+    if (displayProjects.length === 0) return null;
 
     return (
         <section className="py-32 border-b border-foreground/5 dark:border-white/5 overflow-hidden">
             <div className="container mx-auto px-6 mb-16 flex items-end justify-between">
                 <div>
-                    <h2 className="text-6xl md:text-8xl tracking-tighter font-bold mb-4 text-foreground">
+                    <h2 className="text-6xl md:text-8xl tracking-tighter font-bold mb-4 text-foreground uppercase">
                         {content.title}
                     </h2>
-                    <p className="text-xl text-muted-foreground font-sans uppercase tracking-widest pl-2 border-l-2 border-blue-500">
-                        // {content.subtitle}
+                    <p className="text-sm md:text-base text-muted-foreground font-mono uppercase tracking-widest pl-2 border-l-2 border-blue-500">
+                        {'//'} {content.subtitle}
                     </p>
                 </div>
 
-                <div className="hidden md:flex flex-col gap-2 items-end">
-                    <span className="text-xs font-sans text-muted-foreground">SCROLL_X</span>
-                    <div className="w-48 h-1 bg-foreground/10 dark:bg-white/10 rounded-full overflow-hidden">
-                        <motion.div
-                            className="h-full bg-blue-600 dark:bg-blue-500"
-                            style={{ scaleX: scrollXProgress, transformOrigin: lang === 'ar' ? "right" : "left" }}
-                        />
+                <div className="hidden md:flex flex-col gap-6 items-end">
+                    <Link href="/works" className="group flex items-center gap-2 text-sm font-mono uppercase tracking-widest text-muted-foreground hover:text-blue-500 transition-colors">
+                        <span>{lang === 'ar' ? 'عرض الكل' : 'VIEW_ALL_WORKS'}</span>
+                        <PiArrowRightLight className={`w-4 h-4 transition-transform group-hover:translate-x-1 ${lang === 'ar' ? 'rotate-180 group-hover:-translate-x-1' : ''}`} />
+                    </Link>
+
+                    <div className="flex flex-col gap-2 items-end">
+                        <span className="text-[11px] sm:text-xs font-mono text-muted-foreground uppercase tracking-widest">SCROLL_X</span>
+                        <div className="w-48 h-0.5 bg-foreground/10 rounded-full overflow-hidden">
+                            <motion.div
+                                className="h-full bg-blue-500"
+                                style={{ scaleX: scrollXProgress, transformOrigin: lang === 'ar' ? "right" : "left" }}
+                            />
+                        </div>
                     </div>
                 </div>
-
             </div>
 
-            {/* Mobile Floating Hint (Fixed relative to section) */}
-            {/* Mobile Floating Hint (Centered Bottom) */}
-            <div className="absolute bottom-14 left-1/2 -translate-x-1/2 md:hidden z-30 pointer-events-none">
-                <div className="flex items-center gap-2 bg-background/90 backdrop-blur border border-foreground/10 px-4 py-2 rounded-full shadow-2xl animate-pulse whitespace-nowrap">
-                    <span className="text-[10px] font-mono tracking-widest uppercase text-blue-500">
-                        {lang === 'ar' ? 'اسحب للتصفح' : 'SWIPE_TO_EXPLORE'}
-                    </span>
-                    <PiArrowRightLight className={`w-4 h-4 text-blue-500 ${lang === 'ar' ? 'rotate-180' : ''}`} />
+            {/* Mobile Scroll Hint */}
+            <div className="container mx-auto px-6 md:hidden mb-4 flex justify-end">
+                <div className="flex items-center gap-2 text-[11px] sm:text-xs font-mono tracking-widest uppercase text-blue-500 animate-pulse">
+                    <span>{lang === 'ar' ? 'اسحب' : 'SWIPE'}</span>
+                    <PiArrowRightLight className={`w-3 h-3 ${lang === 'ar' ? 'rotate-180' : ''}`} />
                 </div>
             </div>
 
             <div
                 ref={containerRef}
-                className="flex gap-12 overflow-x-auto px-6 pb-20 snap-x snap-mandatory scrollbar-hide pt-4 relative"
+                className="flex gap-8 overflow-x-auto px-6 pb-20 snap-x snap-mandatory scrollbar-hide pt-4"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
                 {displayProjects.map((project, index) => (
@@ -215,7 +136,7 @@ export default function ProjectSlider({ projects = [] }) {
                         initial={{ opacity: 0, x: 50 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.1, duration: 0.6, ease: "easeOut" }}
-                        className="min-w-[90vw] md:min-w-[800px] snap-center group"
+                        className="min-w-[85vw] md:min-w-[600px] snap-center"
                     >
                         <ProjectCard project={project} lang={lang} />
                     </motion.div>

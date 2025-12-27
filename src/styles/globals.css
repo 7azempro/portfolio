@@ -47,6 +47,12 @@
     [dir="rtl"] .dark,
     [dir="rtl"] {
         --font-primary: var(--font-ibm);
+        font-family: var(--font-ibm), sans-serif;
+    }
+
+    /* Force "Mono" elements to use Arabic Sans in RTL (since no Arabic Mono exists) */
+    [dir="rtl"] .font-mono {
+        font-family: var(--font-ibm) !important;
     }
 }
 

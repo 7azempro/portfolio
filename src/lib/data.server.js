@@ -3,14 +3,30 @@ import { client } from '../sanity/lib/client';
 // GROQ Queries
 // GROQ Queries
 const HERO_QUERY = `*[_type == "hero"][0]`;
-const PROJECT_QUERY = `*[_type == "project"]`;
-const ARTICLE_QUERY = `*[_type == "article" && defined(slug.current)] | order(date desc) { ..., thumbnail { asset->, hotspot, crop }, slug }`;
-const LATEST_ARTICLES_QUERY = `*[_type == "article" && defined(slug.current)] | order(date desc)[0...3] { ..., thumbnail { asset->, hotspot, crop }, slug }`;
+const PROJECT_QUERY = `*[_type == "project" && defined(slug.current)] | order(startedAt desc, year desc) {
+    ...,
+    thumbnail { asset->, hotspot, crop },
+    techStack[]->{name, iconKey}
+}`;
+const POPULAR_PROJECT_QUERY = `*[_type == "project" && defined(slug.current)] | order(views desc, startedAt desc)[0...6] {
+    ...,
+    thumbnail { asset->, hotspot, crop },
+    techStack[]->{name, iconKey}
+}`;
+const ARTICLE_QUERY = `*[_type == "article" && defined(slug.current)] | order(views desc, date desc) { ..., thumbnail { asset->, hotspot, crop }, slug, views }`;
+const LATEST_ARTICLES_QUERY = `*[_type == "article" && defined(slug.current)] | order(date desc)[0...3] { ..., thumbnail { asset->, hotspot, crop }, slug, views }`;
+const POPULAR_ARTICLES_QUERY = `*[_type == "article" && defined(slug.current)] | order(views desc, date desc)[0...3] { ..., thumbnail { asset->, hotspot, crop }, slug, views }`;
 const SERVICE_QUERY = `*[_type == "service"]`;
 const TECH_QUERY = `*[_type == "tech"] | order(row asc, name asc)`;
-const SLIDER_QUERY = `*[_type == "project"] | order(year desc)`;
+// SLIDER_QUERY removed (redundant)
 const ABOUT_QUERY = `*[_type == "about"][0]`;
 const SETTINGS_QUERY = `*[_type == "settings"][0]`;
+// Aggregation Query
+const STATS_AGGREGATION_QUERY = `{
+    "totalArticles": count(*[_type == "article"]),
+    "totalProjects": count(*[_type == "project"]),
+    "totalViews": sum(*[_type == "article" || _type == "project"].views)
+}`;
 
 // Fallback for Missing Config (Not connected)
 const MOCK_DATA = {
@@ -66,8 +82,13 @@ export async function getLocalData(key) {
                 return await client.fetch(ARTICLE_QUERY, {}, { next: { revalidate: 30 } }) || [];
             case 'latest_articles':
                 return await client.fetch(LATEST_ARTICLES_QUERY, {}, { next: { revalidate: 30 } }) || [];
+            case 'popular_articles':
+                return await client.fetch(POPULAR_ARTICLES_QUERY, {}, { next: { revalidate: 30 } }) || [];
             case 'services':
                 return await client.fetch(SERVICE_QUERY, {}, { next: { revalidate: 30 } }) || [];
+
+            case 'popular_projects':
+                return await client.fetch(POPULAR_PROJECT_QUERY, {}, { next: { revalidate: 30 } }) || [];
 
             case 'tech':
                 return await client.fetch(TECH_QUERY, {}, { next: { revalidate: 30 } }) || [];
@@ -75,6 +96,8 @@ export async function getLocalData(key) {
                 return await client.fetch(ABOUT_QUERY, {}, { next: { revalidate: 30 } }) || {};
             case 'settings':
                 return await client.fetch(SETTINGS_QUERY, {}, { next: { revalidate: 30 } }) || {};
+            case 'stats_aggregated':
+                return await client.fetch(STATS_AGGREGATION_QUERY, {}, { next: { revalidate: 30 } }) || {};
             default:
                 return {};
         }

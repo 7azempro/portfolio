@@ -1,12 +1,15 @@
 'use client';
+import { useState } from 'react';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { motion } from 'framer-motion';
 import { PiArrowUpRightLight, PiDownloadSimpleLight, PiMapPinLight, PiClockLight, PiStackLight, PiGraduationCapLight } from 'react-icons/pi';
 import Image from 'next/image';
+import ResumeGateModal from '@/components/resume/ResumeGateModal';
 
 export default function AboutClient({ data }) {
     const { lang } = useLanguage();
     const isAr = lang === 'ar';
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const FALLBACK_CONTENT = {
         role: "Product Design Engineer & UX/UI Designer",
@@ -68,7 +71,7 @@ export default function AboutClient({ data }) {
             {/* Header */}
             <header className="border-b border-foreground/10 pb-12 mb-20 relative">
                 <div className="flex justify-between items-end mb-4">
-                    <span className="text-xs font-sans uppercase tracking-widest text-muted-foreground border border-foreground/10 px-3 py-1 rounded-full">
+                    <span className="text-xs sm:text-sm font-sans uppercase tracking-widest text-muted-foreground border border-foreground/10 px-3 py-1 rounded-full">
                         {labels.subtitle} // 001
                     </span>
                     <PiArrowUpRightLight className="w-6 h-6 text-muted-foreground" />
@@ -97,7 +100,7 @@ export default function AboutClient({ data }) {
                                 </div>
                                 {/* Decorative Rings */}
                                 <div className="absolute inset-0 rounded-full border border-blue-500/30 scale-110 animate-pulse" />
-                                <div className="absolute -right-2 -bottom-2 bg-blue-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full z-20 border-2 border-background">
+                                <div className="absolute -right-2 -bottom-2 bg-blue-500 text-white text-[11px] sm:text-xs font-bold px-2 py-0.5 rounded-full z-20 border-2 border-background">
                                     PRO
                                 </div>
                             </div>
@@ -118,7 +121,7 @@ export default function AboutClient({ data }) {
                                     </span>
                                     <div className="text-right">
                                         <span className="block text-2xl font-bold leading-none">{stat.value}</span>
-                                        <span className="text-[10px] text-muted-foreground uppercase">
+                                        <span className="text-[11px] sm:text-xs text-muted-foreground uppercase">
                                             {isAr ? stat.unit : (stat.unit_en || stat.unit)}
                                         </span>
                                     </div>
@@ -126,12 +129,16 @@ export default function AboutClient({ data }) {
                             ))}
                         </div>
 
-                        <button className="w-full py-4 bg-blue-600 text-white font-bold uppercase tracking-widest text-xs hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+                        <button
+                            onClick={() => setIsModalOpen(true)}
+                            className="w-full py-4 bg-blue-600 text-white font-bold uppercase tracking-widest text-xs hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
                             {labels.download}
                             <PiDownloadSimpleLight />
                         </button>
                     </div>
                 </aside>
+
+                <ResumeGateModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
                 {/* Right: History, Education, Tools */}
                 <div className="lg:col-span-8">

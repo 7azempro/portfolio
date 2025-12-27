@@ -2,8 +2,11 @@ import { getLocalData } from '@/lib/data.server';
 import ArticlesView from './ArticlesView';
 
 export const metadata = {
-    title: 'Articles',
-    description: 'Thoughts on Engineering, Design, and Systems.',
+    title: 'Articles | المقالات - Hazem Gamal',
+    description: 'Thoughts on Engineering, Design, and Systems | أفكار في الهندسة والتصميم',
+    alternates: {
+        canonical: '/articles'
+    }
 };
 
 export default async function ArticlesPage() {

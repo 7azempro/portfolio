@@ -15,6 +15,8 @@ import { product } from './product'
 import { order } from './order'
 import { socialPost } from './socialPost'
 import { blockContent } from './blockContent'
+import { resumeLog } from './resumeLog'
+import { contact } from './contact'
 
 import {
     statItem, experienceItem, educationItem,
@@ -40,6 +42,8 @@ export const schemaTypes = [
     education,
     testimonial,
     settings,
+    resumeLog,
+    contact,
     // Hoisted Objects for GraphQL
     statItem,
     experienceItem,

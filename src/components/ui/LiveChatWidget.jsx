@@ -7,7 +7,7 @@ import { useLanguage } from '@/lib/context/LanguageContext';
 import { useSound } from '@/lib/context/SoundContext';
 import { CONTACT_CONFIG } from '@/lib/config/contact';
 import Image from 'next/image';
-// ... other imports
+import { useScrollDirection } from '@/lib/hooks/useScrollDirection';
 
 export default function LiveChatWidget() {
     const { lang } = useLanguage();
@@ -44,8 +44,10 @@ export default function LiveChatWidget() {
         };
     }, [playHover]);
 
+    const scrollDirection = useScrollDirection();
+
     return (
-        <div ref={ref} className={`fixed z-[9980] ${lang === 'ar' ? 'left-6' : 'right-6'} bottom-20 sm:bottom-24 w-14 h-14`}>
+        <div ref={ref} className={`fixed z-[9980] right-4 sm:right-6 bottom-4 sm:bottom-6 w-12 h-12 sm:w-14 sm:h-14 transition-all duration-300 ${scrollDirection === 'down' ? 'translate-y-[200px] opacity-0 pointer-events-none' : 'translate-y-0 opacity-100 pointer-events-auto'}`}>
             <div className="relative w-full h-full">
 
                 {/* 1. SMART HINT CARD */}
@@ -56,7 +58,7 @@ export default function LiveChatWidget() {
                             animate={{ opacity: 1, scale: 1, y: 0, rotate: 0 }}
                             exit={{ opacity: 0, scale: 0.8, y: 10 }}
                             transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                            className={`absolute bottom-full mb-4 w-60 ${lang === 'ar' ? 'origin-bottom-left left-0' : 'origin-bottom-right right-0'}`}
+                            className={`absolute bottom-full mb-4 w-60 hidden sm:block ${lang === 'ar' ? 'origin-bottom-left left-0' : 'origin-bottom-right right-0'}`}
                         >
                             <div className="relative group cursor-pointer" onClick={() => { playClick(); setShowHint(false); }}>
                                 {/* Glass Card */}
@@ -130,7 +132,7 @@ export default function LiveChatWidget() {
                     onClick={playClick}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    className="w-14 h-14 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-2xl shadow-[#25D366]/20 hover:shadow-[#25D366]/40 transition-shadow block relative z-10"
+                    className="w-12 h-12 sm:w-14 sm:h-14 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-2xl shadow-[#25D366]/20 hover:shadow-[#25D366]/40 transition-shadow block relative z-10"
                     aria-label="Live Chat on WhatsApp"
                 >
                     <SiWhatsapp className="w-6 h-6" />

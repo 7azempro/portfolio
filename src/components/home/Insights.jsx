@@ -1,13 +1,15 @@
 'use client';
 import { motion } from 'framer-motion';
+import millify from 'millify';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { useSound } from '@/lib/context/SoundContext';
-import { PiArrowUpRightLight, PiArticleLight } from 'react-icons/pi';
-import { urlFor } from '@/sanity/lib/image';
+import { PiArrowUpRightLight } from 'react-icons/pi';
+import { getSafeImage } from '@/lib/constants';
 import Link from 'next/link';
 
 export default function Insights({ articles = [], settings }) {
     const { lang } = useLanguage();
+    const isAr = lang === 'ar';
     const { playHover, playClick } = useSound();
 
     const t = {
@@ -48,16 +50,16 @@ export default function Insights({ articles = [], settings }) {
                 {/* Header */}
                 <div className="flex items-end justify-between mb-20 border-b border-foreground/10 pb-8">
                     <div>
-                        <div className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase flex items-center gap-2 mb-4">
+                        <div className="font-mono text-[10px] tracking-widest rtl:tracking-normal text-muted-foreground uppercase flex items-center gap-2 mb-4">
                             <span className="w-1.5 h-1.5 bg-blue-500 rounded-none animate-pulse" />
                             {content.sys}
                         </div>
-                        <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-foreground uppercase">
+                        <h2 className="text-4xl md:text-6xl font-black tracking-tighter uppercase rtl:tracking-normal text-foreground opacity-90">
                             {content.heading}
                         </h2>
                     </div>
 
-                    <Link href="/articles" className="hidden md:flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-muted-foreground hover:text-blue-500 transition-colors group">
+                    <Link href="/articles" className="hidden md:flex items-center gap-2 font-mono text-xs uppercase tracking-widest rtl:tracking-normal text-muted-foreground hover:text-blue-500 transition-colors group">
                         <span>{lang === 'ar' ? 'عرض الكل' : 'VIEW_INDEX'}</span>
                         <PiArrowUpRightLight className={`w-4 h-4 ${lang === 'ar' ? '-scale-x-100' : ''}`} />
                     </Link>
@@ -70,16 +72,6 @@ export default function Insights({ articles = [], settings }) {
                         const excerpt = getLoc(article, 'excerpt');
                         const date = new Date(article.date).toLocaleDateString(lang === 'ar' ? 'ar-EG' : 'en-US', { year: 'numeric', month: 'short', day: '2-digit' });
                         const category = article.category || 'SYSTEM';
-
-                        // PRIORITY 1: Stored Static Asset ONLY
-                        let ogUrl = null;
-                        if (article.thumbnail?.asset) {
-                            try {
-                                ogUrl = urlFor(article.thumbnail).width(1200).height(630).url();
-                            } catch (e) {
-                                console.error("URL Builder Error", e);
-                            }
-                        }
 
                         return (
                             <motion.div
@@ -95,42 +87,33 @@ export default function Insights({ articles = [], settings }) {
                                     onMouseEnter={playHover}
                                     className="flex flex-col h-full"
                                 >
-                                    {/* Image Section (Technical Window) */}
-                                    <div className="relative aspect-[1200/630] overflow-hidden border-b border-foreground/10 bg-muted">
+                                    {/* Image Container */}
+                                    <div className="relative aspect-[16/10] overflow-hidden border-b border-white/5 group-hover:border-blue-500/20 transition-colors">
                                         {/* Status Marker */}
                                         <div className="absolute top-3 left-3 z-20 flex items-center gap-2 px-2 py-1 bg-black/50 backdrop-blur-md border border-white/10 text-[10px] font-mono text-white/80 tracking-widest uppercase">
                                             <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
                                             {category}
                                         </div>
 
-                                        <div className="relative w-full h-full">
-                                            {ogUrl ? (
-                                                <>
-                                                    <img
-                                                        src={ogUrl}
-                                                        alt={title}
-                                                        className="w-full h-full object-cover scale-100 group-hover:scale-105 transition-all duration-700 ease-out"
-                                                    />
-                                                    <div className="absolute inset-0 bg-blue-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay" />
-                                                </>
-                                            ) : (
-                                                // FALLBACK: Static Placeholder
-                                                <div className="w-full h-full flex flex-col items-center justify-center bg-zinc-950 text-foreground/20 font-mono tracking-widest uppercase">
-                                                    <div className="text-4xl mb-2 font-black opacity-10">404</div>
-                                                    <div className="text-[10px]">NO_VISUAL_DATA</div>
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        {/* Corner Accents */}
-                                        <div className="absolute bottom-0 right-0 w-3 h-3 border-l border-t border-foreground/20 bg-background z-10" />
+                                        <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/10 transition-colors z-10" />
+                                        <img
+                                            src={getSafeImage(article.thumbnail)}
+                                            alt={isAr ? article.title : article.title_en}
+                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
+                                        />
                                     </div>
+
+                                    {/* Corner Accents */}
+                                    <div className="absolute bottom-0 right-0 w-3 h-3 border-l border-t border-foreground/20 bg-background z-10" />
 
                                     {/* Content Section */}
                                     <div className="p-6 flex flex-col flex-1 gap-4">
                                         {/* Meta Header */}
                                         <div className="flex items-center justify-between font-mono text-[10px] text-muted-foreground uppercase tracking-widest opacity-60">
                                             <span>{date}</span>
+                                            <span className="flex items-center gap-1 opacity-70">
+                                                {article.views > 0 && <>{millify(article.views)} <span className="text-[8px]">VIEWS</span></>}
+                                            </span>
                                             <span>LOG :: 0{index + 1}</span>
                                         </div>
 

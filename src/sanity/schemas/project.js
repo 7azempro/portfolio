@@ -1,4 +1,5 @@
 import { RiFolder3Line } from "react-icons/ri";
+import ScreenshotGenerator from '../components/ScreenshotGenerator';
 
 export const project = {
     name: 'project',
@@ -9,9 +10,24 @@ export const project = {
         { name: 'basic', title: 'Basic Info', options: { collapsible: true, collapsed: false } },
         { name: 'arabic', title: 'Arabic Content (Primary)', options: { collapsible: true, collapsed: false } },
         { name: 'english', title: 'English Content', options: { collapsible: true, collapsed: true } },
-        { name: 'media', title: 'Media & Styling', options: { collapsible: true, collapsed: false } }
+        { name: 'media', title: 'Media & Styling', options: { collapsible: true, collapsed: false } },
+        { name: 'meta', title: 'Metadata & SEO', options: { collapsible: true, collapsed: true } }
     ],
     fields: [
+        {
+            name: 'seo',
+            title: 'SEO & Social',
+            type: 'seoDetails',
+            fieldset: 'meta'
+        },
+        {
+            name: 'views',
+            title: 'View Count',
+            type: 'number',
+            fieldset: 'meta',
+            readOnly: true,
+            initialValue: 0
+        },
         // --- Core Content (Arabic) ---
         {
             name: 'title',
@@ -74,7 +90,12 @@ export const project = {
             name: 'title_en',
             title: 'Project Name (English)',
             type: 'string',
-            fieldset: 'english'
+            fieldset: 'english',
+            options: {
+                aiAssist: {
+                    instruction: 'Translate to English. Use "Swiss International Style" naming (Minimal, Descriptive). E.g., "Fintech Dashboard System".'
+                }
+            }
         },
         {
             name: 'category_en',
@@ -95,21 +116,36 @@ export const project = {
             title: 'Short Description (English)',
             type: 'text',
             rows: 2,
-            fieldset: 'english'
+            fieldset: 'english',
+            options: {
+                aiAssist: {
+                    instruction: 'Translate to English. Write a concise, technical executive summary. Focus on the "What" and "Why".'
+                }
+            }
         },
         {
             name: 'challenge_en',
             title: 'The Challenge (English)',
             type: 'text',
             rows: 4,
-            fieldset: 'english'
+            fieldset: 'english',
+            options: {
+                aiAssist: {
+                    instruction: 'Translate to English. Focus on the "Situation" and "Task" (STAR Method). Describe the technical complexity or business constraint clearly.'
+                }
+            }
         },
         {
             name: 'solution_en',
             title: 'The Solution (English)',
             type: 'text',
             rows: 4,
-            fieldset: 'english'
+            fieldset: 'english',
+            options: {
+                aiAssist: {
+                    instruction: 'Translate to English. Focus on the "Action" and "Result" (STAR Method). Highlight specific technologies, architectural decisions, and performance wins.'
+                }
+            }
         },
 
         // --- Basic Info & Metadata ---
@@ -177,6 +213,17 @@ export const project = {
             fieldset: 'media',
             description: 'e.g., bg-blue-500 or hex #...',
             initialValue: 'bg-blue-500'
+        },
+        {
+            name: 'screenshotTool',
+            title: 'Screenshot Generator',
+            type: 'boolean',
+            fieldset: 'media',
+            description: 'Auto-generate cover image from the project Link.',
+            components: {
+                input: ScreenshotGenerator
+            },
+            initialValue: false
         },
         {
             name: 'thumbnail',

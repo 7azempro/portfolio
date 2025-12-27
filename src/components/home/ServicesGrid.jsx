@@ -19,7 +19,7 @@ function ServiceCard({ service, index, spanClass, onHover }) {
             viewport={{ once: true }}
             transition={{ delay: index * 0.1 }}
             onMouseEnter={onHover}
-            className={`group relative flex flex-col justify-between p-8 md:p-12 border border-foreground/10 bg-background hover:bg-foreground/5 transition-colors duration-500 ${spanClass}`}
+            className={`group relative flex flex-col justify-between p-6 md:p-12 border border-foreground/10 bg-background hover:bg-foreground/5 transition-colors duration-500 ${spanClass}`}
         >
             {/* Top Row: Icon & Number */}
             <div className="flex justify-between items-start mb-12">
@@ -49,7 +49,7 @@ function ServiceCard({ service, index, spanClass, onHover }) {
     );
 }
 
-export default function ServicesGrid({ services = [] }) {
+export default function ServicesGrid({ services = [], settings = {} }) {
     const { lang } = useLanguage();
     const { playHover } = useSound();
 
@@ -82,10 +82,11 @@ export default function ServicesGrid({ services = [] }) {
             {/* Minimal Header */}
             <div className="flex items-end justify-between mb-16 border-b border-foreground/10 pb-8">
                 <h2 className="text-4xl md:text-6xl tracking-tighter font-bold">
-                    {lang === 'ar' ? "خدماتنا" : "SERVICES"}
+                    {lang === 'ar' ? (settings?.services_title || "خدماتنا") : (settings?.services_title_en || "SERVICES")}
                 </h2>
                 <span className="hidden md:block font-sans text-xs uppercase tracking-widest text-muted-foreground">
-                    // CAPABILITIES
+                    {/* Dynamic Subtitle */}
+                    {lang === 'ar' ? "// قدرات" : (settings?.services_subtitle_en || "// CAPABILITIES")}
                 </span>
             </div>
 

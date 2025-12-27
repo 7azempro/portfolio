@@ -1,12 +1,13 @@
 'use client';
 import { motion } from 'framer-motion';
+import millify from 'millify';
 import Link from 'next/link';
-import Image from 'next/image';
-import { RiTimeLine, RiArrowRightUpLine, RiHashtag } from 'react-icons/ri';
+import { RiArrowRightUpLine } from 'react-icons/ri';
 import { PiArrowDownLight } from 'react-icons/pi';
 import { useLanguage } from '@/lib/context/LanguageContext';
 
 import { urlFor } from '@/sanity/lib/image';
+import { getSafeImage } from '@/lib/constants';
 
 import { estimateReadingTime } from '@/lib/readingTime';
 
@@ -60,15 +61,18 @@ export default function ArticlesView({ articles, settings }) {
 
             <div className="container mx-auto px-6 relative z-10">
                 {/* Header Section */}
-                <div className="flex flex-col lg:flex-row items-end justify-between border-b border-foreground/10 pb-12 mb-20 gap-8">
+                <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between border-b border-foreground/10 pb-8 mb-10 lg:pb-12 lg:mb-20 gap-8">
                     <div className="flex flex-col items-start gap-4">
-                        <div className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase flex items-center gap-2">
+                        <div className="font-mono text-[10px] sm:text-xs tracking-widest rtl:tracking-normal text-muted-foreground uppercase flex items-center gap-2">
                             <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
                             {staticText.sysIndex}
                         </div>
-                        <h1 className="text-6xl md:text-9xl font-black tracking-tighter text-foreground leading-[0.8] uppercase opacity-90">
+                        <h1 className="text-5xl sm:text-6xl md:text-9xl font-black rtl:font-bold tracking-tighter rtl:tracking-normal text-foreground leading-[0.8] uppercase opacity-90">
                             {staticText.title}
                         </h1>
+                        <p className="text-sm md:text-xl text-muted-foreground max-w-md leading-relaxed">
+                            {staticText.subtitle}
+                        </p>
                     </div>
                 </div>
 
@@ -83,23 +87,27 @@ export default function ArticlesView({ articles, settings }) {
                         <Link href={`/articles/${featuredArticle._id}`} className="block border border-foreground/10 bg-background hover:border-blue-500/50 transition-colors relative overflow-hidden">
                             <div className="grid lg:grid-cols-12">
                                 {/* Visual */}
-                                <div className="lg:col-span-8 relative aspect-[1200/630] md:aspect-auto md:h-full lg:min-h-[500px] border-b lg:border-b-0 lg:border-r border-foreground/10 bg-muted overflow-hidden">
+                                <div className="lg:col-span-8 relative aspect-[4/3] md:aspect-auto md:h-full lg:min-h-[500px] border-b lg:border-b-0 lg:border-r border-foreground/10 bg-muted overflow-hidden">
                                     {/* Tech Overlay */}
-                                    <div className="absolute top-4 left-4 z-20 px-3 py-1 bg-black/50 backdrop-blur-md border border-white/10 text-[10px] font-mono text-white/80 tracking-widest uppercase">
+                                    <div className="absolute top-4 left-4 z-20 px-3 py-1 bg-black/50 backdrop-blur-md border border-white/10 text-[11px] sm:text-xs font-mono text-white/80 tracking-widest uppercase">
                                         FEATURED_ENTRY
                                     </div>
-                                    <img
-                                        src={getOgUrl(featuredArticle)}
-                                        alt={t(featuredArticle, 'title')}
-                                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-                                    />
+                                    {/* Image Container */}
+                                    <div className="relative aspect-[16/9] overflow-hidden border-b border-white/5 group-hover:border-blue-500/20 transition-colors">
+                                        <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/10 transition-colors z-10" />
+                                        <img
+                                            src={getSafeImage(featuredArticle.thumbnail)}
+                                            alt={t(featuredArticle, 'title')}
+                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
+                                        />
+                                    </div>
                                     <div className="absolute inset-0 bg-blue-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay" />
                                 </div>
 
                                 {/* Meta */}
-                                <div className="lg:col-span-4 p-8 lg:p-12 flex flex-col justify-between">
+                                <div className="lg:col-span-4 p-6 md:p-8 lg:p-12 flex flex-col justify-between">
                                     <div>
-                                        <div className="flex items-center gap-3 text-xs font-mono text-blue-500 mb-6 uppercase tracking-widest">
+                                        <div className="flex items-center gap-3 text-xs font-mono text-blue-500 mb-6 uppercase tracking-widest rtl:tracking-normal">
                                             <span className="w-2 h-2 bg-blue-500 animate-pulse" />
                                             {new Date(featuredArticle.date).toLocaleDateString(isAr ? 'ar-EG' : 'en-US', { month: 'short', day: '2-digit', year: 'numeric' })}
                                         </div>
@@ -132,9 +140,9 @@ export default function ArticlesView({ articles, settings }) {
                         >
                             <Link href={`/articles/${article._id}`} className="flex flex-col h-full">
                                 {/* Visual */}
-                                <div className="relative aspect-[1200/630] overflow-hidden border-b border-foreground/10 bg-muted">
-                                    <div className="absolute top-3 left-3 z-20 px-2 py-1 bg-black/50 backdrop-blur-md border border-white/10 text-[10px] font-mono text-white/80 tracking-widest uppercase">
-                                        LOG :: 0{i + 2}
+                                <div className="relative aspect-[4/3] md:aspect-[1200/630] overflow-hidden border-b border-foreground/10 bg-muted">
+                                    <div className="absolute top-3 left-3 z-20 px-2 py-1 bg-black/50 backdrop-blur-md border border-white/10 text-[11px] sm:text-xs font-mono text-white/80 tracking-widest rtl:tracking-normal uppercase">
+                                        {isAr ? `سجل :: 0${i + 2}` : `LOG :: 0${i + 2}`}
                                     </div>
                                     <img
                                         src={getOgUrl(article)}
@@ -147,14 +155,20 @@ export default function ArticlesView({ articles, settings }) {
                                 </div>
 
                                 {/* Content */}
-                                <div className="p-6 flex flex-col flex-1 gap-4">
-                                    <div className="flex items-center justify-between font-mono text-[10px] text-muted-foreground uppercase tracking-widest opacity-60">
+                                <div className="p-4 md:p-6 flex flex-col flex-1 gap-4">
+                                    <div className="flex items-center justify-between font-mono text-[11px] sm:text-xs text-muted-foreground uppercase tracking-widest rtl:tracking-normal opacity-60">
                                         <span>{new Date(article.date).toLocaleDateString(isAr ? 'ar-EG' : 'en-US')}</span>
-                                        <span>{getReadTime(article)}</span>
+                                        <span className="flex items-center gap-1">
+                                            {article.views > 0 ? (
+                                                <>{millify(article.views)} <span className="text-[10px] opacity-70">{isAr ? 'مشاهدة' : 'VIEWS'}</span></>
+                                            ) : (
+                                                <span>{getReadTime(article)}</span>
+                                            )}
+                                        </span>
                                     </div>
 
                                     <div className="flex-1 space-y-3">
-                                        <h3 className="text-xl font-bold leading-tight group-hover:text-blue-500 transition-colors uppercase">
+                                        <h3 className="text-xl font-bold leading-tight group-hover:text-blue-500 transition-colors uppercase rtl:font-sans">
                                             {t(article, 'title')}
                                         </h3>
                                         <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed opacity-80">
@@ -162,7 +176,7 @@ export default function ArticlesView({ articles, settings }) {
                                         </p>
                                     </div>
 
-                                    <div className="pt-4 mt-auto border-t border-foreground/5 flex items-center justify-between text-xs font-bold uppercase tracking-widest group-hover:text-blue-500 transition-colors">
+                                    <div className="pt-4 mt-auto border-t border-foreground/5 flex items-center justify-between text-xs font-bold uppercase tracking-widest rtl:tracking-normal group-hover:text-blue-500 transition-colors">
                                         <span>{staticText.readArticle}</span>
                                         <PiArrowDownLight className={`w-4 h-4 -rotate-90 transform transition-transform group-hover:translate-x-1 ${isAr ? 'rotate-90' : ''}`} />
                                     </div>
@@ -173,8 +187,8 @@ export default function ArticlesView({ articles, settings }) {
                 </div>
 
                 {/* Footer Status Bar for this page */}
-                <div className="mt-20 pt-8 border-t border-foreground/10 flex items-center justify-between font-mono text-[10px] text-muted-foreground uppercase tracking-widest">
-                    <span>STATUS :: SYSTEM_ONLINE</span>
+                <div className="mt-20 pt-8 border-t border-foreground/10 flex items-center justify-between font-mono text-[11px] sm:text-xs text-muted-foreground uppercase tracking-widest rtl:tracking-normal">
+                    <span>{isAr ? 'الحالة: النظام يعمل' : 'STATUS :: SYSTEM_ONLINE'}</span>
                     <span>{articles.length} {staticText.records}</span>
                 </div>
             </div>

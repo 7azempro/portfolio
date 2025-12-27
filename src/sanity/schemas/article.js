@@ -46,7 +46,7 @@ export const article = {
             icon: PiTextT,
             options: {
                 aiAssist: {
-                    instruction: 'Translate the Arabic title to English. Keep it punchy, professional, and suitable for a tech blog.'
+                    instruction: 'Translate the Arabic title to English. Use a technical, punchy "Swiss Design" style. Avoid marketing fluff. Example: "Building a Scalable System" instead of "How we built an amazing system".'
                 }
             }
         },
@@ -59,7 +59,7 @@ export const article = {
             validation: Rule => Rule.max(200),
             options: {
                 aiAssist: {
-                    instruction: 'Summarize the Arabic content into a short, engaging excerpt (max 200 chars). Focus on the core value proposition.'
+                    instruction: 'Summarize the Arabic content into a concise English executive summary (max 200 chars). Focus strictly on the technical value and problem solved. No buzzwords.'
                 }
             }
         },
@@ -95,6 +95,16 @@ export const article = {
             }
         },
         {
+            name: 'ogImage',
+            title: 'Open Graph Image',
+            description: 'Generated automatically by AI Generator, or upload manually (1200x630).',
+            type: 'image',
+            fieldset: 'media',
+            options: {
+                hotspot: true
+            }
+        },
+        {
             name: 'thumbnail',
             title: 'Thumbnail',
             type: 'image',
@@ -103,7 +113,7 @@ export const article = {
             options: {
                 hotspot: true,
                 aiAssist: {
-                    imageInstruction: 'Create a high-contrast, minimalist, swiss-style abstract composition. Use geometric shapes, vibrant blue and orange accents against a dark background. No text.'
+                    imageInstruction: 'Create an abstract, minimal, Swiss-Style graphic composition. Use dark geometric forms, blueprint lines, and deep navy/black tones. No text. High precision, architectural aesthetic.'
                 }
             },
             fields: [
@@ -139,13 +149,26 @@ export const article = {
             }
         },
         {
+            name: 'views',
+            title: 'View Count',
+            type: 'number',
+            fieldset: 'meta',
+            readOnly: true,
+            initialValue: 0
+        },
+        {
             name: 'tags',
             title: 'Tags',
             type: 'array',
             fieldset: 'meta',
             icon: PiTag,
             of: [{ type: 'string' }],
-            options: { layout: 'tags' }
+            options: {
+                layout: 'tags',
+                aiAssist: {
+                    instruction: 'Generate 5 technical keywords based on the article content. Focus on technologies, frameworks, and architectural concepts. 1-2 words each.'
+                }
+            }
         },
     ],
     preview: {

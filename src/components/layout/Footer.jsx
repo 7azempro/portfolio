@@ -64,7 +64,7 @@ export default function Footer({ socials }) {
                             </h2>
                             <PiArrowUpRightLight className="w-8 h-8 md:w-12 md:h-12 transition-transform duration-500 group-hover:-translate-y-2 group-hover:translate-x-2 rtl:group-hover:-translate-x-2 rtl:-scale-x-100" />
                         </div>
-                        <p className="text-sm opacity-60 font-mono tracking-widest uppercase">
+                        <p className="text-sm opacity-60 font-mono tracking-widest rtl:tracking-normal uppercase">
                             {lang === 'ar' ? "حوّل فكرتك لواقع" : "TURN YOUR IDEA INTO REALITY"}
                         </p>
                     </div>
@@ -101,7 +101,7 @@ export default function Footer({ socials }) {
                             <SiUpwork className="w-8 h-8 md:w-12 md:h-12 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12 group-hover:text-white group-hover:drop-shadow-md" />
                         </div>
                         <div className="flex items-center justify-between">
-                            <p className="text-sm opacity-60 font-mono tracking-widest uppercase group-hover:opacity-100 group-hover:text-white flex items-center gap-2 font-bold">
+                            <p className="text-sm opacity-60 font-mono tracking-widest rtl:tracking-normal uppercase group-hover:opacity-100 group-hover:text-white flex items-center gap-2 font-bold">
                                 <span className="w-2 h-2 rounded-full bg-[#14a800] group-hover:bg-white animate-pulse" />
                                 {lang === 'ar' ? "نصيحة وخبرة عبر UPWORK" : "EXPERT ADVICE VIA UPWORK"}
                             </p>

@@ -26,7 +26,22 @@ const nextConfig: NextConfig = {
     ],
   },
   experimental: {
-    // optimizePackageImports: ['react-icons'],
+    optimizePackageImports: [
+      'react-icons',
+      'lucide-react',
+      'framer-motion',
+      '@sanity/ui',
+      '@sanity/icons'
+    ],
+  },
+  async redirects() {
+    return [
+      {
+        source: '/blog/:path*',
+        destination: '/articles/:path*',
+        permanent: true,
+      },
+    ];
   },
 };
 

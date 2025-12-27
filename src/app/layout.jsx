@@ -25,10 +25,10 @@ export async function generateMetadata() {
     return {
         metadataBase: new URL(baseUrl),
         title: {
-            template: `%s | ${title}`,
-            default: `${title} | Premium Product Design & Development`,
+            template: `%s | Hazem Gamal`,
+            default: `Hazem Gamal | Product Design Engineer`,
         },
-        description: description,
+        description: 'Transforming complex ideas into elegant digital systems | مهندس تصميم وتجربة المستخدم',
         keywords: ['Portfolio', 'Product Design', 'Next.js', 'React', 'Design Systems', 'Arabic UI', 'Frontend Architecture'],
         authors: [{ name: 'Hazem Gamal', url: baseUrl }],
         creator: 'Hazem Gamal',
@@ -86,12 +86,14 @@ export async function generateMetadata() {
 
 import ScrollProgress from '@/components/ui/ScrollProgress';
 import { GoogleAnalytics } from '@next/third-parties/google';
+import { Toaster } from 'sonner';
 
 export default function RootLayout({ children }) {
     return (
         <html lang="en" dir="ltr" className="scroll-smooth" suppressHydrationWarning>
             <body className="bg-background text-foreground transition-colors duration-300">
                 {children}
+                <Toaster richColors position="top-right" />
             </body>
             {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID && (
                 <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID} />
