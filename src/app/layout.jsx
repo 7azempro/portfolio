@@ -86,12 +86,14 @@ export async function generateMetadata() {
 
 import ScrollProgress from '@/components/ui/ScrollProgress';
 import { GoogleAnalytics } from '@next/third-parties/google';
+import { Analytics } from '@vercel/analytics/next';
 
 export default function RootLayout({ children }) {
     return (
         <html lang="en" dir="ltr" className="scroll-smooth" suppressHydrationWarning>
             <body className="bg-background text-foreground transition-colors duration-300">
                 {children}
+                <Analytics />
             </body>
             {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID && (
                 <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID} />
