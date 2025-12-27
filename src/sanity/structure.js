@@ -6,13 +6,37 @@ import {
 // Helper for Web Previews
 // import { Iframe } from 'sanity-plugin-iframe-pane'
 
+// SEO Pane
+// // import { SEOPane } from 'sanity-plugin-seo-pane'
+
 // Define the "Web Preview" view
 export const defaultDocumentNode = (S, { schemaType }) => {
     // Only enable for specific types
-    /*
     if (['article', 'project', 'hero'].includes(schemaType)) {
         return S.document().views([
             S.view.form(), // Default Form
+            /*
+            // Disable SEO Pane for CLI Deploy (Dependency Error)
+            S.view
+                .component(SEOPane)
+                .options({
+                    keywords: `seo.keywords`,
+                    synonyms: `seo.synonyms`,
+                    url: (doc) => {
+                        const baseUrl = 'http://localhost:3000';
+                        if (schemaType === 'article') return `${baseUrl}/articles/${doc?.slug?.current}`;
+                        if (schemaType === 'project') return `${baseUrl}/works/${doc?.slug?.current}`;
+                        return baseUrl;
+                    },
+                    yoast: {
+                        title: (doc) => doc.title_en || doc.title,
+                        description: (doc) => doc.excerpt_en || doc.excerpt || doc.desc_en,
+                    }
+                })
+                .title('SEO Audit'),
+            */
+
+            /*
             S.view
                 .component(Iframe)
                 .options({
@@ -27,9 +51,9 @@ export const defaultDocumentNode = (S, { schemaType }) => {
                     reload: { button: true }, 
                 })
                 .title('Live Preview'),
+            */
         ])
     }
-    */
     return S.document().views([S.view.form()])
 }
 

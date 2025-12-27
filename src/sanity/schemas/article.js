@@ -14,6 +14,12 @@ export const article = {
     fields: [
         // Content
         {
+            name: 'seo',
+            title: 'SEO & Social',
+            type: 'seoDetails',
+            fieldset: 'meta'
+        },
+        {
             name: 'title',
             title: 'Title (Arabic)',
             type: 'string',
@@ -37,7 +43,12 @@ export const article = {
             title: 'Title (English)',
             type: 'string',
             fieldset: 'content',
-            icon: PiTextT
+            icon: PiTextT,
+            options: {
+                aiAssist: {
+                    instruction: 'Translate the Arabic title to English. Keep it punchy, professional, and suitable for a tech blog.'
+                }
+            }
         },
         {
             name: 'excerpt',
@@ -45,7 +56,12 @@ export const article = {
             type: 'text',
             rows: 3,
             fieldset: 'content',
-            validation: Rule => Rule.max(200)
+            validation: Rule => Rule.max(200),
+            options: {
+                aiAssist: {
+                    instruction: 'Summarize the Arabic content into a short, engaging excerpt (max 200 chars). Focus on the core value proposition.'
+                }
+            }
         },
         {
             name: 'excerpt_en',
@@ -84,7 +100,12 @@ export const article = {
             type: 'image',
             fieldset: 'media',
             icon: PiImage,
-            options: { hotspot: true },
+            options: {
+                hotspot: true,
+                aiAssist: {
+                    imageInstruction: 'Create a high-contrast, minimalist, swiss-style abstract composition. Use geometric shapes, vibrant blue and orange accents against a dark background. No text.'
+                }
+            },
             fields: [
                 {
                     name: 'caption',

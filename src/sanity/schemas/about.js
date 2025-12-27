@@ -40,44 +40,19 @@ export const about = {
             name: 'stats',
             title: 'Key Metrics',
             type: 'array',
-            of: [{
-                type: 'object',
-                fields: [
-                    { name: 'label', title: 'Label (Ar)', type: 'string' },
-                    { name: 'label_en', title: 'Label (En)', type: 'string' },
-                    { name: 'value', title: 'Value', type: 'string' },
-                    { name: 'unit', title: 'Unit (Ar)', type: 'string' },
-                    { name: 'unit_en', title: 'Unit (En)', type: 'string' }
-                ]
-            }]
+            of: [{ type: 'statItem' }]
         },
         {
             name: 'experience',
             title: 'Work Experience',
             type: 'array',
-            of: [{
-                type: 'object',
-                fields: [
-                    { name: 'role', title: 'Role', type: 'string' },
-                    { name: 'company', title: 'Company', type: 'string' },
-                    { name: 'year', title: 'Year/Duration', type: 'string' },
-                    { name: 'desc', title: 'Description (Ar)', type: 'text' },
-                    { name: 'desc_en', title: 'Description (En)', type: 'text' }
-                ]
-            }]
+            of: [{ type: 'experienceItem' }]
         },
         {
             name: 'education',
             title: 'Education',
             type: 'array',
-            of: [{
-                type: 'object',
-                fields: [
-                    { name: 'degree', title: 'Degree', type: 'string' },
-                    { name: 'institution', title: 'Institution', type: 'string' },
-                    { name: 'year', title: 'Year', type: 'string' }
-                ]
-            }]
+            of: [{ type: 'educationItem' }]
         },
         {
             name: 'tools',

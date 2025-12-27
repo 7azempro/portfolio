@@ -42,14 +42,7 @@ export const lesson = {
             type: 'array',
             of: [
                 { type: 'file', title: 'File' },
-                {
-                    type: 'object',
-                    title: 'External Link',
-                    fields: [
-                        { name: 'url', title: 'URL', type: 'url' },
-                        { name: 'title', title: 'Title', type: 'string' }
-                    ]
-                }
+                { type: 'externalLink' }
             ]
         },
         {

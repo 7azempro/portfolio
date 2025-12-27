@@ -212,13 +212,9 @@ export default function ArticleDetail({ article, settings, relatedArticles = [] 
                             className="prose prose-lg prose-invert max-w-none prose-headings:font-bold prose-p:leading-loose prose-p:text-foreground/80 prose-li:text-foreground/80 mb-32"
                         >
                             {/* Featured Image (Schematic OG Cover) */}
-                            <div className="mb-20 relative rounded-xl overflow-hidden shadow-2xl shadow-blue-900/10 aspect-[1200/630] group">
+                            <div className="mb-20 relative rounded-xl overflow-hidden shadow-2xl shadow-blue-900/10 aspect-[1200/630] group bg-muted border border-foreground/10">
                                 {(() => {
-                                    const titleEn = article.title_en || article.title;
-                                    const imageId = article.thumbnail?.asset?._id || article.thumbnail?.asset?._ref;
-                                    const authorId = settings?.profileImage?.asset?._id || settings?.profileImage?.asset?._ref;
-
-                                    // PRIORITY 1: Stored Static Asset
+                                    // PRIORITY 1: Stored Static Asset ONLY
                                     let displayUrl;
                                     try {
                                         if (article.thumbnail?.asset) {
@@ -226,29 +222,35 @@ export default function ArticleDetail({ article, settings, relatedArticles = [] 
                                         }
                                     } catch (e) { console.error(e); }
 
-                                    // PRIORITY 2: Dynamic Fallback
-                                    if (!displayUrl) {
-                                        displayUrl = `/api/og?title=${encodeURIComponent(titleEn)}&type=ARTICLE&subtitle=READING_ENTRY${imageId ? `&imageId=${imageId}` : ''}${authorId ? `&authorImageId=${authorId}` : ''}`;
+                                    if (displayUrl) {
+                                        return (
+                                            <>
+                                                <img
+                                                    src={displayUrl}
+                                                    alt={title}
+                                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                                />
+                                                {/* Overlay Grid */}
+                                                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:100px_100px] pointer-events-none mix-blend-overlay" />
+
+                                                {/* Gradient Fade */}
+                                                <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-60" />
+
+                                                {/* Technical Markers */}
+                                                <div className="absolute bottom-4 left-4 z-20 px-3 py-1 bg-background/50 backdrop-blur-md border border-foreground/10 text-[10px] font-mono text-foreground/80 tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    FIG_MAIN :: STORED_ASSET
+                                                </div>
+                                            </>
+                                        );
                                     }
 
+                                    // FALLBACK: Static Placeholder (No signal)
                                     return (
-                                        <>
-                                            <img
-                                                src={displayUrl}
-                                                alt={title}
-                                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                            />
-                                            {/* Overlay Grid */}
-                                            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:100px_100px] pointer-events-none mix-blend-overlay" />
-
-                                            {/* Gradient Fade */}
-                                            <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-60" />
-
-                                            {/* Technical Markers */}
-                                            <div className="absolute bottom-4 left-4 z-20 px-3 py-1 bg-background/50 backdrop-blur-md border border-foreground/10 text-[10px] font-mono text-foreground/80 tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity">
-                                                FIG_MAIN :: {article.thumbnail?.asset ? 'STORED_ASSET' : 'LIVE_GEN'}
-                                            </div>
-                                        </>
+                                        <div className="w-full h-full flex flex-col items-center justify-center bg-zinc-950 text-foreground/20 font-mono tracking-widest uppercase">
+                                            <div className="text-6xl mb-4 font-black opacity-10">404</div>
+                                            <div className="text-xs">SIGNAL_LOST :: NO_VISUAL_DATA</div>
+                                            <div className="mt-4 text-[10px] bg-foreground/10 px-2 py-1 rounded">Generate in Studio</div>
+                                        </div>
                                     );
                                 })()}
                             </div>

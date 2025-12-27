@@ -72,31 +72,7 @@ export const settings = {
             title: 'Social Media Links',
             type: 'array',
             fieldset: 'contact',
-            of: [
-                {
-                    type: 'object',
-                    fields: [
-                        { name: 'platform', title: 'Platform Name', type: 'string' },
-                        { name: 'url', title: 'URL', type: 'url' },
-                        {
-                            name: 'iconKey',
-                            title: 'Icon Key',
-                            type: 'string',
-                            options: {
-                                list: [
-                                    { title: 'GitHub', value: 'github' },
-                                    { title: 'Twitter / X', value: 'twitter' },
-                                    { title: 'LinkedIn', value: 'linkedin' },
-                                    { title: 'Behance', value: 'behance' },
-                                    { title: 'Dribbble', value: 'dribbble' },
-                                    { title: 'Instagram', value: 'instagram' },
-                                    { title: 'Facebook', value: 'facebook' }
-                                ]
-                            }
-                        }
-                    ]
-                }
-            ]
+            of: [{ type: 'socialLink' }]
         },
 
         // --- Navigation ---
@@ -105,19 +81,7 @@ export const settings = {
             title: 'Main Navigation',
             type: 'array',
             fieldset: 'general',
-            of: [
-                {
-                    type: 'object',
-                    fields: [
-                        { name: 'label', title: 'Label (Arabic)', type: 'string' },
-                        { name: 'label_en', title: 'Label (English)', type: 'string' },
-                        { name: 'link', title: 'Link / Section ID', type: 'string' }
-                    ],
-                    preview: {
-                        select: { title: 'label', subtitle: 'label_en' }
-                    }
-                }
-            ]
+            of: [{ type: 'navItem' }]
         }
     ],
     preview: {

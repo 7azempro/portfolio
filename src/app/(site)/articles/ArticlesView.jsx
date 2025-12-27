@@ -48,11 +48,9 @@ export default function ArticlesView({ articles, settings }) {
             } catch (e) { console.error("URL Builder Error", e); }
         }
 
-        // PRIORITY 2: Dynamic Fallback
-        const titleEn = article.title_en || article.title;
-        const imageId = article.thumbnail?.asset?._ref || article.thumbnail?.asset?._id;
-        const authorId = settings?.profileImage?.asset?._ref || settings?.profileImage?.asset?._id;
-        return `/api/og?title=${encodeURIComponent(titleEn)}&type=ARTICLE&subtitle=READING_ENTRY${imageId ? `&imageId=${imageId}` : ''}${authorId ? `&authorImageId=${authorId}` : ''}`;
+        // PRIORITY 2: Dynamic Fallback -> DISABLED PER USER REQUEST
+        // Return null or a local placeholder if needed.
+        return null;
     };
 
     return (

@@ -4,8 +4,8 @@ import { client } from '../sanity/lib/client';
 // GROQ Queries
 const HERO_QUERY = `*[_type == "hero"][0]`;
 const PROJECT_QUERY = `*[_type == "project"]`;
-const ARTICLE_QUERY = `*[_type == "article"] | order(date desc) { ..., thumbnail { asset->, hotspot, crop } }`;
-const LATEST_ARTICLES_QUERY = `*[_type == "article"] | order(date desc)[0...3] { ..., thumbnail { asset->, hotspot, crop } }`;
+const ARTICLE_QUERY = `*[_type == "article" && defined(slug.current)] | order(date desc) { ..., thumbnail { asset->, hotspot, crop }, slug }`;
+const LATEST_ARTICLES_QUERY = `*[_type == "article" && defined(slug.current)] | order(date desc)[0...3] { ..., thumbnail { asset->, hotspot, crop }, slug }`;
 const SERVICE_QUERY = `*[_type == "service"]`;
 const TECH_QUERY = `*[_type == "tech"] | order(row asc, name asc)`;
 const SLIDER_QUERY = `*[_type == "project"] | order(year desc)`;

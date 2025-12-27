@@ -71,12 +71,15 @@ export default function Insights({ articles = [], settings }) {
                         const date = new Date(article.date).toLocaleDateString(lang === 'ar' ? 'ar-EG' : 'en-US', { year: 'numeric', month: 'short', day: '2-digit' });
                         const category = article.category || 'SYSTEM';
 
-                        // Dynamic OG Generation
-                        const titleEn = article.title_en || article.title;
-                        const imageId = article.thumbnail?.asset?._ref;
-                        const authorId = settings?.profileImage?.asset?._ref;
-
-                        const ogUrl = `/api/og?title=${encodeURIComponent(titleEn)}&type=ARTICLE&subtitle=READING_ENTRY${imageId ? `&imageId=${imageId}` : ''}${authorId ? `&authorImageId=${authorId}` : ''}`;
+                        // PRIORITY 1: Stored Static Asset ONLY
+                        let ogUrl = null;
+                        if (article.thumbnail?.asset) {
+                            try {
+                                ogUrl = urlFor(article.thumbnail).width(1200).height(630).url();
+                            } catch (e) {
+                                console.error("URL Builder Error", e);
+                            }
+                        }
 
                         return (
                             <motion.div
@@ -101,12 +104,22 @@ export default function Insights({ articles = [], settings }) {
                                         </div>
 
                                         <div className="relative w-full h-full">
-                                            <img
-                                                src={ogUrl}
-                                                alt={title}
-                                                className="w-full h-full object-cover scale-100 group-hover:scale-105 transition-all duration-700 ease-out"
-                                            />
-                                            <div className="absolute inset-0 bg-blue-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay" />
+                                            {ogUrl ? (
+                                                <>
+                                                    <img
+                                                        src={ogUrl}
+                                                        alt={title}
+                                                        className="w-full h-full object-cover scale-100 group-hover:scale-105 transition-all duration-700 ease-out"
+                                                    />
+                                                    <div className="absolute inset-0 bg-blue-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay" />
+                                                </>
+                                            ) : (
+                                                // FALLBACK: Static Placeholder
+                                                <div className="w-full h-full flex flex-col items-center justify-center bg-zinc-950 text-foreground/20 font-mono tracking-widest uppercase">
+                                                    <div className="text-4xl mb-2 font-black opacity-10">404</div>
+                                                    <div className="text-[10px]">NO_VISUAL_DATA</div>
+                                                </div>
+                                            )}
                                         </div>
 
                                         {/* Corner Accents */}

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Stack, Button, Flex, Text, Card, Spinner, Code } from '@sanity/ui';
 import { useFormValue, useClient } from 'sanity';
-import { PimagicWand } from 'react-icons/pi';
+import { PiMagicWand } from 'react-icons/pi';
 
 export default function OGGeneratorInput(props) {
     const { onChange } = props;
@@ -16,9 +16,14 @@ export default function OGGeneratorInput(props) {
 
         try {
             // 1. Gather Data
+            const documentId = document._id;
             const title = document.title_en || document.title;
             const subtitle = document.category || 'ARTICLE';
-            const titleAr = document.title; // Arabic title
+            const titleAr = document.title;
+
+            // Handle Drafts (remove 'drafts.' prefix if present for API, though API probably needs actual ID to patch)
+            // Actually, we pass the raw ID. The API client token has write access.
+            const targetId = documentId.replace('drafts.', '');
 
             if (!title) {
                 setStatus('Error: Title is required');
@@ -26,73 +31,47 @@ export default function OGGeneratorInput(props) {
                 return;
             }
 
-            setStatus('Fetching Global Settings...');
+            setStatus('Delegating to Server API...');
 
-            // 2. Fetch Settings for Author Data
-            const settings = await client.fetch(`*[_type == "settings"][0]{ 
-                "imageId": profileImage.asset._ref,
-                "name": authorName,
-                "role": authorRole
-            }`);
-
-            const authorImageId = settings?.imageId;
-            const authorName = settings?.name;
-            const authorRole = settings?.role;
-
-            setStatus('Generating OG Image from API...');
-
-            // 3. Call Local OG API
+            // 2. Build URL Params
             const params = new URLSearchParams({
                 title: title,
                 type: 'ARTICLE',
                 subtitle: subtitle.toUpperCase(),
+                id: documentId, // Pass full ID (draft/pub)
+                save: 'true'   // Trigger Server-Side Save
             });
 
             if (titleAr && titleAr !== title) {
                 params.append('title_ar', titleAr);
             }
 
-            if (authorImageId) params.append('authorImageId', authorImageId);
-            if (authorName) params.append('authorName', authorName);
-            if (authorRole) params.append('authorRole', authorRole);
+            // We let the API fetch the author settings itself to avoid passing too much param data,
+            // or we can pass overrides if needed. The API code I viewed fetches defaults if not provided.
+            // But to be safe and consistent with UI, let's keep passing author data if we have it?
+            // Actually, the API logic fetches 'settings' document itself if needed. 
+            // Let's rely on the API's internal logic for consistency.
 
             const apiUrl = `/api/og?${params.toString()}`;
-            console.log("Fetching OG from:", apiUrl);
+            console.log("Triggering OG Generation:", apiUrl);
 
-            // Fetch Blob
+            // 3. Call API
             const response = await fetch(apiUrl);
 
             if (!response.ok) {
                 const text = await response.text();
-                throw new Error(`API Error ${response.status}: ${text.substring(0, 100)}`);
+                throw new Error(`API Error ${response.status}: ${text}`);
             }
 
-            const blob = await response.blob();
+            const result = await response.json();
 
-            setStatus('Uploading to Sanity...');
-
-            // 4. Upload to Sanity Assets
-            const asset = await client.assets.upload('image', blob, {
-                filename: `og-${title.substring(0, 20)}.png`
-            });
-
-            setStatus('Patching Document...');
-
-            // 5. Update the Field (Patch)
-            await client
-                .patch(document._id)
-                .set({
-                    thumbnail: {
-                        _type: 'image',
-                        asset: {
-                            _type: 'reference',
-                            _ref: asset._id
-                        }
-                    }
-                })
-                .commit();
-
-            setStatus('Success! Image Updated.');
+            if (result.success) {
+                setStatus('Success! Image Generated & Saved.');
+                // Optional: Trigger a client-side reload or toast? 
+                // The Studio subscription should auto-update the thumbnail field.
+            } else {
+                throw new Error(result.error || 'Unknown Error');
+            }
 
         } catch (error) {
             console.error(error);
@@ -121,7 +100,7 @@ export default function OGGeneratorInput(props) {
                 )}
 
                 <Button
-                    icon={PimagicWand}
+                    icon={PiMagicWand}
                     fontSize={2}
                     padding={3}
                     tone="primary"

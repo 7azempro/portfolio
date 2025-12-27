@@ -16,6 +16,13 @@ import { order } from './order'
 import { socialPost } from './socialPost'
 import { blockContent } from './blockContent'
 
+import {
+    statItem, experienceItem, educationItem,
+    seoDetails, productVariant, productDimensions,
+    socialLink, navItem, externalLink,
+    courseModule
+} from './objects'
+
 export const schemaTypes = [
     hero,
     about,
@@ -32,5 +39,16 @@ export const schemaTypes = [
     experience,
     education,
     testimonial,
-    settings
+    settings,
+    // Hoisted Objects for GraphQL
+    statItem,
+    experienceItem,
+    educationItem,
+    seoDetails,
+    productVariant,
+    productDimensions,
+    socialLink,
+    navItem,
+    externalLink,
+    courseModule
 ]

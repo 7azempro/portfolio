@@ -53,19 +53,7 @@ export const course = {
             title: 'Curriculum Modules',
             type: 'array',
             of: [
-                {
-                    type: 'object',
-                    title: 'Module',
-                    fields: [
-                        { name: 'title', title: 'Module Title', type: 'string' },
-                        {
-                            name: 'lessons',
-                            title: 'Lessons',
-                            type: 'array',
-                            of: [{ type: 'reference', to: [{ type: 'lesson' }] }]
-                        }
-                    ]
-                }
+                { type: 'courseModule' }
             ]
         }
     ]

@@ -20,19 +20,15 @@ export async function generateMetadata({ params }) {
 
     const imageUrl = article.thumbnail ? urlFor(article.thumbnail).width(1200).height(630).url() : null;
 
+    const ogImages = imageUrl ? [{ url: imageUrl, width: 1200, height: 630 }] : [];
+
     return {
         title: article.title_en || article.title,
         description: article.excerpt_en || article.excerpt,
         openGraph: {
             title: article.title_en || article.title,
             description: article.excerpt_en || article.excerpt,
-            images: [
-                {
-                    url: `/api/og?title=${encodeURIComponent(article.title_en || article.title)}&type=ARTICLE&subtitle=${encodeURIComponent('READING_ENTRY')}${article.thumbnail?.asset?._ref ? `&imageId=${article.thumbnail.asset._ref}` : ''}${settings?.profileImage?.asset?._ref ? `&authorImageId=${settings.profileImage.asset._ref}` : ''}`,
-                    width: 1200,
-                    height: 630,
-                },
-            ]
+            images: ogImages
         }
     };
 }
@@ -44,7 +40,7 @@ export default async function ArticlePage({ params }) {
     const query = `{
         "article": *[_type == "article" && _id == $id][0] { ..., thumbnail { asset-> } },
         "settings": *[_type == "settings"][0] { siteTitle, profileImage { asset-> } },
-        "relatedArticles": *[_type == "article" && _id != $id] | order(date desc)[0...3] { ..., thumbnail { asset-> } }
+        "relatedArticles": *[_type == "article" && _id != $id && defined(slug.current)] | order(date desc)[0...3] { ..., thumbnail { asset-> }, slug }
     }`;
     const { article, settings, relatedArticles } = await client.fetch(query, { id });
 
