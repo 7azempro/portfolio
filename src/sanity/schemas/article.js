@@ -1,4 +1,5 @@
 import { PiArticle, PiTextT, PiImage, PiLink, PiTag, PiCalendar, PiClock } from 'react-icons/pi';
+import OGGeneratorInput from '../components/OGGeneratorInput';
 
 export const article = {
     name: 'article',
@@ -55,6 +56,15 @@ export const article = {
         },
 
         // Media
+        {
+            name: 'ogGenerator',
+            title: 'AI Generator',
+            type: 'boolean', // Dummy type
+            fieldset: 'media',
+            components: {
+                input: OGGeneratorInput
+            }
+        },
         {
             name: 'thumbnail',
             title: 'Thumbnail',

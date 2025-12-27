@@ -1,5 +1,5 @@
-import Preloader from "@/components/ui/Preloader";
+import WireframeLoader from "@/components/ui/WireframeLoader";
 
 export default function Loading() {
-    return <Preloader />;
+    return <WireframeLoader />;
 }

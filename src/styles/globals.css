@@ -42,6 +42,12 @@
         --foreground: 248 250 252;
         --font-primary: var(--font-jakarta);
     }
+
+    /* RTL OVERRIDES (Priority over Dark Mode) */
+    [dir="rtl"] .dark,
+    [dir="rtl"] {
+        --font-primary: var(--font-ibm);
+    }
 }
 
 body {
