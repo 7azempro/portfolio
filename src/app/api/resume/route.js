@@ -19,11 +19,15 @@ async function streamToBuffer(stream) {
 
 export async function POST(req) {
     try {
+        console.log("1. Resume Request Received");
         const body = await req.json();
         const { name, email, purpose } = body;
+        console.log("2. Request parsed:", { name, email, purpose });
 
         // 1. Log to Sanity (CRM - Contact Schema)
         const token = process.env.SANITY_API_WRITE_TOKEN;
+        console.log("3. Sanity Token Present:", !!token);
+
         if (token) {
             const writeClient = client.withConfig({ token, useCdn: false });
             await writeClient.create({
@@ -34,7 +38,7 @@ export async function POST(req) {
                 message: purpose || 'Unknown',
                 status: 'new',
                 createdAt: new Date().toISOString()
-            }).catch(console.error);
+            }).catch(err => console.error("Sanity Write Error:", err));
         }
 
         // 2. Fetch Data
@@ -43,17 +47,24 @@ export async function POST(req) {
           "settings": *[_type == "settings"][0]
         }`;
 
+        console.log("4. Fetching content data...");
         const data = await client.fetch(query);
+        console.log("5. Data fetched:", !!data);
+
         const authorName = data.settings?.authorName || 'Hazem Gamal';
         const role = data.settings?.authorRole || 'Product Designer';
         const portfolioUrl = 'https://7azempro.vercel.app';
 
         // 3. Generate PDF Buffer via Stream (Safer Compatibility)
+        console.log("6. Starting PDF Rendering...");
         const stream = await renderToStream(<ResumeDocument data={data} />);
+        console.log("7. PDF Rendering stream created, converting to buffer...");
         const pdfBuffer = await streamToBuffer(stream);
+        console.log("8. Buffer created, size:", pdfBuffer.length);
 
         // 4. Send Emails (if Resend is configured)
         if (resend) {
+            console.log("9. Resend configured, preparing emails...");
             const emailsToSend = [];
 
             // A. Admin Alert
