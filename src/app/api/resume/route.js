@@ -59,7 +59,7 @@ export async function POST(req) {
             // A. Admin Alert
             if (data.settings?.contactEmail) {
                 emailsToSend.push(resend.emails.send({
-                    from: 'System Log <onboarding@resend.dev>',
+                    from: 'System Log <noreply@24tech.sa>',
                     to: data.settings.contactEmail,
                     subject: `[Resume Access] New Download by ${name}`,
                     html: `
@@ -133,7 +133,7 @@ export async function POST(req) {
                 `;
 
                 emailsToSend.push(resend.emails.send({
-                    from: `${authorName} <onboarding@resend.dev>`,
+                    from: `${authorName} <noreply@24tech.sa>`,
                     to: email,
                     subject: `ACCESS GRANTED: ${authorName} Bio-Data`,
                     html: emailHtml,
@@ -146,7 +146,19 @@ export async function POST(req) {
                 }));
             }
 
-            await Promise.allSettled(emailsToSend);
+            const results = await Promise.allSettled(emailsToSend);
+
+            // Log results for debugging
+            results.forEach((result, index) => {
+                if (result.status === 'rejected') {
+                    const err = result.reason;
+                    if (err?.statusCode === 403 && err?.message?.includes('testing emails')) {
+                        console.warn(`[Resend Test Mode] Blocked email to recipient ${index + 1}. You must verify your domain to send to external addresses.`);
+                    } else {
+                        console.error(`[Resend Error] Email ${index + 1} failed:`, err);
+                    }
+                }
+            });
         }
 
         // 5. Return PDF Response
