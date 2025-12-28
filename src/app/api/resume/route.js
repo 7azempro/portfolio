@@ -46,7 +46,7 @@ export async function POST(req) {
         const data = await client.fetch(query);
         const authorName = data.settings?.authorName || 'Hazem Gamal';
         const role = data.settings?.authorRole || 'Product Designer';
-        const portfolioUrl = 'https://7azem.pro';
+        const portfolioUrl = 'https://7azempro.vercel.app';
 
         // 3. Generate PDF Buffer via Stream (Safer Compatibility)
         const stream = await renderToStream(<ResumeDocument data={data} />);
@@ -117,7 +117,8 @@ export async function POST(req) {
                         <div class="footer">
                             <div>
                                 <div style="margin-bottom: 10px; font-weight: bold; color: #000;">ESTABLISH COMM_LINK:</div>
-                                <a href="https://www.linkedin.com/in/hazem-gamal" class="link">LINKEDIN</a>
+                                <a href="https://www.linkedin.com/in/7azempro" class="link">LINKEDIN</a>
+                                <a href="https://linktr.ee/7azempro" class="link">LINKTREE</a>
                                 <a href="mailto:${data.settings?.contactEmail}" class="link">EMAIL</a>
                                 <a href="${portfolioUrl}/works" class="link">ARCHIVE</a>
                             </div>
@@ -171,6 +172,10 @@ export async function POST(req) {
 
     } catch (error) {
         console.error('PDF Generation Error:', error);
-        return NextResponse.json({ error: 'Failed to generate PDF' }, { status: 500 });
+        return NextResponse.json({
+            error: 'Failed to generate PDF',
+            details: error.message,
+            stack: error.stack
+        }, { status: 500 });
     }
 }
