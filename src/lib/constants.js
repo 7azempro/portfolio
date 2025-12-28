@@ -24,8 +24,36 @@ export const FALLBACK_IMAGE = `data:image/svg+xml;base64,${Buffer.from(SVG_PLACE
 import { urlFor } from '@/sanity/lib/image';
 
 export function getSafeImage(source) {
-    if (source && source.asset) {
-        return urlFor(source).url();
-    }
-    return FALLBACK_IMAGE;
+  if (source && source.asset) {
+    return urlFor(source).url();
+  }
+  return FALLBACK_IMAGE;
 }
+
+export const FALLBACK_ABOUT_DATA = {
+  role: "Product Design Engineer & UX/UI Designer",
+  role_en: "Product Design Engineer & UX/UI Designer",
+  location: "القاهرة، مصر",
+  location_en: "Cairo, Egypt",
+  bio: "أمتلك خبرة تزيد عن 3 سنوات في تصميم تجربة المستخدم وتطوير Webflow. متخصص في تصميم تجارب رقمية باستخدام Figma و Framer و React.",
+  bio_en: "Over 3 years of experience in UX/UI design and Webflow development. Specializing in creating digital experiences using Figma, Framer, Webflow, and React.",
+  stats: [
+    { label: "حركة المرور", label_en: "TRAFFIC", value: "+25%", unit: "زيادة", unit_en: "INCREASE" },
+    { label: "معدل الارتداد", label_en: "BOUNCE RATE", value: "-15%", unit: "تحسن", unit_en: "REDUCED" },
+    { label: "سهولة الوصول", label_en: "ACCESSIBILITY", value: "+30%", unit: "نتيجة", unit_en: "SCORE" },
+  ],
+  tools: ['Adobe Creative Suite', 'Figma', 'Adobe XD', 'Webflow', 'Framer', 'React', 'Next.js'],
+  education: [
+    { degree: "Bachelor of Arts", institution: "Al-Azhar University", year: "2020" },
+    { degree: "Nanodegree (UX Design)", institution: "Udacity", year: "2021" }
+  ],
+  experience: [
+    {
+      role: "Senior Product Designer",
+      company: "TechCompany Inc.",
+      year: "2023 - Present",
+      desc: "Leading design ops and core system architecture.",
+      desc_en: "Leading design ops and core system architecture."
+    }
+  ]
+};

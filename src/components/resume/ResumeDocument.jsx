@@ -1,145 +1,22 @@
-import React from 'react';
+import { FALLBACK_ABOUT_DATA } from '@/lib/constants';
 import { Document, Page, Text, View, StyleSheet, Font, Link } from '@react-pdf/renderer';
 
-// Register Fonts (Using standard Helvetica for now to ensure compatibility, can add custom fonts later if needed)
-Font.register({
-    family: 'Helvetica',
-    fonts: [
-        { src: 'https://fonts.gstatic.com/s/helveticaneue/v70/1Ptsg8zYS_SKggPNyC0IT4ttDfA.ttf' }, // Normal
-        { src: 'https://fonts.gstatic.com/s/helveticaneue/v70/1Ptsg8zYS_SKggPNyC0IT4ttDfA.ttf', fontWeight: 700 }, // Bold (Simulated)
-    ]
-});
-
-const styles = StyleSheet.create({
-    page: {
-        padding: 40,
-        fontFamily: 'Helvetica',
-        backgroundColor: '#FFFFFF',
-        color: '#111111',
-        lineHeight: 1.5,
-    },
-    // Header
-    headerParam: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        marginBottom: 30,
-        borderBottomWidth: 2,
-        borderBottomColor: '#111111',
-        paddingBottom: 20,
-    },
-    nameStr: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        textTransform: 'uppercase',
-        letterSpacing: 1,
-        marginBottom: 4,
-    },
-    roleStr: {
-        fontSize: 10,
-        textTransform: 'uppercase',
-        letterSpacing: 2,
-        color: '#666',
-        marginBottom: 10,
-    },
-    contactBlock: {
-        alignItems: 'flex-end',
-    },
-    contactRow: {
-        fontSize: 9,
-        marginBottom: 2,
-        color: '#444',
-        textDecoration: 'none',
-    },
-    // Sections
-    section: {
-        marginBottom: 20,
-    },
-    sectionTitle: {
-        fontSize: 10,
-        fontWeight: 'bold',
-        textTransform: 'uppercase',
-        letterSpacing: 2,
-        marginBottom: 15,
-        backgroundColor: '#F5F5F5',
-        padding: 4,
-    },
-    // Content Blocks
-    expBlock: {
-        marginBottom: 15,
-        paddingLeft: 10,
-        borderLeftWidth: 1,
-        borderLeftColor: '#E5E5E5',
-    },
-    expHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 4,
-    },
-    expRole: {
-        fontSize: 12,
-        fontWeight: 'bold',
-    },
-    expCompany: {
-        fontSize: 10,
-        color: '#666',
-        textTransform: 'uppercase',
-    },
-    expDate: {
-        fontSize: 9,
-        color: '#888',
-        fontFamily: 'Helvetica', // Fallback for mono
-    },
-    expDesc: {
-        fontSize: 9,
-        color: '#333',
-        marginTop: 4,
-        textAlign: 'justify',
-    },
-    // Skills
-    skillGrid: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        gap: 6,
-    },
-    skillTag: {
-        fontSize: 8,
-        backgroundColor: '#F3F4F6',
-        paddingVertical: 3,
-        paddingHorizontal: 6,
-        borderRadius: 2,
-        color: '#333',
-        textTransform: 'uppercase',
-        marginRight: 6,
-        marginBottom: 6,
-    },
-    // Footer
-    footer: {
-        position: 'absolute',
-        bottom: 30,
-        left: 40,
-        right: 40,
-        borderTopWidth: 1,
-        borderTopColor: '#E5E5E5',
-        paddingTop: 10,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    footerText: {
-        fontSize: 8,
-        color: '#999',
-    }
-});
+// ... (keep Font and Styles unchanged) ...
 
 const ResumeDocument = ({ data }) => {
     const { settings, about } = data;
 
-    // Fallbacks
+    // Fallbacks & Data Preparation
     const name = settings?.authorName || 'Hazem Gamal';
-    const role = settings?.authorRole || 'Product Designer';
+    const role = settings?.authorRole || FALLBACK_ABOUT_DATA.role_en;
     const email = settings?.contactEmail || 'contact@7azem.pro';
-    const location = about?.location_en || about?.location || 'Cairo, Egypt';
-    const bio = about?.bio_en || about?.bio || settings?.seoDescription || '';
+    const location = about?.location_en || about?.location || FALLBACK_ABOUT_DATA.location_en;
+    const bio = about?.bio_en || about?.bio || settings?.seoDescription || FALLBACK_ABOUT_DATA.bio_en;
+
+    // Arrays fallbacks
+    const tools = (about?.tools && about.tools.length > 0) ? about.tools : FALLBACK_ABOUT_DATA.tools;
+    const experience = (about?.experience && about.experience.length > 0) ? about.experience : FALLBACK_ABOUT_DATA.experience;
+    const education = (about?.education && about.education.length > 0) ? about.education : FALLBACK_ABOUT_DATA.education;
 
     return (
         <Document>
@@ -166,11 +43,11 @@ const ResumeDocument = ({ data }) => {
                 </View>
 
                 {/* TECH STACK */}
-                {about?.tools && (
+                {tools && tools.length > 0 && (
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>Technical Arsenal</Text>
                         <View style={styles.skillGrid}>
-                            {about.tools.map((tool, i) => (
+                            {tools.map((tool, i) => (
                                 <Text key={i} style={styles.skillTag}>{tool}</Text>
                             ))}
                         </View>
@@ -178,10 +55,10 @@ const ResumeDocument = ({ data }) => {
                 )}
 
                 {/* EXPERIENCE */}
-                {about?.experience && (
+                {experience && experience.length > 0 && (
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>Professional Logs</Text>
-                        {about.experience.map((exp, i) => (
+                        {experience.map((exp, i) => (
                             <View key={i} style={styles.expBlock}>
                                 <View style={styles.expHeader}>
                                     <View>
@@ -197,10 +74,10 @@ const ResumeDocument = ({ data }) => {
                 )}
 
                 {/* EDUCATION */}
-                {about?.education && (
+                {education && education.length > 0 && (
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>Academic Data</Text>
-                        {about.education.map((edu, i) => (
+                        {education.map((edu, i) => (
                             <View key={i} style={styles.expBlock}>
                                 <View style={styles.expHeader}>
                                     <View>

@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import { FALLBACK_ABOUT_DATA } from '@/lib/constants';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { motion } from 'framer-motion';
 import { PiArrowUpRightLight, PiDownloadSimpleLight, PiMapPinLight, PiClockLight, PiStackLight, PiGraduationCapLight } from 'react-icons/pi';
@@ -11,43 +12,16 @@ export default function AboutClient({ data }) {
     const isAr = lang === 'ar';
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const FALLBACK_CONTENT = {
-        role: "Product Design Engineer & UX/UI Designer",
-        role_en: "Product Design Engineer & UX/UI Designer",
-        location: "القاهرة، مصر",
-        location_en: "Cairo, Egypt",
-        bio: "أمتلك خبرة تزيد عن 3 سنوات في تصميم تجربة المستخدم وتطوير Webflow. متخصص في تصميم تجارب رقمية باستخدام Figma و Framer و React.",
-        bio_en: "Over 3 years of experience in UX/UI design and Webflow development. Specializing in creating digital experiences using Figma, Framer, Webflow, and React.",
-        stats: [
-            { label: "حركة المرور", label_en: "TRAFFIC", value: "+25%", unit: "زيادة", unit_en: "INCREASE" },
-            { label: "معدل الارتداد", label_en: "BOUNCE RATE", value: "-15%", unit: "تحسن", unit_en: "REDUCED" },
-            { label: "سهولة الوصول", label_en: "ACCESSIBILITY", value: "+30%", unit: "نتيجة", unit_en: "SCORE" },
-        ],
-        tools: ['Adobe Creative Suite', 'Figma', 'Adobe XD', 'Webflow', 'Framer', 'React', 'Next.js'],
-        education: [
-            { degree: "Bachelor of Arts", institution: "Al-Azhar University", year: "2020" },
-            { degree: "Nanodegree (UX Design)", institution: "Udacity", year: "2021" }
-        ],
-        experience: [
-            {
-                role: "Senior Product Designer",
-                company: "TechCompany Inc.",
-                year: "2023 - Present",
-                desc: "Leading design ops and core system architecture.",
-                desc_en: "Leading design ops and core system architecture."
-            }
-        ]
-    };
 
     const finalData = {
-        role: (isAr ? data?.role : data?.role_en) || (isAr ? FALLBACK_CONTENT.role : FALLBACK_CONTENT.role_en),
-        location: (isAr ? data?.location : data?.location_en) || (isAr ? FALLBACK_CONTENT.location : FALLBACK_CONTENT.location_en),
-        bio: (isAr ? data?.bio : data?.bio_en) || (isAr ? FALLBACK_CONTENT.bio : FALLBACK_CONTENT.bio_en),
+        role: (isAr ? data?.role : data?.role_en) || (isAr ? FALLBACK_ABOUT_DATA.role : FALLBACK_ABOUT_DATA.role_en),
+        location: (isAr ? data?.location : data?.location_en) || (isAr ? FALLBACK_ABOUT_DATA.location : FALLBACK_ABOUT_DATA.location_en),
+        bio: (isAr ? data?.bio : data?.bio_en) || (isAr ? FALLBACK_ABOUT_DATA.bio : FALLBACK_ABOUT_DATA.bio_en),
         image: data?.image || '/assets/hazem-upwork.jpg',
-        stats: (data?.stats && data.stats.length > 0) ? data.stats : FALLBACK_CONTENT.stats,
-        tools: (data?.tools && data.tools.length > 0) ? data.tools : FALLBACK_CONTENT.tools,
-        education: (data?.education && data.education.length > 0) ? data.education : FALLBACK_CONTENT.education,
-        experience: (data?.experience && data.experience.length > 0) ? data.experience : FALLBACK_CONTENT.experience
+        stats: (data?.stats && data.stats.length > 0) ? data.stats : FALLBACK_ABOUT_DATA.stats,
+        tools: (data?.tools && data.tools.length > 0) ? data.tools : FALLBACK_ABOUT_DATA.tools,
+        education: (data?.education && data.education.length > 0) ? data.education : FALLBACK_ABOUT_DATA.education,
+        experience: (data?.experience && data.experience.length > 0) ? data.experience : FALLBACK_ABOUT_DATA.experience
     };
 
     const t = {
