@@ -39,15 +39,8 @@ export async function POST(req) {
 
         // 2. Fetch Data
         const query = `{
-          "about": *[_type == "about"][0] {
-             bio_en, location_en, 
-             experience, education, 
-             tools
-          },
-          "settings": *[_type == "settings"][0] {
-             authorName, authorRole, contactEmail, seoDescription,
-             socialLinks
-          }
+          "about": *[_type == "about"][0],
+          "settings": *[_type == "settings"][0]
         }`;
 
         const data = await client.fetch(query);

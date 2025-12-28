@@ -47,7 +47,7 @@ export default function LiveChatWidget() {
     const scrollDirection = useScrollDirection();
 
     return (
-        <div ref={ref} className={`fixed z-[9980] right-4 sm:right-6 bottom-4 sm:bottom-6 w-12 h-12 sm:w-14 sm:h-14 transition-all duration-300 ${scrollDirection === 'down' ? 'translate-y-[200px] opacity-0 pointer-events-none' : 'translate-y-0 opacity-100 pointer-events-auto'}`}>
+        <div ref={ref} className={`fixed z-[9980] left-4 sm:left-auto sm:right-6 bottom-4 sm:bottom-24 w-12 h-12 sm:w-14 sm:h-14 transition-all duration-300 ${scrollDirection === 'down' ? 'translate-y-[200px] opacity-0 pointer-events-none' : 'translate-y-0 opacity-100 pointer-events-auto'}`}>
             <div className="relative w-full h-full">
 
                 {/* 1. SMART HINT CARD */}

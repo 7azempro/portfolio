@@ -156,7 +156,7 @@ export default function HelpWidget() {
             className={`fixed z-[9995] flex flex-col gap-4 transition-all duration-300
                 ${widgetPosition.isTop ? 'top-4 sm:top-6' : 'bottom-4 sm:bottom-6'} 
                 bg-transparent
-                left-4 right-auto sm:left-auto sm:right-6
+                right-4 left-auto sm:left-auto sm:right-6
                 ${isVisuallyRight ? 'sm:items-end' : 'sm:items-start sm:left-6 sm:right-auto'}
             `}
         >

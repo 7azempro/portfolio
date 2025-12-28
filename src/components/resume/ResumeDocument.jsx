@@ -138,8 +138,8 @@ const ResumeDocument = ({ data }) => {
     const name = settings?.authorName || 'Hazem Gamal';
     const role = settings?.authorRole || 'Product Designer';
     const email = settings?.contactEmail || 'contact@7azem.pro';
-    const location = about?.location_en || 'Cairo, Egypt';
-    const bio = about?.bio_en || settings?.seoDescription || '';
+    const location = about?.location_en || about?.location || 'Cairo, Egypt';
+    const bio = about?.bio_en || about?.bio || settings?.seoDescription || '';
 
     return (
         <Document>
@@ -190,7 +190,7 @@ const ResumeDocument = ({ data }) => {
                                     </View>
                                     <Text style={styles.expDate}>{exp.year}</Text>
                                 </View>
-                                {exp.desc_en && <Text style={styles.expDesc}>{exp.desc_en}</Text>}
+                                {(exp.desc_en || exp.desc) && <Text style={styles.expDesc}>{exp.desc_en || exp.desc}</Text>}
                             </View>
                         ))}
                     </View>

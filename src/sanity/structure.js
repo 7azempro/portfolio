@@ -1,7 +1,7 @@
 import {
     RiLayoutTopLine, RiUser3Line, RiBriefcaseLine, RiArticleLine,
     RiServerLine, RiShoppingCartLine, RiBookOpenLine,
-    RiDatabase2Line, RiSettings3Line, RiShieldUserLine
+    RiDatabase2Line, RiSettings3Line, RiShieldUserLine, RiToggleLine
 } from "react-icons/ri";
 // Helper for Web Previews
 // import { Iframe } from 'sanity-plugin-iframe-pane'
@@ -158,6 +158,15 @@ export const structure = (S) =>
                                         .schemaType('settings')
                                         .documentId('settings')
                                         .title('Global Settings')
+                                ),
+                            S.listItem()
+                                .title('Widgets Config')
+                                .icon(RiToggleLine)
+                                .child(
+                                    S.document()
+                                        .schemaType('widget')
+                                        .documentId('widget')
+                                        .title('Widgets Config')
                                 ),
                             // Add future system docs here (e.g., Redirects, Menus)
                         ])
